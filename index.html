@@ -1,0 +1,3132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D积分学习 | AP微积分AB+BC 教学版</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --accent: #2563eb;
+            --bc: #7c3aed;
+            --border: #e2e8f0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.06);
+            --radius: 16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8eef5 30%, #f5f7fa 60%, #eef1f5 100%);
+            font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .header {
+            text-align: center;
+            padding: 14px 20px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            z-index: 10;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+        }
+        .nav a {
+            padding: 8px 14px;
+            background: #e8ecf1;
+            color: #475569;
+            text-decoration: none;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.3s;
+            white-space: nowrap;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        .nav a:hover, .nav a.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            box-shadow: 0 2px 10px rgba(37,99,235,0.25);
+        }
+        .nav a.bc-link { background: #ede9fe; color: #5b21b6; }
+        .nav a.bc-link:hover, .nav a.bc-link.active {
+            background: var(--bc);
+            color: white;
+            border-color: var(--bc);
+            box-shadow: 0 2px 10px rgba(124,58,237,0.25);
+        }
+        .main-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .card {
+            position: absolute;
+            inset: 0;
+            overflow-y: auto;
+            padding: 24px;
+            background: transparent;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .card.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .card-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            padding: 24px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .badge.ab { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+        .badge.bc { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+        .badge.ext { background: linear-gradient(135deg, #64748b, #8b5cf6); }
+        .formula {
+            background: #f1f5f9;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin: 14px 0;
+            border: 1px solid var(--border);
+            font-size: 1.05rem;
+            overflow-x: auto;
+            color: #334155;
+        }
+        .video-wrap {
+            margin: 15px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            background: #0f172a;
+        }
+        .video-wrap iframe,
+        .video-wrap video { width: 100%; height: 100%; border: 0; display: block; }
+        .video-tools {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: -4px 0 14px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+        .video-tools a {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #eef2ff;
+            color: #3730a3;
+            text-decoration: none;
+            font-weight: 700;
+            border: 1px solid #c7d2fe;
+        }
+        .video-tools a:hover { background: #e0e7ff; }
+        .video-note {
+            flex-basis: 100%;
+            color: #64748b;
+            line-height: 1.5;
+        }
+        .model-block {
+            margin: 16px 0 18px;
+        }
+        .model-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #334155;
+            font-weight: 800;
+        }
+        .compat-toggle {
+            margin: 0;
+            padding: 6px 12px;
+            border-radius: 18px;
+            font-size: 0.78rem;
+            background: #f8fafc;
+            color: #475569;
+        }
+        .canvas-container {
+            width: 100%;
+            height: 380px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            margin: 0;
+            background: #f5f7fa;
+            cursor: grab;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+        }
+        .compat-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .compat-status {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            z-index: 10;
+            max-width: calc(100% - 24px);
+            padding: 6px 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.88);
+            color: #475569;
+            font-size: 0.8rem;
+            line-height: 1.45;
+            pointer-events: none;
+            box-shadow: 0 1px 8px rgba(15,23,42,0.08);
+        }
+        .canvas-container:active { cursor: grabbing; }
+        .hint {
+            position: absolute;
+            bottom: 10px;
+            left: 14px;
+            color: #64748b;
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.85);
+            padding: 4px 10px;
+            border-radius: 12px;
+            z-index: 10;
+        }
+        button {
+            padding: 9px 18px;
+            border-radius: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: #475569;
+            margin: 4px;
+        }
+        button.accent {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        button.accent:hover {
+            background: #1d4ed8;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.2);
+        }
+        button.bc-btn {
+            background: var(--bc);
+            color: white;
+            border-color: var(--bc);
+        }
+        button.bc-btn:hover {
+            background: #6d28d9;
+            box-shadow: 0 2px 8px rgba(124,58,237,0.2);
+        }
+        input[type="range"] { width: 150px; accent-color: var(--accent); }
+        input[type="text"], input[type="number"], select {
+            padding: 10px 14px;
+            background: #fff;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            color: #1e293b;
+            margin: 0 4px;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px 16px;
+            background: #f0fdf4;
+            border-radius: 8px;
+            color: #059669;
+            font-weight: 700;
+        }
+        .quiz { margin-top: 20px; }
+        .quiz h3 { color: #d97706; margin-bottom: 8px; }
+        .quiz button.ans-btn {
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            color: #92400e;
+            margin-top: 4px;
+        }
+        .quiz button.ans-btn:hover { background: #fde68a; }
+        .quiz .explanation {
+            display: none;
+            margin-top: 6px;
+            padding: 8px 12px;
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            color: #065f46;
+            border-radius: 4px;
+        }
+        .tip {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #92400e;
+        }
+        .explanation-section {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin: 12px 0;
+        }
+        .explanation-section h3 { color: #1e40af; margin-bottom: 8px; }
+        .explanation-section p { color: #334155; margin-bottom: 6px; }
+        .explanation-section ul { margin-left: 20px; color: #475569; }
+        .btn-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0 16px;
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(140px, 1fr)) auto;
+            gap: 10px;
+            align-items: end;
+        }
+        .calc-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 0;
+        }
+        .calc-field label {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .calc-field input,
+        .calc-field select {
+            width: 100%;
+            margin: 0;
+        }
+        .calc-field.hidden { display: none; }
+        .error {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+        /* Dark glass visual pass, aligned with the imported 3D lab. */
+        body {
+            background:
+                radial-gradient(circle at 20% 12%, rgba(56, 189, 248, 0.16), transparent 28%),
+                radial-gradient(circle at 82% 18%, rgba(139, 92, 246, 0.18), transparent 30%),
+                #0a0f1e;
+            color: #e2e8f0;
+        }
+        .header,
+        .nav {
+            background: rgba(15, 23, 42, 0.84);
+            border-color: rgba(56, 189, 248, 0.25);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.28);
+        }
+        .nav a {
+            background: #1e293b;
+            color: #cbd5e1;
+            border-color: rgba(148, 163, 184, 0.18);
+        }
+        .nav a:hover,
+        .nav a.active {
+            background: #3b82f6;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(59,130,246,0.45);
+        }
+        .nav a.bc-link { background: #2e225d; color: #ddd6fe; }
+        .nav a.bc-link:hover,
+        .nav a.bc-link.active {
+            background: #8b5cf6;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(139,92,246,0.5);
+        }
+        .card-inner {
+            background: rgba(15, 23, 42, 0.86);
+            border-color: rgba(56, 189, 248, 0.28);
+            box-shadow: 0 18px 44px rgba(0,0,0,0.35);
+            backdrop-filter: blur(14px);
+        }
+        .formula,
+        .explanation-section,
+        .result {
+            background: rgba(15, 23, 42, 0.78);
+            border-color: rgba(148, 163, 184, 0.24);
+            color: #dbeafe;
+        }
+        .explanation-section h3 { color: #38bdf8; }
+        .explanation-section p,
+        .explanation-section ul,
+        .model-title,
+        .video-note { color: #cbd5e1; }
+        .tip {
+            background: rgba(67, 56, 202, 0.2);
+            border-left-color: #38bdf8;
+            color: #dbeafe;
+        }
+        .canvas-container {
+            background: #0a0f1e;
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            background: #0f172a;
+            border-color: #334155;
+            color: #f1f5f9;
+        }
+        .advanced-lab-card {
+            padding: 0;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+        }
+        .advanced-lab {
+            position: relative;
+            min-height: 720px;
+            height: min(76vh, 780px);
+            overflow: hidden;
+            border-radius: 18px;
+            background: #0a0f1e;
+            border: 1px solid rgba(56, 189, 248, 0.38);
+            box-shadow: 0 22px 60px rgba(0,0,0,0.45);
+        }
+        .advanced-lab-viewport {
+            position: absolute;
+            inset: 0;
+            background: #0a0f1e;
+        }
+        .advanced-lab-viewport canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .lab-control-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            width: 390px;
+            padding: 18px 24px;
+            border-radius: 28px;
+            background: rgba(15, 23, 42, 0.86);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+            backdrop-filter: blur(16px);
+        }
+        .lab-control-panel h2 {
+            color: #38bdf8;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+        }
+        .lab-btn-group,
+        .lab-axis-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .lab-control-panel button {
+            border: 0;
+            border-radius: 40px;
+            padding: 7px 14px;
+            margin: 0;
+            background: #1e293b;
+            color: #e2e8f0;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+        .lab-control-panel button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+        }
+        .lab-mode-btn {
+            border: 1px solid rgba(148, 163, 184, 0.24) !important;
+            padding: 7px 11px !important;
+        }
+        .lab-mode-btn.active {
+            color: #fff !important;
+            transform: translateY(-1px);
+        }
+        .lab-mode-area.active { background: #eab308 !important; box-shadow: 0 0 10px #eab308aa; }
+        .lab-mode-disk.active { background: #22c55e !important; box-shadow: 0 0 10px #22c55eaa; }
+        .lab-mode-washer.active { background: #f97316 !important; box-shadow: 0 0 10px #f97316aa; }
+        .lab-mode-cs.active { background: #3b82f6 !important; box-shadow: 0 0 10px #3b82f6aa; }
+        .lab-mode-shell.active { background: #a855f7 !important; box-shadow: 0 0 10px #a855f7aa; }
+        .lab-mode-polar.active { background: #06b6d4 !important; box-shadow: 0 0 10px #06b6d4aa; }
+        .lab-mode-arc.active { background: #ef4444 !important; box-shadow: 0 0 10px #ef4444aa; }
+        .lab-mode-surface.active { background: #14b8a6 !important; box-shadow: 0 0 10px #14b8a6aa; }
+        .lab-mode-parametric.active { background: #6366f1 !important; box-shadow: 0 0 10px #6366f1aa; }
+        .lab-btn-reset { background: #475569 !important; }
+        .lab-axis-selector {
+            background: #0f172a80;
+            border-radius: 48px;
+            padding: 4px;
+        }
+        .lab-axis-selector button {
+            flex: 1;
+            padding: 7px 0;
+        }
+        .lab-axis-selector button.active {
+            background: #8b5cf6 !important;
+            color: #fff;
+            box-shadow: 0 0 10px #8b5cf6aa;
+        }
+        .lab-custom-section {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(148, 163, 184, 0.3);
+        }
+        .lab-input-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .lab-input-row label {
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .lab-input-row input {
+            margin: 0;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #f1f5f9;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 12px;
+        }
+        .lab-input-row input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 2px #38bdf855;
+            outline: none;
+        }
+        .lab-update-btn {
+            width: 100%;
+            background: #8b5cf6 !important;
+            color: #fff !important;
+            font-weight: 800;
+        }
+        .lab-error-msg {
+            display: none;
+            margin-top: 7px;
+            padding: 5px 8px;
+            border-radius: 18px;
+            background: #7f1a1a66;
+            color: #ffb4a8;
+            font-size: 11px;
+            text-align: center;
+        }
+        .lab-tip {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 10px;
+        }
+        .lab-info-card {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 20;
+            padding: 11px 18px;
+            border-radius: 24px;
+            border-left: 4px solid #facc15;
+            background: rgba(0,0,0,0.74);
+            color: #cbd5e1;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 13px;
+            pointer-events: none;
+            backdrop-filter: blur(12px);
+        }
+        .lab-info-card span { color: #ffd966; font-weight: 800; }
+        .lab-volume-value { font-size: 18px; }
+        .lab-warning-msg {
+            display: none;
+            margin-top: 7px;
+            padding-top: 7px;
+            border-top: 1px solid rgba(250, 204, 21, 0.28);
+            color: #fde68a;
+            font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+        .lab-note {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            z-index: 20;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #00000066;
+            color: #9ca3af;
+            font-size: 11px;
+            backdrop-filter: blur(4px);
+        }
+        .lab-fallback {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            padding: 28px;
+            color: #e2e8f0;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(56,189,248,0.12), transparent 42%), #0a0f1e;
+        }
+        @media (max-width: 768px) {
+            .canvas-container { height: 260px; }
+            .header h1 { font-size: 1.3rem; }
+            .card { padding: 14px; }
+            .card-inner { padding: 16px; }
+            .calc-grid { grid-template-columns: 1fr; }
+            .advanced-lab { min-height: 780px; height: 82vh; }
+            .lab-control-panel {
+                width: calc(100% - 24px);
+                top: 12px;
+                left: 12px;
+                padding: 13px 16px;
+            }
+            .lab-info-card {
+                left: 12px;
+                right: 12px;
+                bottom: 46px;
+                font-size: 11px;
+            }
+            .lab-note {
+                left: 12px;
+                right: 12px;
+                bottom: 12px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>🧮 AP微积分积分应用 · 3D教学</h1>
+</div>
+<nav class="nav" id="topNav">
+    <a data-page="area" class="active">📏 面积</a>
+    <a data-page="disk">🔄 Disk</a>
+    <a data-page="washer">⭕ Washer</a>
+    <a data-page="cross">📋 截面</a>
+    <a data-page="shell" class="bc-link">🐚 Shell 拓展</a>
+    <a data-page="polar" class="bc-link">📈 极坐标</a>
+    <a data-page="arc" class="bc-link">📐 弧长</a>
+    <a data-page="surface" class="bc-link">🌐 旋转面</a>
+    <a data-page="parametric" class="bc-link">📊 参数方程</a>
+    <a data-page="calc">🔢 计算器</a>
+</nav>
+
+<div class="main-area" id="mainArea"></div>
+
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+    const sceneData = {};
+    const compatScenes = {};
+
+    function createCompatScene(containerId, reason = '兼容模式') {
+        const container = document.getElementById(containerId);
+        if (!container) return null;
+        const key = containerId.replace(/Canvas$/, '');
+        container.innerHTML = '';
+
+        const canvas = document.createElement('canvas');
+        canvas.className = 'compat-canvas';
+        const status = document.createElement('div');
+        status.className = 'compat-status';
+        status.textContent = `${reason}：拖动旋转，滚轮缩放`;
+        container.appendChild(canvas);
+        container.appendChild(status);
+
+        const ctx = canvas.getContext('2d');
+        const state = { rx: -0.65, ry: 0.75, zoom: 1, dragging: false, px: 0, py: 0 };
+        const colors = {
+            blue: '#2563eb',
+            red: '#dc2626',
+            gold: '#f59e0b',
+            purple: '#7c3aed',
+            green: '#10b981',
+            cyan: '#0891b2',
+            grid: '#dbe4ee',
+            axisX: '#ef4444',
+            axisY: '#16a34a',
+            axisZ: '#2563eb'
+        };
+
+        function resize() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const rect = container.getBoundingClientRect();
+            canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+            canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+            canvas.style.width = `${rect.width}px`;
+            canvas.style.height = `${rect.height}px`;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            draw();
+        }
+
+        function project(x, y, z) {
+            const cy = Math.cos(state.ry), sy = Math.sin(state.ry);
+            const cx = Math.cos(state.rx), sx = Math.sin(state.rx);
+            const x1 = x * cy - z * sy;
+            const z1 = x * sy + z * cy;
+            const y1 = y * cx - z1 * sx;
+            const z2 = y * sx + z1 * cx;
+            const rect = container.getBoundingClientRect();
+            const scale = Math.min(rect.width, rect.height) * 0.16 * state.zoom;
+            return {
+                x: rect.width / 2 + x1 * scale,
+                y: rect.height / 2 - y1 * scale,
+                z: z2
+            };
+        }
+
+        function path(points) {
+            ctx.beginPath();
+            points.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+        }
+
+        function strokeLine(points, color, width = 2) {
+            path(points.map(p => project(...p)));
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.stroke();
+        }
+
+        function fillPoly(points, color, alpha = 0.35, stroke = null) {
+            const projected = points.map(p => project(...p));
+            path(projected);
+            ctx.closePath();
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            if (stroke) {
+                ctx.strokeStyle = stroke;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
+        }
+
+        function circlePoints(center, radius, plane = 'yz', count = 48) {
+            const pts = [];
+            for (let i = 0; i <= count; i++) {
+                const a = i / count * Math.PI * 2;
+                if (plane === 'yz') pts.push([center[0], center[1] + radius * Math.cos(a), center[2] + radius * Math.sin(a)]);
+                if (plane === 'xz') pts.push([center[0] + radius * Math.cos(a), center[1], center[2] + radius * Math.sin(a)]);
+                if (plane === 'xy') pts.push([center[0] + radius * Math.cos(a), center[1] + radius * Math.sin(a), center[2]]);
+            }
+            return pts;
+        }
+
+        function drawDisc(center, radius, color, alpha = 0.35) {
+            fillPoly(circlePoints(center, radius, 'yz', 60), color, alpha, color);
+        }
+
+        function drawCylinderShell(radius, height, color, alpha = 0.24) {
+            const bottom = circlePoints([0, 0, 0], radius, 'xz', 60);
+            const top = circlePoints([0, height, 0], radius, 'xz', 60);
+            for (let i = 0; i < bottom.length - 1; i += 6) {
+                fillPoly([bottom[i], bottom[i + 1], top[i + 1], top[i]], color, alpha);
+            }
+            strokeLine(bottom, color, 1.5);
+            strokeLine(top, color, 1.5);
+            [[radius, 0], [-radius, 0], [0, radius], [0, -radius]].forEach(([x, z]) => {
+                strokeLine([[x, 0, z], [x, height, z]], color, 1);
+            });
+        }
+
+        function drawGridAndAxes() {
+            for (let i = -4; i <= 4; i++) {
+                strokeLine([[-4, 0, i], [4, 0, i]], colors.grid, 1);
+                strokeLine([[i, 0, -4], [i, 0, 4]], colors.grid, 1);
+            }
+            strokeLine([[-4.2, 0, 0], [4.2, 0, 0]], colors.axisX, 2);
+            strokeLine([[0, -2.2, 0], [0, 3.8, 0]], colors.axisY, 2);
+            strokeLine([[0, 0, -4.2], [0, 0, 4.2]], colors.axisZ, 2);
+        }
+
+        function drawAreaModel() {
+            const top = [], bottom = [];
+            for (let i = 0; i <= 50; i++) {
+                const t = i / 50;
+                top.push([t * 3 - 1.5, t * 2.4 - 1.1, 0]);
+                bottom.push([t * 3 - 1.5, t * t * 2.4 - 1.1, 0]);
+            }
+            fillPoly([...top, ...bottom.reverse()], colors.gold, 0.35, '#d97706');
+            strokeLine(top, colors.blue, 3);
+            strokeLine(bottom.reverse(), colors.red, 3);
+            for (let i = 4; i <= 44; i += 7) {
+                const t = i / 50;
+                const x = t * 3 - 1.5, y1 = t * t * 2.4 - 1.1, y2 = t * 2.4 - 1.1;
+                fillPoly([[x - 0.08, y1, 0.08], [x + 0.08, y1, 0.08], [x + 0.08, y2, 0.08], [x - 0.08, y2, 0.08]], colors.red, 0.5);
+            }
+        }
+
+        function drawDiskModel() {
+            for (let i = 0; i < 10; i++) {
+                const x = -1.8 + i * 0.36;
+                const r = 0.25 + i * 0.12;
+                drawDisc([x, 0, 0], r, i % 2 ? colors.gold : colors.purple, 0.38);
+            }
+            strokeLine([[-1.95, 0, 0], [2.05, 0, 0]], colors.axisX, 2);
+        }
+
+        function drawWasherModel() {
+            for (let i = 0; i < 8; i++) {
+                const x = -1.6 + i * 0.45;
+                drawDisc([x, 0, 0], 1.25, colors.blue, 0.18);
+                drawDisc([x, 0, 0], 0.35 + i * 0.08, colors.red, 0.25);
+            }
+            strokeLine([[-1.9, 0, 0], [1.9, 0, 0]], colors.axisX, 2);
+        }
+
+        function drawCrossModel() {
+            const x0 = -2, x1 = 2, y0 = -1, y1 = 1, z0 = -1, z1 = 1;
+            const edges = [
+                [[x0,y0,z0],[x1,y0,z0]], [[x0,y1,z0],[x1,y1,z0]], [[x0,y0,z1],[x1,y0,z1]], [[x0,y1,z1],[x1,y1,z1]],
+                [[x0,y0,z0],[x0,y1,z0]], [[x1,y0,z0],[x1,y1,z0]], [[x0,y0,z1],[x0,y1,z1]], [[x1,y0,z1],[x1,y1,z1]],
+                [[x0,y0,z0],[x0,y0,z1]], [[x1,y0,z0],[x1,y0,z1]], [[x0,y1,z0],[x0,y1,z1]], [[x1,y1,z0],[x1,y1,z1]]
+            ];
+            fillPoly([[x0,y0,z0],[x1,y0,z0],[x1,y1,z0],[x0,y1,z0]], colors.green, 0.12);
+            edges.forEach(e => strokeLine(e, colors.green, 1.5));
+            [-1.4, -0.5, 0.4, 1.3].forEach((x, i) => fillPoly([[x,y0,z0],[x,y1,z0],[x,y1,z1],[x,y0,z1]], i === 2 ? colors.gold : colors.red, 0.32));
+        }
+
+        function drawShellModel() {
+            [0.45, 0.75, 1.05, 1.35].forEach((r, i) => drawCylinderShell(r, 0.45 + i * 0.35, colors.purple, 0.18));
+        }
+
+        function drawPolarModel() {
+            const pts = [];
+            for (let i = 0; i <= 160; i++) {
+                const t = i / 160 * Math.PI * 2;
+                const r = 1 + Math.cos(t);
+                pts.push([r * Math.cos(t) * 1.35, 0, r * Math.sin(t) * 1.35]);
+            }
+            fillPoly(pts, colors.gold, 0.24, '#d97706');
+            strokeLine(pts, colors.purple, 3);
+            for (let i = 0; i < 8; i++) {
+                const t = i / 8 * Math.PI * 2;
+                const r = 1 + Math.cos(t);
+                strokeLine([[0,0,0], [r * Math.cos(t) * 1.35, 0, r * Math.sin(t) * 1.35]], colors.gold, 1);
+            }
+        }
+
+        function drawArcModel() {
+            const pts = [];
+            for (let i = 0; i <= 80; i++) {
+                const x = i / 80 * 3.4 - 1.7;
+                const raw = (x + 1.7) / 3.4 * 4;
+                pts.push([x, Math.pow(raw, 1.5) / 3.2 - 1.2, 0]);
+            }
+            strokeLine(pts, colors.purple, 3);
+            for (let i = 0; i < pts.length - 1; i += 10) strokeLine([pts[i], pts[i + 10]], colors.red, 2);
+        }
+
+        function drawSurfaceModel() {
+            for (let x = -1.7; x <= 1.7; x += 0.22) {
+                const r = Math.sqrt(Math.max(0.05, x + 1.8)) * 0.65;
+                strokeLine(circlePoints([x, 0, 0], r, 'yz', 32), colors.cyan, 1);
+            }
+            const curve = [];
+            for (let x = -1.7; x <= 1.7; x += 0.08) curve.push([x, Math.sqrt(x + 1.8) * 0.65, 0]);
+            strokeLine(curve, colors.purple, 3);
+        }
+
+        function drawParametricModel() {
+            for (let t = 0; t <= Math.PI; t += 0.18) {
+                const x = 1.7 * Math.cos(t), r = Math.sin(t);
+                strokeLine(circlePoints([x, 0, 0], r, 'yz', 32), colors.cyan, 1);
+            }
+            const curve = [];
+            for (let t = 0; t <= Math.PI * 2; t += 0.06) curve.push([1.7 * Math.cos(t), Math.sin(t), 0]);
+            strokeLine(curve, colors.purple, 3);
+        }
+
+        function draw() {
+            const rect = container.getBoundingClientRect();
+            ctx.clearRect(0, 0, rect.width, rect.height);
+            ctx.fillStyle = '#f5f7fa';
+            ctx.fillRect(0, 0, rect.width, rect.height);
+            drawGridAndAxes();
+            const drawers = {
+                area: drawAreaModel,
+                disk: drawDiskModel,
+                washer: drawWasherModel,
+                cross: drawCrossModel,
+                shell: drawShellModel,
+                polar: drawPolarModel,
+                arc: drawArcModel,
+                surface: drawSurfaceModel,
+                parametric: drawParametricModel
+            };
+            (drawers[key] || drawAreaModel)();
+        }
+
+        canvas.addEventListener('pointerdown', (e) => {
+            state.dragging = true;
+            state.px = e.clientX;
+            state.py = e.clientY;
+            canvas.setPointerCapture?.(e.pointerId);
+        });
+        canvas.addEventListener('pointermove', (e) => {
+            if (!state.dragging) return;
+            state.ry += (e.clientX - state.px) * 0.012;
+            state.rx += (e.clientY - state.py) * 0.012;
+            state.rx = Math.max(-1.45, Math.min(1.1, state.rx));
+            state.px = e.clientX;
+            state.py = e.clientY;
+            draw();
+        });
+        canvas.addEventListener('pointerup', (e) => {
+            state.dragging = false;
+            canvas.releasePointerCapture?.(e.pointerId);
+        });
+        canvas.addEventListener('pointerleave', () => { state.dragging = false; });
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            state.zoom *= e.deltaY > 0 ? 0.92 : 1.08;
+            state.zoom = Math.max(0.55, Math.min(2.2, state.zoom));
+            draw();
+        }, { passive: false });
+
+        const compat = { resize, draw, container };
+        compatScenes[key] = compat;
+        resize();
+        return compat;
+    }
+
+    window.useCompatModel = (key) => {
+        const d = sceneData[key];
+        if (d?.stop) d.stop();
+        delete sceneData[key];
+        createCompatScene(`${key}Canvas`, '已切换到兼容交互模型');
+    };
+
+    function createScene(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return null;
+        const w = container.clientWidth || 600;
+        const h = container.clientHeight || 380;
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf5f7fa);
+        const cam = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);
+        cam.position.set(5, 4, 6);
+        let renderer;
+        try {
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+        } catch (error) {
+            createCompatScene(containerId, '当前浏览器无法创建 WebGL，已自动切换到兼容模型');
+            return null;
+        }
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(w, h);
+        renderer.domElement.style.display = 'block';
+        container.appendChild(renderer.domElement);
+        const controls = new OrbitControls(cam, renderer.domElement);
+        controls.enableDamping = true;
+        scene.add(new THREE.AmbientLight(0x8090b0, 0.8));
+        const dir = new THREE.DirectionalLight(0xffffff, 1.0);
+        dir.position.set(5, 8, 5);
+        scene.add(dir);
+        const dir2 = new THREE.DirectionalLight(0xaaccff, 0.4);
+        dir2.position.set(-3, 2, -2);
+        scene.add(dir2);
+        const grid = new THREE.GridHelper(8, 20, 0xccd5e0, 0xe8ecf1);
+        scene.add(grid);
+        const axes = new THREE.AxesHelper(4);
+        scene.add(axes);
+
+        let stopped = false;
+        const animate = () => {
+            if (stopped) return;
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, cam);
+        };
+        animate();
+        return {
+            scene, cam, renderer, controls, container, extra: {},
+            stop() {
+                stopped = true;
+                controls.dispose();
+                renderer.dispose();
+            }
+        };
+    }
+
+    function resizeScene(d) {
+        if (!d || !d.renderer || !d.container) return;
+        const w = d.container.clientWidth;
+        const h = d.container.clientHeight;
+        if (w > 0 && h > 0) {
+            d.renderer.setSize(w, h);
+            d.cam.aspect = w / h;
+            d.cam.updateProjectionMatrix();
+        }
+    }
+
+    function createCylinderBetween(start, end, radius, material) {
+        const direction = new THREE.Vector3().subVectors(end, start);
+        const length = direction.length();
+        const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, length, 8), material);
+        mesh.position.copy(start).add(end).multiplyScalar(0.5);
+        mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+        return mesh;
+    }
+
+    const advancedLab = {
+        initialized: false,
+        page: null,
+        prefix: '',
+        presetKey: 'area',
+        observer: null,
+        animationFrame: null,
+        scene: null,
+        camera: null,
+        renderer: null,
+        labelRenderer: null,
+        controls: null,
+        sliceGroup: null,
+        curveLinesGroup: null,
+        helpersInitialized: false,
+        mode: 'disk',
+        axis: 'x',
+        f: (t) => 0.65 * t + Math.sin(t * 0.75),
+        g: (t) => 0.28 * t + 0.3,
+        axisOffset: 0,
+        tMin: 0,
+        tMax: 8,
+        sliceStep: 0.38,
+        csDepth: 3.6
+    };
+
+    const TAU = Math.PI * 2;
+
+    const advancedLabPresets = {
+        area: {
+            title: '面积累积',
+            mode: 'area',
+            axis: 'x',
+            f: '0.32*t + 0.75 + 0.32*sin(t*0.75)',
+            g: '0.14*t + 0.2',
+            tMin: 0,
+            tMax: 8,
+            sliceStep: 0.38
+        },
+        disk: {
+            title: 'Disk 圆盘法',
+            mode: 'disk',
+            axis: 'x',
+            f: '0.42*t + 0.35',
+            g: '0',
+            tMin: 0,
+            tMax: 8,
+            sliceStep: 0.36
+        },
+        washer: {
+            title: 'Washer 垫圈法',
+            mode: 'washer',
+            axis: 'x',
+            f: '0.42*t + 1.2',
+            g: '0.2*t + 0.35',
+            tMin: 0,
+            tMax: 8,
+            sliceStep: 0.36
+        },
+        cross: {
+            title: '截面法',
+            mode: 'cs',
+            axis: 'x',
+            f: 'sqrt(t + 0.4) + 0.8',
+            g: '0.22*t + 0.25',
+            tMin: 0,
+            tMax: 8,
+            sliceStep: 0.34,
+            csDepth: 1
+        },
+        shell: {
+            title: 'Shell 壳层法（拓展）',
+            mode: 'shell',
+            axis: 'y',
+            f: '0.46*t + 0.9 + 0.32*sin(t*0.65)',
+            g: '0.18*t + 0.25',
+            tMin: 0.25,
+            tMax: 7.5,
+            sliceStep: 0.34
+        },
+        polar: {
+            title: '极坐标面积',
+            mode: 'polar',
+            axis: 'x',
+            f: '1.65 + 0.75*cos(t)',
+            g: '0',
+            tMin: 0,
+            tMax: TAU,
+            sliceStep: Math.PI / 14
+        },
+        arc: {
+            title: '弧长',
+            mode: 'arc',
+            axis: 'x',
+            f: '0.18*pow(t, 1.5) + 0.45*sin(t*0.9) + 0.8',
+            g: '0',
+            tMin: 0,
+            tMax: 8,
+            sliceStep: 0.5
+        },
+        surface: {
+            title: '旋转面面积',
+            mode: 'surface',
+            axis: 'x',
+            f: 'sqrt(t + 0.25) + 0.15*sin(t*1.2)',
+            g: '0',
+            tMin: 0,
+            tMax: 8,
+            sliceStep: 0.42
+        },
+        parametric: {
+            title: '参数方程',
+            mode: 'parametric',
+            axis: 'x',
+            f: '2*cos(t)',
+            g: '1.15*sin(t)',
+            tMin: 0,
+            tMax: TAU,
+            sliceStep: Math.PI / 16
+        }
+    };
+
+    const labModePresetPage = {
+        area: 'area',
+        disk: 'disk',
+        washer: 'washer',
+        cs: 'cross',
+        shell: 'shell',
+        polar: 'polar',
+        arc: 'arc',
+        surface: 'surface',
+        parametric: 'parametric'
+    };
+
+    const labModeMeta = {
+        area: {
+            name: '面积',
+            formula: variable => `A = ∫[a,b] |f(${variable}) - g(${variable})| d${variable}`,
+            metric: '近似面积',
+            unit: '平方单位',
+            axis: true,
+            axisX: '竖直 dx 切片',
+            axisY: '水平 dy 切片',
+            fLabel: '🔴 上边界 f(t)',
+            gLabel: '🔵 下边界 g(t)',
+            note: '填两条边界曲线，模型会显示夹出的面积区域；若区间内相交，面积按 ∫|f-g| 计算，不能只对积分结果取绝对值。'
+        },
+        disk: {
+            name: '圆盘法',
+            formula: variable => `V = π∫[a,b] dist(f(${variable}), axis)² d${variable}`,
+            metric: '近似体积',
+            unit: '立方单位',
+            axis: true,
+            axisX: '绕 X 轴旋转',
+            axisY: '绕 Y 轴旋转',
+            fLabel: '🔴 半径函数 f(t)',
+            gLabel: '🔵 备用函数 g(t)',
+            note: '旋转体半径不是函数值本身，而是曲线到旋转轴的距离；当前默认旋转轴偏移为 0。'
+        },
+        washer: {
+            name: '垫圈法',
+            formula: variable => `V = π∫[a,b] (outer²-inner²) d${variable}`,
+            metric: '近似体积',
+            unit: '立方单位',
+            axis: true,
+            axisX: '绕 X 轴旋转',
+            axisY: '绕 Y 轴旋转',
+            fLabel: '🔴 外半径 R(t)',
+            gLabel: '🔵 内半径 r(t)',
+            note: '系统按到旋转轴的距离自动识别外半径和内半径，并生成真实中空垫圈。'
+        },
+        cs: {
+            name: '截面法',
+            formula: variable => `V = ∫[a,b] A(${variable}) d${variable}`,
+            metric: '近似体积',
+            unit: '立方单位',
+            axis: true,
+            axisX: '沿 X 方向堆叠',
+            axisY: '沿 Y 方向堆叠',
+            fLabel: '🔴 截面上边界 f(t)',
+            gLabel: '🔵 截面下边界 g(t)',
+            note: '模型用两曲线距离作为正方形截面的边长。'
+        },
+        shell: {
+            name: 'Shell 拓展',
+            formula: variable => `V = 2π∫[a,b] radius·height d${variable}`,
+            metric: '近似体积',
+            unit: '立方单位',
+            axis: true,
+            axisX: '绕 X 轴壳层',
+            axisY: '绕 Y 轴壳层',
+            fLabel: '🔴 外边界 f(t)',
+            gLabel: '🔵 内边界 g(t)',
+            note: 'Shell Method 是有用的拓展方法，不是 AP BC 体积主线核心；AP 主线通常是 cross sections、disk 和 washer。'
+        },
+        polar: {
+            name: '极坐标',
+            formula: () => `A = 1/2 ∫[α,β] r(θ)² dθ`,
+            metric: '近似面积',
+            unit: '平方单位',
+            axis: false,
+            fLabel: '🔴 极径 r(θ)',
+            gLabel: '🔵 辅助函数，可填 0',
+            note: '极坐标中 r 可以为负，负 r 表示沿相反方向取点；面积公式仍然使用 r²。'
+        },
+        arc: {
+            name: '弧长',
+            formula: variable => `L = ∫[a,b] √(1 + [f'(${variable})]²) d${variable}`,
+            metric: '近似弧长',
+            unit: '长度单位',
+            axis: false,
+            fLabel: '🔴 曲线 y = f(t)',
+            gLabel: '🔵 辅助函数，可填 0',
+            note: '黄色折线是数值近似，红色曲线是真实函数。'
+        },
+        surface: {
+            name: '旋转面',
+            formula: variable => `S = 2π∫[a,b] dist(f(${variable}), axis)√(1 + [f'(${variable})]²) d${variable}`,
+            metric: '近似面积',
+            unit: '平方单位',
+            axis: true,
+            axisX: '绕 X 轴旋转',
+            axisY: '绕 Y 轴旋转',
+            fLabel: '🔴 半径函数 f(t)',
+            gLabel: '🔵 辅助函数，可填 0',
+            note: '旋转曲面半径是曲线到旋转轴的距离；当前默认旋转轴偏移为 0。'
+        },
+        parametric: {
+            name: '参数方程',
+            formula: () => `A = |∫ y(t)x'(t)dt|，V = π∫ dist(y(t),axis)²|x'(t)|dt`,
+            metric: '面积 / 体积',
+            unit: '单位',
+            axis: false,
+            fLabel: '🔴 x(t)',
+            gLabel: '🔵 y(t)',
+            note: '用于面积/体积时要检查 x(t) 或 y(t) 是否单调；导数变号通常需要分段，否则可能重复计算。'
+        }
+    };
+
+    function labEl(id) {
+        return document.getElementById(`${advancedLab.prefix}${id}`);
+    }
+
+    function parseLabFunction(expr) {
+        const source = expr.trim().replace(/\^/g, '**').replace(/π/g, 'pi');
+        try {
+            const fn = new Function('t', `
+                const {
+                    sin, cos, tan, asin, acos, atan, sqrt, cbrt, abs, log, log10,
+                    exp, pow, min, max, floor, ceil, round, PI, E
+                } = Math;
+                const pi = PI;
+                const x = t;
+                const y = t;
+                const theta = t;
+                return (${source});
+            `);
+            const test = Number(fn(1));
+            if (!Number.isFinite(test)) throw new Error('invalid value');
+            return fn;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function integrateLabTrapezoid(func, a, b, n = 240) {
+        const h = (b - a) / n;
+        let sum = 0.5 * (func(a) + func(b));
+        for (let i = 1; i < n; i++) sum += func(a + i * h);
+        return sum * h;
+    }
+
+    function labRawValue(func, t, fallback = 0) {
+        const value = Number(func(t));
+        return Number.isFinite(value) ? value : fallback;
+    }
+
+    function labValue(func, t, min = -12, max = 12) {
+        return THREE.MathUtils.clamp(labRawValue(func, t), min, max);
+    }
+
+    // 数学半径：旋转体半径是点到旋转轴的距离，而不是函数值本身。
+    function getRadiusToAxis(value, axisOffset = 0) {
+        return Math.abs(value - axisOffset);
+    }
+
+    function getLabAxisOffset(lab = advancedLab) {
+        return Number.isFinite(lab.axisOffset) ? lab.axisOffset : 0;
+    }
+
+    // Washer 的外/内半径按“到轴距离”自动排序，避免函数上下关系误导半径关系。
+    function getWasherRadii(firstValue, secondValue, axisOffset = 0) {
+        const firstRadius = getRadiusToAxis(firstValue, axisOffset);
+        const secondRadius = getRadiusToAxis(secondValue, axisOffset);
+        return {
+            outer: Math.max(firstRadius, secondRadius),
+            inner: Math.min(firstRadius, secondRadius),
+            swapped: secondRadius > firstRadius
+        };
+    }
+
+    function getBoundedRadius(func, t, max = 8, axisOffset = getLabAxisOffset()) {
+        return THREE.MathUtils.clamp(getRadiusToAxis(labValue(func, t, -max, max), axisOffset), 0, max);
+    }
+
+    // 采样检测符号变化；用于提示需要分段，而不是替代精确求交点。
+    function hasSignChange(func, a, b, samples = 80, epsilon = 1e-7) {
+        let lastSign = 0;
+        for (let i = 0; i <= samples; i++) {
+            const t = a + (i / samples) * (b - a);
+            const value = Number(func(t));
+            if (!Number.isFinite(value) || Math.abs(value) <= epsilon) continue;
+            const sign = Math.sign(value);
+            if (lastSign && sign !== lastSign) return true;
+            lastSign = sign;
+        }
+        return false;
+    }
+
+    function areaDifferenceChangesSign() {
+        const lab = advancedLab;
+        return hasSignChange(t => labRawValue(lab.f, t) - labRawValue(lab.g, t), lab.tMin, lab.tMax);
+    }
+
+    function parametricXDerivativeChangesSign() {
+        const lab = advancedLab;
+        return hasSignChange(t => labDerivative(lab.f, t), lab.tMin, lab.tMax, 90, 1e-5);
+    }
+
+    // 极坐标面积密度：signed r 直接平方；未来可传入内外两条极坐标曲线。
+    function polarAreaDensity(outerRadius, innerRadius = 0) {
+        return 0.5 * (outerRadius * outerRadius - innerRadius * innerRadius);
+    }
+
+    function labDerivative(func, t) {
+        const lab = advancedLab;
+        const span = Math.max(1e-4, Math.abs(lab.tMax - lab.tMin) * 1e-4);
+        const left = Math.max(lab.tMin, t - span);
+        const right = Math.min(lab.tMax, t + span);
+        if (right <= left) return 0;
+        return (labRawValue(func, right) - labRawValue(func, left)) / (right - left);
+    }
+
+    function formatLabLimit(value) {
+        if (Math.abs(value) < 1e-9) return '0';
+        if (Math.abs(value - Math.PI) < 1e-6) return 'π';
+        if (Math.abs(value - TAU) < 1e-6) return '2π';
+        return Number(value).toFixed(value % 1 === 0 ? 0 : 2);
+    }
+
+    function formatLabInterval() {
+        return `[${formatLabLimit(advancedLab.tMin)},${formatLabLimit(advancedLab.tMax)}]`;
+    }
+
+    function computeLabMetric() {
+        const lab = advancedLab;
+        const axisOffset = getLabAxisOffset(lab);
+        if (lab.mode === 'area') {
+            return integrateLabTrapezoid(t => Math.abs(labRawValue(lab.f, t) - labRawValue(lab.g, t)), lab.tMin, lab.tMax, 320);
+        }
+        if (lab.mode === 'disk') {
+            return Math.PI * integrateLabTrapezoid(t => getRadiusToAxis(labRawValue(lab.f, t), axisOffset) ** 2, lab.tMin, lab.tMax, 260);
+        }
+        if (lab.mode === 'washer') {
+            return Math.PI * integrateLabTrapezoid(t => {
+                const { outer, inner } = getWasherRadii(labRawValue(lab.f, t), labRawValue(lab.g, t), axisOffset);
+                return outer * outer - inner * inner;
+            }, lab.tMin, lab.tMax, 260);
+        }
+        if (lab.mode === 'shell') {
+            return 2 * Math.PI * integrateLabTrapezoid(t => {
+                const radius = Math.max(0, Math.abs(t));
+                const height = Math.max(0, Math.abs(labRawValue(lab.f, t) - labRawValue(lab.g, t)));
+                return radius * height;
+            }, lab.tMin, lab.tMax, 240);
+        }
+        if (lab.mode === 'polar') {
+            return integrateLabTrapezoid(t => polarAreaDensity(labRawValue(lab.f, t)), lab.tMin, lab.tMax, 320);
+        }
+        if (lab.mode === 'arc') {
+            return integrateLabTrapezoid(t => Math.sqrt(1 + labDerivative(lab.f, t) ** 2), lab.tMin, lab.tMax, 320);
+        }
+        if (lab.mode === 'surface') {
+            return 2 * Math.PI * integrateLabTrapezoid(t => {
+                const radius = getRadiusToAxis(labRawValue(lab.f, t), axisOffset);
+                return radius * Math.sqrt(1 + labDerivative(lab.f, t) ** 2);
+            }, lab.tMin, lab.tMax, 320);
+        }
+        if (lab.mode === 'parametric') {
+            const area = Math.abs(integrateLabTrapezoid(t => labRawValue(lab.g, t) * labDerivative(lab.f, t), lab.tMin, lab.tMax, 360));
+            const volume = Math.PI * integrateLabTrapezoid(t => getRadiusToAxis(labRawValue(lab.g, t), axisOffset) ** 2 * Math.abs(labDerivative(lab.f, t)), lab.tMin, lab.tMax, 360);
+            return { area, volume };
+        }
+        return integrateLabTrapezoid(t => {
+            const base = Math.max(0, Math.abs(labRawValue(lab.f, t) - labRawValue(lab.g, t)));
+            return base * base;
+        }, lab.tMin, lab.tMax, 240);
+    }
+
+    function washerRadiiSwapDetected(samples = 80) {
+        const lab = advancedLab;
+        const axisOffset = getLabAxisOffset(lab);
+        for (let i = 0; i <= samples; i++) {
+            const t = lab.tMin + (i / samples) * (lab.tMax - lab.tMin);
+            if (getWasherRadii(labRawValue(lab.f, t), labRawValue(lab.g, t), axisOffset).swapped) return true;
+        }
+        return false;
+    }
+
+    function getLabWarnings() {
+        const lab = advancedLab;
+        const warnings = [];
+        if (lab.mode === 'area' && areaDifferenceChangesSign()) {
+            warnings.push('检测到两曲线在区间内可能相交，系统已按 ∫|f-g| 计算面积。');
+        }
+        if (lab.mode === 'washer' && washerRadiiSwapDetected()) {
+            warnings.push('检测到内外函数到旋转轴的距离顺序可能互换，系统已按距离自动识别外半径和内半径。');
+        }
+        if (lab.mode === 'parametric' && parametricXDerivativeChangesSign()) {
+            warnings.push("检测到 x'(t) 可能变号：当前区间可能需要分段计算。");
+        }
+        return warnings;
+    }
+
+    function updateLabInfoUI() {
+        const lab = advancedLab;
+        const volumeEl = labEl('VolumeValue');
+        const metricEl = labEl('MetricLabel');
+        const unitEl = labEl('UnitLabel');
+        const modeEl = labEl('ModeName');
+        const axisEl = labEl('AxisName');
+        const formulaEl = labEl('FormulaTxt');
+        const warningEl = labEl('WarningMsg');
+        if (!volumeEl || !modeEl || !axisEl || !formulaEl) return;
+
+        const meta = labModeMeta[lab.mode] || labModeMeta.area;
+        const variable = lab.axis === 'x' ? 'x' : 'y';
+        const metric = computeLabMetric();
+        modeEl.textContent = meta.name;
+        axisEl.textContent = meta.axis ? (lab.axis === 'x' ? meta.axisX : meta.axisY) : '无旋转轴';
+        formulaEl.innerHTML = meta.formula(variable)
+            .replace('[a,b]', formatLabInterval())
+            .replace('[α,β]', formatLabInterval());
+        if (lab.mode === 'parametric') {
+            volumeEl.textContent = `A≈${metric.area.toFixed(3)} / V≈${metric.volume.toFixed(3)}`;
+        } else {
+            volumeEl.textContent = metric.toFixed(3);
+        }
+        if (metricEl) metricEl.textContent = meta.metric;
+        if (unitEl) unitEl.textContent = meta.unit;
+        if (warningEl) {
+            const warnings = getLabWarnings();
+            warningEl.textContent = warnings.join(' ');
+            warningEl.style.display = warnings.length ? 'block' : 'none';
+        }
+    }
+
+    function disposeLabObject(object) {
+        object.traverse?.(child => {
+            child.geometry?.dispose?.();
+            if (Array.isArray(child.material)) child.material.forEach(mat => mat.dispose?.());
+            else child.material?.dispose?.();
+        });
+    }
+
+    function clearLabGroup(group) {
+        while (group.children.length) {
+            const child = group.children.pop();
+            disposeLabObject(child);
+        }
+    }
+
+    function addLabEdges(mesh, color = 0xffffff) {
+        const edgesGeo = new THREE.EdgesGeometry(mesh.geometry);
+        const edgesMat = new THREE.LineBasicMaterial({ color });
+        mesh.add(new THREE.LineSegments(edgesGeo, edgesMat));
+        return mesh;
+    }
+
+    // Washer 几何：把外半径-内半径的环形截面沿厚度挤出，得到真实中空垫圈。
+    function createLabHollowCylinder(outerRadius, innerRadius, height, radialSegments = 56, heightSegments = 1) {
+        const outerR = Math.max(0.001, outerRadius);
+        const innerR = THREE.MathUtils.clamp(innerRadius, 0.001, outerR - 0.001);
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const indices = [];
+        const ringSize = radialSegments + 1;
+
+        for (let yIndex = 0; yIndex <= heightSegments; yIndex++) {
+            const y = -height / 2 + (yIndex / heightSegments) * height;
+            for (let i = 0; i <= radialSegments; i++) {
+                const theta = (i / radialSegments) * TAU;
+                vertices.push(outerR * Math.cos(theta), y, outerR * Math.sin(theta));
+            }
+        }
+
+        const innerOffset = vertices.length / 3;
+        for (let yIndex = 0; yIndex <= heightSegments; yIndex++) {
+            const y = -height / 2 + (yIndex / heightSegments) * height;
+            for (let i = 0; i <= radialSegments; i++) {
+                const theta = (i / radialSegments) * TAU;
+                vertices.push(innerR * Math.cos(theta), y, innerR * Math.sin(theta));
+            }
+        }
+
+        for (let yIndex = 0; yIndex < heightSegments; yIndex++) {
+            for (let i = 0; i < radialSegments; i++) {
+                const a = yIndex * ringSize + i;
+                const b = a + 1;
+                const c = (yIndex + 1) * ringSize + i;
+                const d = c + 1;
+                indices.push(a, b, c, b, d, c);
+
+                const ia = innerOffset + yIndex * ringSize + i;
+                const ib = ia + 1;
+                const ic = innerOffset + (yIndex + 1) * ringSize + i;
+                const id = ic + 1;
+                indices.push(ia, ic, ib, ib, ic, id);
+            }
+        }
+
+        const topOuter = heightSegments * ringSize;
+        const topInner = innerOffset + heightSegments * ringSize;
+        const bottomOuter = 0;
+        const bottomInner = innerOffset;
+        for (let i = 0; i < radialSegments; i++) {
+            const topOuterA = topOuter + i;
+            const topOuterB = topOuterA + 1;
+            const topInnerA = topInner + i;
+            const topInnerB = topInnerA + 1;
+            indices.push(topOuterA, topOuterB, topInnerA, topOuterB, topInnerB, topInnerA);
+
+            const bottomOuterA = bottomOuter + i;
+            const bottomOuterB = bottomOuterA + 1;
+            const bottomInnerA = bottomInner + i;
+            const bottomInnerB = bottomInnerA + 1;
+            indices.push(bottomOuterA, bottomInnerA, bottomOuterB, bottomOuterB, bottomInnerA, bottomInnerB);
+        }
+
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setIndex(indices);
+        geometry.computeVertexNormals();
+        return geometry;
+    }
+
+    function makeLabFanMesh(points, material) {
+        if (points.length < 3) return null;
+        const vertices = [];
+        const indices = [];
+        points.forEach(point => vertices.push(point.x, point.y, point.z));
+        for (let i = 1; i < points.length - 1; i++) indices.push(0, i, i + 1);
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setIndex(indices);
+        geometry.computeVertexNormals();
+        return new THREE.Mesh(geometry, material);
+    }
+
+    function makeLabShapeMesh(points, color, opacity = 0.28) {
+        if (points.length < 3) return null;
+        const shape = new THREE.Shape();
+        shape.moveTo(points[0].x, points[0].y);
+        points.slice(1).forEach(point => shape.lineTo(point.x, point.y));
+        shape.closePath();
+        return new THREE.Mesh(
+            new THREE.ShapeGeometry(shape),
+            new THREE.MeshStandardMaterial({
+                color,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity,
+                roughness: 0.42
+            })
+        );
+    }
+
+    function makeRevolutionGeometry(radiusFunc, a, b, axis = 'x', tSegments = 92, radialSegments = 48, axisOffset = 0) {
+        const vertices = [];
+        const indices = [];
+        for (let i = 0; i <= tSegments; i++) {
+            const t = a + (i / tSegments) * (b - a);
+            const radius = getRadiusToAxis(labValue(radiusFunc, t, -8, 8), axisOffset);
+            for (let j = 0; j <= radialSegments; j++) {
+                const angle = (j / radialSegments) * TAU;
+                if (axis === 'x') {
+                    vertices.push(t, radius * Math.cos(angle), radius * Math.sin(angle));
+                } else {
+                    vertices.push(radius * Math.cos(angle), t, radius * Math.sin(angle));
+                }
+            }
+        }
+        const row = radialSegments + 1;
+        for (let i = 0; i < tSegments; i++) {
+            for (let j = 0; j < radialSegments; j++) {
+                const a1 = i * row + j;
+                const b1 = a1 + row;
+                indices.push(a1, b1, a1 + 1, b1, b1 + 1, a1 + 1);
+            }
+        }
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setIndex(indices);
+        geometry.computeVertexNormals();
+        return geometry;
+    }
+
+    function makeParametricRevolutionGeometry(xFunc, yFunc, a, b, tSegments = 128, radialSegments = 42, axisOffset = 0) {
+        const vertices = [];
+        const indices = [];
+        for (let i = 0; i <= tSegments; i++) {
+            const t = a + (i / tSegments) * (b - a);
+            const x = labValue(xFunc, t, -8, 8);
+            const radius = getRadiusToAxis(labValue(yFunc, t, -6, 6), axisOffset);
+            for (let j = 0; j <= radialSegments; j++) {
+                const angle = (j / radialSegments) * TAU;
+                vertices.push(x, radius * Math.cos(angle), radius * Math.sin(angle));
+            }
+        }
+        const row = radialSegments + 1;
+        for (let i = 0; i < tSegments; i++) {
+            for (let j = 0; j < radialSegments; j++) {
+                const a1 = i * row + j;
+                const b1 = a1 + row;
+                indices.push(a1, b1, a1 + 1, b1, b1 + 1, a1 + 1);
+            }
+        }
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setIndex(indices);
+        geometry.computeVertexNormals();
+        return geometry;
+    }
+
+    function graphPointForLab(func, t) {
+        const lab = advancedLab;
+        const value = labValue(func, t, -8, 8);
+        if (lab.mode === 'shell' && lab.axis === 'x') {
+            return new THREE.Vector3(value, t, 0);
+        }
+        if (lab.mode === 'area' || lab.mode === 'shell' && lab.axis === 'y' || lab.axis === 'x') {
+            return new THREE.Vector3(t, value, 0);
+        }
+        return new THREE.Vector3(value, t, 0);
+    }
+
+    function buildLabSlices() {
+        const lab = advancedLab;
+        clearLabGroup(lab.sliceGroup);
+        const halfStep = lab.sliceStep / 2;
+        const axisOffset = getLabAxisOffset(lab);
+
+        if (lab.mode === 'area') {
+            const upper = [];
+            const lower = [];
+            for (let i = 0; i <= 150; i++) {
+                const t = lab.tMin + (i / 150) * (lab.tMax - lab.tMin);
+                const a = labValue(lab.f, t, -8, 8);
+                const b = labValue(lab.g, t, -8, 8);
+                upper.push(new THREE.Vector2(t, Math.max(a, b)));
+                lower.push(new THREE.Vector2(t, Math.min(a, b)));
+            }
+            const region = makeLabShapeMesh([...upper, ...lower.reverse()], 0xfacc15, 0.26);
+            if (region) {
+                region.position.z = -0.03;
+                lab.sliceGroup.add(region);
+            }
+
+            const sliceMat = new THREE.MeshStandardMaterial({
+                color: 0xf59e0b,
+                emissive: 0x4a2a00,
+                transparent: true,
+                opacity: 0.72,
+                roughness: 0.38
+            });
+
+            if (lab.axis === 'x') {
+                for (let t = lab.tMin; t <= lab.tMax - halfStep; t += lab.sliceStep) {
+                    const center = t + halfStep;
+                    const a = labValue(lab.f, center, -8, 8);
+                    const b = labValue(lab.g, center, -8, 8);
+                    const high = Math.max(a, b);
+                    const low = Math.min(a, b);
+                    const height = high - low;
+                    if (height < 0.025) continue;
+                    const bar = new THREE.Mesh(new THREE.BoxGeometry(lab.sliceStep * 0.82, height, 0.18), sliceMat);
+                    bar.position.set(center, low + height / 2, 0.08);
+                    lab.sliceGroup.add(addLabEdges(bar, 0xfff2aa));
+                }
+            } else {
+                const yMin = Math.min(...upper.map(p => p.y), ...lower.map(p => p.y));
+                const yMax = Math.max(...upper.map(p => p.y), ...lower.map(p => p.y));
+                const stripStep = Math.max(0.08, (yMax - yMin) / 16);
+                for (let y = yMin; y <= yMax - stripStep / 2; y += stripStep) {
+                    const centerY = y + stripStep / 2;
+                    const xs = [];
+                    for (let i = 0; i <= 220; i++) {
+                        const t = lab.tMin + (i / 220) * (lab.tMax - lab.tMin);
+                        const a = labValue(lab.f, t, -8, 8);
+                        const b = labValue(lab.g, t, -8, 8);
+                        if (centerY >= Math.min(a, b) && centerY <= Math.max(a, b)) xs.push(t);
+                    }
+                    if (xs.length < 2) continue;
+                    const minX = Math.min(...xs);
+                    const maxX = Math.max(...xs);
+                    const width = maxX - minX;
+                    if (width < 0.025) continue;
+                    const bar = new THREE.Mesh(new THREE.BoxGeometry(width, stripStep * 0.82, 0.18), sliceMat);
+                    bar.position.set(minX + width / 2, centerY, 0.08);
+                    lab.sliceGroup.add(addLabEdges(bar, 0xfff2aa));
+                }
+            }
+            return;
+        }
+
+        if (lab.mode === 'shell') {
+            const shellMat = new THREE.MeshStandardMaterial({
+                color: 0xa855f7,
+                emissive: 0x2d145f,
+                roughness: 0.35,
+                metalness: 0.05,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.44
+            });
+            for (let t = lab.tMin; t <= lab.tMax - halfStep; t += lab.sliceStep) {
+                const center = t + halfStep;
+                const a = labValue(lab.f, center, -8, 8);
+                const b = labValue(lab.g, center, -8, 8);
+                const low = Math.min(a, b);
+                const height = Math.abs(a - b);
+                const radius = Math.min(7.6, Math.max(0.06, Math.abs(center)));
+                if (height < 0.035) continue;
+                const shell = new THREE.Mesh(
+                    new THREE.CylinderGeometry(radius, radius, height, 72, 1, true, -Math.PI * 0.18, TAU * 0.78),
+                    shellMat
+                );
+                if (lab.axis === 'y') {
+                    shell.position.set(0, low + height / 2, 0);
+                } else {
+                    shell.rotation.z = Math.PI / 2;
+                    shell.position.set(low + height / 2, 0, 0);
+                }
+                lab.sliceGroup.add(addLabEdges(shell, 0xd8b4fe));
+            }
+            return;
+        }
+
+        if (lab.mode === 'polar') {
+            const sectorCount = Math.max(8, Math.ceil((lab.tMax - lab.tMin) / lab.sliceStep));
+            for (let s = 0; s < sectorCount; s++) {
+                const start = lab.tMin + (s / sectorCount) * (lab.tMax - lab.tMin);
+                const end = lab.tMin + ((s + 1) / sectorCount) * (lab.tMax - lab.tMin);
+                const points = [new THREE.Vector3(0, 0.02, 0)];
+                for (let i = 0; i <= 6; i++) {
+                    const theta = start + (i / 6) * (end - start);
+                    const radius = labValue(lab.f, theta, -4.5, 4.5);
+                    points.push(new THREE.Vector3(radius * Math.cos(theta), 0.02, radius * Math.sin(theta)));
+                }
+                const mesh = makeLabFanMesh(
+                    points,
+                    new THREE.MeshStandardMaterial({
+                        color: s % 2 ? 0x22d3ee : 0x38bdf8,
+                        emissive: 0x07364a,
+                        side: THREE.DoubleSide,
+                        transparent: true,
+                        opacity: 0.55
+                    })
+                );
+                if (mesh) {
+                    lab.sliceGroup.add(addLabEdges(mesh, 0xbef6ff));
+                    lab.sliceGroup.add(new THREE.Line(
+                        new THREE.BufferGeometry().setFromPoints([...points.slice(1), points[0], points[1]]),
+                        new THREE.LineBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.42 })
+                    ));
+                }
+            }
+            return;
+        }
+
+        if (lab.mode === 'arc') {
+            const ribbonPts = [];
+            const baselinePts = [];
+            for (let i = 0; i <= 120; i++) {
+                const t = lab.tMin + (i / 120) * (lab.tMax - lab.tMin);
+                ribbonPts.push(new THREE.Vector2(t, Math.max(0, labValue(lab.f, t, -8, 8))));
+                baselinePts.push(new THREE.Vector2(t, 0));
+            }
+            const ribbon = makeLabShapeMesh([...ribbonPts, ...baselinePts.reverse()], 0x38bdf8, 0.2);
+            if (ribbon) {
+                ribbon.position.z = -0.12;
+                ribbon.material.emissive = new THREE.Color(0x075985);
+                lab.sliceGroup.add(ribbon);
+            }
+
+            const segmentMat = new THREE.MeshBasicMaterial({ color: 0xfff176 });
+            const pointMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const guideMat = new THREE.MeshBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.48 });
+            const segments = Math.max(8, Math.round((lab.tMax - lab.tMin) / lab.sliceStep));
+            let previous = null;
+            for (let i = 0; i <= segments; i++) {
+                const t = lab.tMin + (i / segments) * (lab.tMax - lab.tMin);
+                const point = new THREE.Vector3(t, labValue(lab.f, t, -8, 8), 0.03);
+                const bead = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), pointMat);
+                bead.position.copy(point);
+                lab.sliceGroup.add(bead);
+                if (i % 2 === 0 && point.y > 0.05) {
+                    lab.sliceGroup.add(createCylinderBetween(new THREE.Vector3(t, 0, 0.02), point, 0.015, guideMat));
+                }
+                if (previous) lab.sliceGroup.add(createCylinderBetween(previous, point, 0.06, segmentMat));
+                previous = point;
+            }
+            return;
+        }
+
+        if (lab.mode === 'surface') {
+            const surface = new THREE.Mesh(
+                makeRevolutionGeometry(lab.f, lab.tMin, lab.tMax, lab.axis, 96, 56, axisOffset),
+                new THREE.MeshStandardMaterial({
+                    color: 0x14b8a6,
+                    emissive: 0x063f3a,
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.58,
+                    roughness: 0.28,
+                    metalness: 0.08
+                })
+            );
+            lab.sliceGroup.add(addLabEdges(surface, 0x99f6e4));
+            for (let t = lab.tMin; t <= lab.tMax; t += lab.sliceStep * 1.7) {
+                const radius = getBoundedRadius(lab.f, t, 8, axisOffset);
+                if (radius < 0.05) continue;
+                const ring = new THREE.Mesh(
+                    new THREE.TorusGeometry(radius, 0.025, 10, 80),
+                    new THREE.MeshBasicMaterial({ color: 0xccfbf1, transparent: true, opacity: 0.52 })
+                );
+                if (lab.axis === 'x') {
+                    ring.rotation.y = Math.PI / 2;
+                    ring.position.set(t, 0, 0);
+                } else {
+                    ring.rotation.x = Math.PI / 2;
+                    ring.position.set(0, t, 0);
+                }
+                lab.sliceGroup.add(ring);
+            }
+            return;
+        }
+
+        if (lab.mode === 'parametric') {
+            const points = [];
+            for (let i = 0; i <= 180; i++) {
+                const t = lab.tMin + (i / 180) * (lab.tMax - lab.tMin);
+                points.push(new THREE.Vector2(labValue(lab.f, t, -8, 8), labValue(lab.g, t, -8, 8)));
+            }
+            const areaMesh = makeLabShapeMesh(points, 0x60a5fa, 0.24);
+            if (areaMesh) {
+                areaMesh.position.z = -0.08;
+                lab.sliceGroup.add(areaMesh);
+            }
+            const surface = new THREE.Mesh(
+                makeParametricRevolutionGeometry(lab.f, lab.g, lab.tMin, lab.tMax, 128, 42, axisOffset),
+                new THREE.MeshStandardMaterial({
+                    color: 0x818cf8,
+                    emissive: 0x272a72,
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.36,
+                    roughness: 0.32
+                })
+            );
+            lab.sliceGroup.add(addLabEdges(surface, 0xc7d2fe));
+            return;
+        }
+
+        for (let t = lab.tMin; t <= lab.tMax - halfStep; t += lab.sliceStep) {
+            if (lab.mode === 'cs') {
+                const a = labValue(lab.f, t + halfStep, -8, 8);
+                const b = labValue(lab.g, t + halfStep, -8, 8);
+                const base = Math.max(0, Math.abs(a - b));
+                if (base < 0.02) continue;
+                const geo = lab.axis === 'x'
+                    ? new THREE.BoxGeometry(lab.sliceStep * 0.98, base, Math.max(0.08, base))
+                    : new THREE.BoxGeometry(Math.max(0.08, base), lab.sliceStep * 0.98, base);
+                const mat = new THREE.MeshStandardMaterial({
+                    color: 0x3b82f6,
+                    emissive: 0x0a2a5a,
+                    roughness: 0.35,
+                    transparent: true,
+                    opacity: 0.75
+                });
+                const box = new THREE.Mesh(geo, mat);
+                if (lab.axis === 'x') box.position.set(t + halfStep, Math.min(a, b) + base / 2, 0);
+                else box.position.set(Math.min(a, b) + base / 2, t + halfStep, 0);
+                lab.sliceGroup.add(addLabEdges(box, 0xcceeff));
+                continue;
+            }
+
+            if (lab.mode === 'disk') {
+                const radius = getBoundedRadius(lab.f, t + halfStep, 8, axisOffset);
+                if (radius <= 0.01) continue;
+                const geo = new THREE.CylinderGeometry(radius, radius, lab.sliceStep * 0.98, 42);
+                const mat = new THREE.MeshStandardMaterial({
+                    color: 0x22c55e,
+                    emissive: 0x064e3b,
+                    roughness: 0.3,
+                    metalness: 0.2,
+                    transparent: true,
+                    opacity: 0.72
+                });
+                const cylinder = new THREE.Mesh(geo, mat);
+                if (lab.axis === 'x') {
+                    cylinder.rotation.z = Math.PI / 2;
+                    cylinder.position.set(t + halfStep, 0, 0);
+                } else {
+                    cylinder.position.set(0, t + halfStep, 0);
+                }
+                lab.sliceGroup.add(addLabEdges(cylinder, 0xaaffaa));
+                continue;
+            }
+
+            const fValue = labValue(lab.f, t + halfStep, -8, 8);
+            const gValue = labValue(lab.g, t + halfStep, -8, 8);
+            const { outer, inner } = getWasherRadii(fValue, gValue, axisOffset);
+            if (outer <= 0.02 || outer <= inner) continue;
+            const thickness = lab.sliceStep * 0.98;
+            const washerGeo = createLabHollowCylinder(outer, inner, thickness, 64, 2);
+            const washerMat = new THREE.MeshStandardMaterial({
+                color: 0xf97316,
+                emissive: 0x4a2200,
+                roughness: 0.4,
+                metalness: 0.18,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.84
+            });
+            const washer = new THREE.Mesh(washerGeo, washerMat);
+            if (lab.axis === 'x') {
+                washer.rotation.z = Math.PI / 2;
+                washer.position.set(t + halfStep, 0, 0);
+            } else {
+                washer.position.set(0, t + halfStep, 0);
+            }
+            lab.sliceGroup.add(addLabEdges(washer, 0xffaa77));
+        }
+    }
+
+    function rebuildLabCurves() {
+        const lab = advancedLab;
+        clearLabGroup(lab.curveLinesGroup);
+        const axisOffset = getLabAxisOffset(lab);
+
+        if (lab.mode === 'polar') {
+            const points = [];
+            for (let i = 0; i <= 260; i++) {
+                const t = lab.tMin + (i / 260) * (lab.tMax - lab.tMin);
+                const radius = labValue(lab.f, t, -4.5, 4.5);
+                points.push(new THREE.Vector3(radius * Math.cos(t), 0.08, radius * Math.sin(t)));
+            }
+            lab.curveLinesGroup.add(new THREE.Line(
+                new THREE.BufferGeometry().setFromPoints(points),
+                new THREE.LineBasicMaterial({ color: 0xfff7ad })
+            ));
+            const origin = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+            origin.position.set(0, 0.08, 0);
+            lab.curveLinesGroup.add(origin);
+            return;
+        }
+
+        if (lab.mode === 'arc') {
+            const points = [];
+            for (let i = 0; i <= 220; i++) {
+                const t = lab.tMin + (i / 220) * (lab.tMax - lab.tMin);
+                points.push(new THREE.Vector3(t, labValue(lab.f, t, -8, 8), 0));
+            }
+            lab.curveLinesGroup.add(new THREE.Mesh(
+                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 180, 0.14, 14, false),
+                new THREE.MeshBasicMaterial({ color: 0xff4d6d })
+            ));
+            return;
+        }
+
+        if (lab.mode === 'parametric') {
+            const points = [];
+            for (let i = 0; i <= 260; i++) {
+                const t = lab.tMin + (i / 260) * (lab.tMax - lab.tMin);
+                points.push(new THREE.Vector3(labValue(lab.f, t, -8, 8), labValue(lab.g, t, -8, 8), 0.05));
+            }
+            lab.curveLinesGroup.add(new THREE.Mesh(
+                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 220, 0.035, 10, true),
+                new THREE.MeshStandardMaterial({ color: 0xff7777, emissive: 0x552020 })
+            ));
+            return;
+        }
+
+        const pointsF = [];
+        const pointsG = [];
+        for (let i = 0; i <= 220; i++) {
+            const t = lab.tMin + (i / 220) * (lab.tMax - lab.tMin);
+            pointsF.push(graphPointForLab(lab.f, t));
+            pointsG.push(graphPointForLab(lab.g, t));
+        }
+        const curveF = new THREE.Line(
+            new THREE.BufferGeometry().setFromPoints(pointsF),
+            new THREE.LineBasicMaterial({ color: 0xff6666 })
+        );
+        const curveG = new THREE.Line(
+            new THREE.BufferGeometry().setFromPoints(pointsG),
+            new THREE.LineBasicMaterial({ color: 0x66ccff })
+        );
+        lab.curveLinesGroup.add(curveF, curveG);
+
+        const redMat = new THREE.MeshStandardMaterial({ color: 0xff8888 });
+        const blueMat = new THREE.MeshStandardMaterial({ color: 0x88aaff });
+        [graphPointForLab(lab.f, lab.tMin), graphPointForLab(lab.f, lab.tMax)].forEach(point => {
+            const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), redMat);
+            sphere.position.copy(point);
+            lab.curveLinesGroup.add(sphere);
+        });
+        [graphPointForLab(lab.g, lab.tMin), graphPointForLab(lab.g, lab.tMax)].forEach(point => {
+            const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), blueMat);
+            sphere.position.copy(point);
+            lab.curveLinesGroup.add(sphere);
+        });
+
+        const mid = (lab.tMin + lab.tMax) / 2;
+        const ringRad = lab.mode === 'washer'
+            ? getWasherRadii(labValue(lab.f, mid, -8, 8), labValue(lab.g, mid, -8, 8), axisOffset).outer
+            : getBoundedRadius(lab.f, mid, 8, axisOffset);
+        if ((lab.mode === 'disk' || lab.mode === 'washer' || lab.mode === 'surface') && ringRad > 0.2 && ringRad < 12) {
+            const ring = new THREE.Mesh(
+                new THREE.TorusGeometry(ringRad, 0.045, 64, 160),
+                new THREE.MeshStandardMaterial({ color: 0x77aaff, emissive: 0x225588, transparent: true, opacity: 0.35 })
+            );
+            if (lab.axis === 'x') {
+                ring.position.set(mid, 0, 0);
+                ring.rotation.y = Math.PI / 2;
+            } else {
+                ring.position.set(0, mid, 0);
+                ring.rotation.x = Math.PI / 2;
+            }
+            lab.curveLinesGroup.add(ring);
+        }
+    }
+
+    function initLabHelpers() {
+        const lab = advancedLab;
+        if (lab.helpersInitialized) return;
+        const grid = new THREE.GridHelper(18, 22, 0x4b6e8f, 0x2a3a5a);
+        grid.position.y = -1.6;
+        grid.material.transparent = true;
+        grid.material.opacity = 0.3;
+        lab.scene.add(grid);
+
+        lab.scene.add(
+            new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(-0.5, 0, 0), 9.5, 0xff7777, 0.6, 0.3),
+            new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, -1.2, 0), 7.2, 0x77ff77, 0.6, 0.3),
+            new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, -1.2, -3), 6.5, 0x7777ff, 0.6, 0.3)
+        );
+
+        const makeLabel = (text, pos, color) => {
+            const div = document.createElement('div');
+            div.textContent = text;
+            div.style.color = color;
+            div.style.fontSize = '18px';
+            div.style.fontWeight = 'bold';
+            div.style.textShadow = '1px 1px 0 #000';
+            div.style.background = 'rgba(0,0,0,0.5)';
+            div.style.padding = '2px 8px';
+            div.style.borderRadius = '24px';
+            div.style.backdropFilter = 'blur(5px)';
+            const label = new CSS2DObject(div);
+            label.position.copy(pos);
+            lab.scene.add(label);
+        };
+        makeLabel('X', new THREE.Vector3(9.2, -0.3, 0), '#ffaaaa');
+        makeLabel('Y', new THREE.Vector3(0, 6.4, 0), '#aaffaa');
+        makeLabel('Z', new THREE.Vector3(0, -0.3, 5.6), '#aaaaff');
+        makeLabel('O', new THREE.Vector3(-0.4, -0.4, -0.3), '#cccccc');
+        lab.helpersInitialized = true;
+    }
+
+    function refreshAdvancedLab() {
+        buildLabSlices();
+        rebuildLabCurves();
+        updateLabPanelState();
+        updateLabInfoUI();
+    }
+
+    function updateLabPanelState() {
+        const lab = advancedLab;
+        const meta = labModeMeta[lab.mode] || labModeMeta.area;
+        const titleEl = labEl('PanelTitle');
+        const axisWrap = labEl('AxisSelector');
+        const fLabel = labEl('FuncFLabel');
+        const gLabel = labEl('FuncGLabel');
+        const modeNote = labEl('ModeNote');
+        const root = labEl('Root');
+        if (titleEl) titleEl.textContent = `${meta.name} · 3D互动模型`;
+        if (axisWrap) axisWrap.style.display = meta.axis ? 'flex' : 'none';
+        if (fLabel) fLabel.textContent = meta.fLabel;
+        if (gLabel) gLabel.textContent = meta.gLabel;
+        if (modeNote) modeNote.textContent = meta.note;
+        const axisX = labEl('AxisXBtn');
+        const axisY = labEl('AxisYBtn');
+        if (axisX) {
+            axisX.textContent = meta.axisX || 'X 轴';
+            axisX.classList.toggle('active', lab.axis === 'x');
+        }
+        if (axisY) {
+            axisY.textContent = meta.axisY || 'Y 轴';
+            axisY.classList.toggle('active', lab.axis === 'y');
+        }
+        root?.querySelectorAll('[data-lab-mode]').forEach(button => {
+            button.classList.toggle('active', button.dataset.labMode === lab.mode);
+        });
+    }
+
+    function setLabAxis(axis) {
+        const lab = advancedLab;
+        lab.axis = axis;
+        labEl('AxisXBtn')?.classList.toggle('active', axis === 'x');
+        labEl('AxisYBtn')?.classList.toggle('active', axis === 'y');
+        refreshAdvancedLab();
+        if (axis === 'y') lab.controls.target.set(0, 4.2, 0);
+        else lab.controls.target.set(4.2, 1.5, 0);
+        lab.controls.update();
+    }
+
+    function setLabMode(mode) {
+        const presetPage = labModePresetPage[mode] || advancedLab.page || 'area';
+        if (presetPage !== advancedLab.page && content[presetPage]) {
+            switchPage(presetPage);
+            document.querySelector('.main-area')?.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+        applyLabPreset(presetPage);
+        refreshAdvancedLab();
+        resetLabView();
+    }
+
+    function resetLabView() {
+        const lab = advancedLab;
+        if (!lab.camera || !lab.controls) return;
+        if (lab.mode === 'polar' || lab.mode === 'parametric') {
+            lab.camera.position.set(5.8, 6.2, 8.2);
+            lab.controls.target.set(0, 0.8, 0);
+        } else if (lab.mode === 'arc') {
+            lab.camera.position.set(8.5, 5.8, 8.2);
+            lab.controls.target.set(4.1, 2.2, 0);
+        } else if (lab.axis === 'x') {
+            lab.camera.position.set(11, 8.5, 13.5);
+            lab.controls.target.set(4.2, 1.5, 0);
+        } else {
+            lab.camera.position.set(9, 7, 12);
+            lab.controls.target.set(0, 4.2, 0);
+        }
+        lab.controls.update();
+    }
+
+    function applyLabPreset(page) {
+        const preset = advancedLabPresets[page] || advancedLabPresets.area;
+        advancedLab.presetKey = page;
+        advancedLab.mode = preset.mode;
+        advancedLab.axis = preset.axis;
+        advancedLab.f = parseLabFunction(preset.f) || advancedLab.f;
+        advancedLab.g = parseLabFunction(preset.g) || advancedLab.g;
+        advancedLab.tMin = preset.tMin ?? 0;
+        advancedLab.tMax = preset.tMax ?? 8;
+        advancedLab.sliceStep = preset.sliceStep ?? 0.38;
+        advancedLab.csDepth = preset.csDepth ?? 1;
+        advancedLab.axisOffset = preset.axisOffset ?? 0;
+        const fInput = labEl('FuncF');
+        const gInput = labEl('FuncG');
+        if (fInput) fInput.value = preset.f;
+        if (gInput) gInput.value = preset.g;
+        labEl('AxisXBtn')?.classList.toggle('active', preset.axis === 'x');
+        labEl('AxisYBtn')?.classList.toggle('active', preset.axis === 'y');
+        updateLabPanelState();
+    }
+
+    function destroyAdvancedLab() {
+        const lab = advancedLab;
+        if (lab.animationFrame) cancelAnimationFrame(lab.animationFrame);
+        lab.animationFrame = null;
+        lab.observer?.disconnect?.();
+        lab.observer = null;
+        lab.controls?.dispose?.();
+        if (lab.scene) {
+            disposeLabObject(lab.scene);
+            lab.scene.clear();
+        }
+        lab.renderer?.dispose?.();
+        lab.renderer?.domElement?.remove?.();
+        lab.labelRenderer?.domElement?.remove?.();
+        lab.initialized = false;
+        lab.page = null;
+        lab.prefix = '';
+        lab.scene = null;
+        lab.camera = null;
+        lab.renderer = null;
+        lab.labelRenderer = null;
+        lab.controls = null;
+        lab.sliceGroup = null;
+        lab.curveLinesGroup = null;
+        lab.helpersInitialized = false;
+    }
+
+    function resizeAdvancedLab() {
+        const lab = advancedLab;
+        const viewport = labEl('Viewport');
+        if (!lab.renderer || !lab.camera || !viewport) return;
+        const rect = viewport.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return;
+        lab.renderer.setSize(rect.width, rect.height);
+        lab.labelRenderer?.setSize(rect.width, rect.height);
+        lab.camera.aspect = rect.width / rect.height;
+        lab.camera.updateProjectionMatrix();
+    }
+
+    function initAdvancedLab(page = 'area') {
+        if (!advancedLabPresets[page]) return;
+        if (advancedLab.initialized && advancedLab.page === page) {
+            resizeAdvancedLab();
+            return;
+        }
+        destroyAdvancedLab();
+        const lab = advancedLab;
+        lab.page = page;
+        lab.prefix = `lab-${page}-`;
+        const viewport = labEl('Viewport');
+        if (!viewport) return;
+        lab.initialized = true;
+        viewport.innerHTML = '';
+        lab.scene = new THREE.Scene();
+        lab.scene.background = new THREE.Color(0x0a0f1e);
+        lab.scene.fog = new THREE.FogExp2(0x0a0f1e, 0.008);
+        lab.camera = new THREE.PerspectiveCamera(48, 1, 0.1, 500);
+        lab.camera.position.set(11, 8.5, 13.5);
+        lab.sliceGroup = new THREE.Group();
+        lab.curveLinesGroup = new THREE.Group();
+
+        try {
+            lab.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+        } catch (error) {
+            viewport.innerHTML = '<div class="lab-fallback"><div><h2>当前浏览器无法创建 WebGL</h2><p>这个高级模型需要浏览器支持 WebGL。请用 Chrome / Safari 打开，或开启硬件加速。</p></div></div>';
+            return;
+        }
+        lab.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        lab.renderer.shadowMap.enabled = true;
+        viewport.appendChild(lab.renderer.domElement);
+
+        lab.labelRenderer = new CSS2DRenderer();
+        lab.labelRenderer.domElement.style.position = 'absolute';
+        lab.labelRenderer.domElement.style.inset = '0';
+        lab.labelRenderer.domElement.style.pointerEvents = 'none';
+        viewport.appendChild(lab.labelRenderer.domElement);
+
+        lab.controls = new OrbitControls(lab.camera, lab.renderer.domElement);
+        lab.controls.enableDamping = true;
+        lab.controls.dampingFactor = 0.06;
+        lab.controls.rotateSpeed = 1.0;
+        lab.controls.zoomSpeed = 1.2;
+        lab.controls.panSpeed = 0.8;
+        lab.controls.target.set(4.2, 1.5, 0);
+
+        lab.scene.add(new THREE.AmbientLight(0x404060, 0.55));
+        const mainLight = new THREE.DirectionalLight(0xfff2e0, 1.2);
+        mainLight.position.set(6, 12, 5);
+        lab.scene.add(mainLight);
+        [[0x4488ff, -2, 4, 5, 0.4], [0xffaa66, 5, 2, -6, 0.35], [0xffaa88, 8, 3, -4, 0.5]].forEach(([color, x, y, z, intensity]) => {
+            const light = new THREE.PointLight(color, intensity);
+            light.position.set(x, y, z);
+            lab.scene.add(light);
+        });
+
+        lab.scene.add(lab.sliceGroup, lab.curveLinesGroup);
+        applyLabPreset(page);
+        initLabHelpers();
+
+        const starGeo = new THREE.BufferGeometry();
+        const starPos = new Float32Array(1400 * 3);
+        for (let i = 0; i < 1400; i++) {
+            starPos[i * 3] = (Math.random() - 0.5) * 220;
+            starPos[i * 3 + 1] = (Math.random() - 0.5) * 120;
+            starPos[i * 3 + 2] = (Math.random() - 0.5) * 130 - 50;
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+        lab.scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0x88aadd, size: 0.07, transparent: true, opacity: 0.5 })));
+
+        labEl('Root')?.querySelectorAll('[data-lab-mode]').forEach(button => {
+            button.onclick = () => setLabMode(button.dataset.labMode);
+        });
+        labEl('BtnReset').onclick = resetLabView;
+        labEl('AxisXBtn').onclick = () => setLabAxis('x');
+        labEl('AxisYBtn').onclick = () => setLabAxis('y');
+        labEl('UpdateEqBtn').onclick = () => {
+            const fInput = labEl('FuncF');
+            const gInput = labEl('FuncG');
+            const newF = parseLabFunction(fInput.value);
+            const newG = parseLabFunction(gInput.value);
+            const error = labEl('EqErrorMsg');
+            if (!newF || !newG) {
+                error.textContent = `⚠️ ${!newF ? 'f(t) 无效 ' : ''}${!newG ? 'g(t) 无效' : ''}，保留原函数`;
+                error.style.display = 'block';
+                setTimeout(() => error.style.display = 'none', 3000);
+                return;
+            }
+            lab.f = newF;
+            lab.g = newG;
+            error.style.display = 'none';
+            refreshAdvancedLab();
+        };
+        labEl('FuncF').addEventListener('keypress', e => { if (e.key === 'Enter') labEl('UpdateEqBtn').click(); });
+        labEl('FuncG').addEventListener('keypress', e => { if (e.key === 'Enter') labEl('UpdateEqBtn').click(); });
+
+        resizeAdvancedLab();
+        resetLabView();
+        refreshAdvancedLab();
+        lab.observer = new ResizeObserver(resizeAdvancedLab);
+        lab.observer.observe(viewport);
+
+        const animateLab = () => {
+            lab.animationFrame = requestAnimationFrame(animateLab);
+            if (!lab.renderer) return;
+            lab.controls.update();
+            lab.renderer.render(lab.scene, lab.camera);
+            lab.labelRenderer.render(lab.scene, lab.camera);
+        };
+        animateLab();
+    }
+
+    function initAreaScene() {
+        const d = createScene('areaCanvas');
+        if (!d) return;
+        const { scene, extra } = d;
+        const shape = new THREE.Shape();
+        for (let i = 0; i <= 40; i++) { const t = i / 40; shape.lineTo(t, t); }
+        for (let i = 40; i >= 0; i--) { const t = i / 40; shape.lineTo(t, t * t); }
+        shape.closePath();
+        scene.add(new THREE.Mesh(new THREE.ShapeGeometry(shape), new THREE.MeshBasicMaterial({ color: 0xfbbf24, side: THREE.DoubleSide, transparent: true, opacity: 0.25 })));
+        const upPts = [], loPts = [];
+        for (let t = 0; t <= 1; t += 0.02) { upPts.push(new THREE.Vector3(t, t, 0)); loPts.push(new THREE.Vector3(t, t * t, 0)); }
+        scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(upPts), 100, 0.02, 8, false), new THREE.MeshBasicMaterial({ color: 0x2563eb })));
+        scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(loPts), 100, 0.02, 8, false), new THREE.MeshBasicMaterial({ color: 0xdc2626 })));
+        const vertG = new THREE.Group(), horizG = new THREE.Group();
+        for (let x = 0.08; x < 1; x += 0.14) {
+            const h = x - x * x;
+            if (h < 0.02) continue;
+            const bar = new THREE.Mesh(new THREE.BoxGeometry(0.08, h, 0.1), new THREE.MeshBasicMaterial({ color: 0xef4444 }));
+            bar.position.set(x, x * x + h / 2, 0); vertG.add(bar);
+        }
+        for (let y = 0.08; y < 1; y += 0.14) {
+            const w = Math.sqrt(y) - y;
+            if (w < 0.02) continue;
+            const bar = new THREE.Mesh(new THREE.BoxGeometry(w, 0.08, 0.1), new THREE.MeshBasicMaterial({ color: 0x3b82f6 }));
+            bar.position.set(y + w / 2, y, 0); horizG.add(bar);
+        }
+        horizG.visible = false;
+        scene.add(vertG); scene.add(horizG);
+        extra.vertG = vertG; extra.horizG = horizG; extra.current = 'vertical';
+        sceneData.area = d;
+    }
+
+    function initDiskScene() {
+        const d = createScene('diskCanvas');
+        if (!d) return;
+        const { scene, extra } = d;
+        const cone = new THREE.Mesh(new THREE.ConeGeometry(2, 2, 48), new THREE.MeshPhysicalMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.45 }));
+        cone.rotation.z = Math.PI / 2; cone.position.x = 1; scene.add(cone);
+        const diskG = new THREE.Group();
+        function createDisks(n) {
+            while (diskG.children.length) diskG.remove(diskG.children[0]);
+            const dx = 2 / n;
+            for (let i = 0; i < n; i++) {
+                const x = dx * (i + 0.5), r = x;
+                if (r < 0.02) continue;
+                const disk = new THREE.Mesh(new THREE.CylinderGeometry(r, r, dx * 0.9, 32), new THREE.MeshPhysicalMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.7 }));
+                disk.rotation.z = Math.PI / 2; disk.position.x = x;
+                diskG.add(disk);
+            }
+        }
+        createDisks(12); scene.add(diskG);
+        extra.diskG = diskG; extra.createDisks = createDisks; extra.visible = true;
+        sceneData.disk = d;
+    }
+
+    function initWasherScene() {
+        const d = createScene('washerCanvas');
+        if (!d) return;
+        const { scene, extra } = d;
+        const outer = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 2, 64), new THREE.MeshPhysicalMaterial({ color: 0x3b82f6, transparent: true, opacity: 0.35 }));
+        outer.rotation.z = Math.PI / 2; outer.position.x = 1; scene.add(outer);
+        const inner = new THREE.Mesh(new THREE.ConeGeometry(2, 2, 48), new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3 }));
+        inner.rotation.z = Math.PI / 2; inner.position.x = 1; scene.add(inner);
+        const ringG = new THREE.Group();
+        for (let x = 0.2; x < 2; x += 0.3) {
+            const torus = new THREE.Mesh(new THREE.TorusGeometry((2 + x) / 2, (2 - x) / 2, 16, 32), new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.7 }));
+            torus.position.x = x; torus.rotation.y = Math.PI / 2; ringG.add(torus);
+        }
+        ringG.visible = false; scene.add(ringG);
+        extra.ringG = ringG; extra.ringsVisible = false;
+        sceneData.washer = d;
+    }
+
+    function initCrossScene() {
+        const d = createScene('crossCanvas');
+        if (!d) return;
+        const { scene, extra } = d;
+        scene.add(new THREE.Mesh(new THREE.BoxGeometry(4, 2, 2), new THREE.MeshPhysicalMaterial({ color: 0x10b981, transparent: true, opacity: 0.35 })));
+        const cg = new THREE.Group();
+        function createSections(hx) {
+            while (cg.children.length) cg.remove(cg.children[0]);
+            [-1.6, -0.8, 0, 0.8, 1.6].forEach(x => {
+                const mat = new THREE.MeshBasicMaterial({ color: Math.abs(x - hx) < 0.05 ? 0xfbbf24 : 0xef4444, transparent: true, opacity: 0.6, side: THREE.DoubleSide });
+                const p = new THREE.Mesh(new THREE.PlaneGeometry(2.05, 2.05), mat);
+                p.position.x = x; p.rotation.y = Math.PI / 2; cg.add(p);
+            });
+        }
+        createSections(0); scene.add(cg);
+        extra.cg = cg; extra.createSections = createSections; extra.visible = true;
+        sceneData.cross = d;
+    }
+
+    function initShellScene() {
+        const d = createScene('shellCanvas');
+        if (!d) return;
+        const { scene, extra } = d;
+        const shellG = new THREE.Group();
+        function createShells(n) {
+            while (shellG.children.length) shellG.remove(shellG.children[0]);
+            const maxR = Math.sqrt(2);
+            for (let i = 0; i < n; i++) {
+                const r = (i + 0.5) * maxR / n, h = r * r;
+                const tube = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 32, 1, true), new THREE.MeshPhysicalMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.5, side: THREE.DoubleSide }));
+                tube.position.y = h / 2; shellG.add(tube);
+            }
+        }
+        createShells(10); scene.add(shellG);
+        extra.shellG = shellG; extra.createShells = createShells; extra.visible = true;
+        sceneData.shell = d;
+    }
+
+    function initPolarScene() {
+        const d = createScene('polarCanvas');
+        if (!d) return;
+        const { scene, extra } = d;
+        scene.add(new THREE.Mesh(new THREE.PlaneGeometry(4, 4), new THREE.MeshBasicMaterial({ color: 0xe8ecf1, side: THREE.DoubleSide, transparent: true, opacity: 0.5 })).rotateX(-Math.PI / 2));
+        const curvePts = [];
+        for (let t = 0; t <= 2 * Math.PI; t += 0.02) { const r = 1 + Math.cos(t); curvePts.push(new THREE.Vector3(r * Math.cos(t), 0, r * Math.sin(t))); }
+        scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(curvePts), 200, 0.03, 8, false), new THREE.MeshBasicMaterial({ color: 0x7c3aed })));
+        const sectorG = new THREE.Group();
+        for (let t = 0; t < 2 * Math.PI; t += 0.3) {
+            const r = 1 + Math.cos(t);
+            const shape = new THREE.Shape();
+            shape.moveTo(0, 0); shape.lineTo(r * Math.cos(t), r * Math.sin(t)); shape.lineTo(r * Math.cos(t + 0.2), r * Math.sin(t + 0.2)); shape.closePath();
+            const mesh = new THREE.Mesh(new THREE.ShapeGeometry(shape), new THREE.MeshBasicMaterial({ color: 0xf59e0b, side: THREE.DoubleSide, transparent: true, opacity: 0.4 }));
+            mesh.rotation.x = -Math.PI / 2; sectorG.add(mesh);
+        }
+        sectorG.visible = true; scene.add(sectorG);
+        extra.sectorG = sectorG; extra.sectorsVisible = true;
+        sceneData.polar = d;
+    }
+
+    function initArcScene() {
+        const d = createScene('arcCanvas');
+        if (!d) return;
+        const { scene, extra } = d;
+        const pts = [];
+        for (let x = 0; x <= 4; x += 0.1) pts.push(new THREE.Vector3(x, Math.pow(x, 1.5), 0));
+        scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 100, 0.05, 8, false), new THREE.MeshStandardMaterial({ color: 0x7c3aed })));
+        const segG = new THREE.Group();
+        function createSegments(n) {
+            while (segG.children.length) segG.remove(segG.children[0]);
+            const dx = 4 / n;
+            for (let i = 0; i < n; i++) {
+                const x1 = i * dx, y1 = Math.pow(x1, 1.5), x2 = (i + 1) * dx, y2 = Math.pow(x2, 1.5);
+                segG.add(createCylinderBetween(
+                    new THREE.Vector3(x1, y1, 0),
+                    new THREE.Vector3(x2, y2, 0),
+                    0.03,
+                    new THREE.MeshBasicMaterial({ color: 0xef4444 })
+                ));
+            }
+        }
+        createSegments(12); scene.add(segG);
+        extra.segG = segG; extra.createSegments = createSegments;
+        sceneData.arc = d;
+    }
+
+    function initSurfaceScene() {
+        const d = createScene('surfaceCanvas');
+        if (!d) return;
+        const { scene } = d;
+        const pts = [];
+        for (let x = 0; x <= 4; x += 0.1) {
+            const r = Math.sqrt(x);
+            for (let a = 0; a <= 2 * Math.PI; a += 0.1) pts.push(new THREE.Vector3(x, r * Math.cos(a), r * Math.sin(a)));
+        }
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(pts.flatMap(p => [p.x, p.y, p.z]), 3));
+        scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ color: 0x0891b2, size: 0.06 })));
+        const curvePts = [];
+        for (let x = 0; x <= 4; x += 0.1) curvePts.push(new THREE.Vector3(x, Math.sqrt(x), 0));
+        scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(curvePts), 80, 0.05, 8, false), new THREE.MeshBasicMaterial({ color: 0x7c3aed })));
+        sceneData.surface = d;
+    }
+
+    function initParametricScene() {
+        const d = createScene('parametricCanvas');
+        if (!d) return;
+        const { scene } = d;
+        const pts = [];
+        for (let t = 0; t <= Math.PI; t += 0.05) {
+            const x = 2 * Math.cos(t), r = Math.sin(t);
+            for (let a = 0; a <= 2 * Math.PI; a += 0.1) pts.push(new THREE.Vector3(x, r * Math.cos(a), r * Math.sin(a)));
+        }
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(pts.flatMap(p => [p.x, p.y, p.z]), 3));
+        scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ color: 0x0891b2, size: 0.05 })));
+        const curvePts = [];
+        for (let t = 0; t <= 2 * Math.PI; t += 0.05) curvePts.push(new THREE.Vector3(2 * Math.cos(t), Math.sin(t), 0));
+        scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(curvePts), 100, 0.05, 8, false), new THREE.MeshBasicMaterial({ color: 0x7c3aed })));
+        sceneData.parametric = d;
+    }
+
+    // 视频配置：
+    // 1. bilibili: B站视频，默认直接嵌入到页面大窗口播放。
+    // 2. local: 本地 mp4/webm 文件路径，例如 './videos/area.mp4'，配置后优先使用本地视频播放器。
+    // 3. embed: 其他平台提供的 iframe 播放器地址。
+    // 4. youtube: YouTube 视频ID，作为最后备用。
+    const videoLinks = {
+        area: {
+            title: '曲线之间的面积',
+            bilibili: { bvid: 'BV11i4y1t7Uk', page: 16, cid: '182929079' },
+            source: 'WANG-吉玥 / Khan Academy AP Calculus：Area between curves'
+        },
+        disk: {
+            title: 'Disk圆盘法',
+            bilibili: { bvid: 'BV11i4y1t7Uk', page: 26, cid: '182929281' },
+            source: 'WANG-吉玥 / Khan Academy AP Calculus：Disc method around x-axis'
+        },
+        washer: {
+            title: 'Washer圆环法',
+            bilibili: { bvid: 'BV11i4y1t7Uk', page: 33, cid: '182929393' },
+            source: 'WANG-吉玥 / Khan Academy AP Calculus：Generalizing the washer method'
+        },
+        cross: {
+            title: '已知横截面的体积',
+            bilibili: { bvid: 'BV11i4y1t7Uk', page: 21, cid: '182929184' },
+            source: 'WANG-吉玥 / Khan Academy AP Calculus：Volume with cross sections intro'
+        },
+        shell: {
+            title: 'Shell壳法',
+            bilibili: { bvid: 'BV1RT41127eF', page: 1, cid: '966994755' },
+            source: '丛哥AP微积分66：旋转体求体积的 shell 方法（未找到 WANG-吉玥/Khan 对应分 P）'
+        },
+        polar: {
+            title: '极坐标面积',
+            bilibili: { bvid: 'BV1Bs4uz3E7b', page: 15, cid: '33014351998' },
+            source: 'Khan Academy AP Calculus BC：Area bounded by polar curves'
+        },
+        arc: {
+            title: '曲线弧长',
+            bilibili: { bvid: 'BV11i4y1t7Uk', page: 38, cid: '182929503' },
+            source: 'WANG-吉玥 / Khan Academy AP Calculus BC：Arc length intro'
+        },
+        surface: {
+            title: '旋转曲面面积',
+            bilibili: { bvid: 'BV1wA411t7Rv', page: 1, cid: '186029298' },
+            source: 'AP微积分BC真题精讲：弧长与旋转面积（未找到 WANG-吉玥/Khan 对应分 P）'
+        },
+        parametric: {
+            title: '参数方程',
+            bilibili: { bvid: 'BV1Bs4uz3E7b', page: 1, cid: '33014349923' },
+            source: 'Khan Academy AP Calculus BC：Parametric equations'
+        }
+    };
+
+    const content = {
+        area: {
+            badge: 'ab', title: '一、平面图形面积（两种切片）',
+            explanation: `
+                <h3>📖 原理说明</h3>
+                <p>当我们要求由曲线 \(y=f(x)\)、\(y=g(x)\) 和直线 \(x=a, x=b\) 围成的区域面积时，核心思想是<b>“以直代曲”</b>：将区域分割成无数个竖直细条（或水平细条），每个细条近似看作矩形，其面积 = 高度 × 宽度。然后将所有细条的面积求和，再取极限（积分）。</p>
+                <p><strong>对x积分（垂直切片）：</strong> 在 \([a,b]\) 上任取一点 \(x\)，该处竖直细条的高为 \(f_{\text{上}}(x)-f_{\text{下}}(x)\)，宽为 \(dx\)，所以面积微元 \(dA = [上-下]dx\)，积分得总面积。这种方法适合上下边界明确的情形。</p>
+                <p><strong>对y积分（水平切片）：</strong> 当左右边界更容易用 \(y\) 表达时（例如函数形式为 \(x=g(y)\)），可将区域切成水平细条，高为 \(dy\)，长为 \(右-左\)，面积微元 \(dA = [右(y)-左(y)]dy\)，积分限为 \(y\) 的范围。</p>
+                <p><strong>重要：</strong>如果两条曲线在区间内相交，面积必须按 \(|f-g|\) 或按交点分段，不能直接把积分结果取绝对值。</p>
+                <p>两种方法结果一致，选择依据是哪个方向积分更简单。</p>
+            `,
+            formula: `\\[ S = \\int_{a}^{b} |f(x) - g(x)| \\, dx \\] \\[ S = \\int_{c}^{d} |g_{\\text{右}}(y) - g_{\\text{左}}(y)| \\, dy \\]`,
+            quiz: [
+                { q: '由 y=x² 与 y=2x 围成的区域，交点的x坐标为？', a: '0和2', explanation: '解方程 x² = 2x ⇒ x(x-2)=0 ⇒ x=0 或 x=2。' },
+                { q: '用对x积分求该区域面积，积分表达式为？', a: '∫₀² (2x - x²) dx', explanation: '在[0,2]上，上函数为y=2x，下函数为y=x²，因此面积 = ∫₀² (2x - x²) dx = [x² - x³/3]₀² = 4 - 8/3 = 4/3。' }
+            ]
+        },
+        disk: {
+            badge: 'ab', title: '二、旋转体体积：Disk（圆盘法）',
+            explanation: `
+                <h3>📖 原理说明</h3>
+                <p>曲线 \(y=f(x)\) 绕x轴旋转一周，会生成一个实心旋转体。我们在区间 \([a,b]\) 上用垂直于旋转轴的平面去截，得到一系列薄圆盘。在位置 \(x\) 处，圆盘的半径是曲线到旋转轴的距离。</p>
+                <p>单个圆盘的体积 = 底面积 × 高 = \(\pi [f(x)]^2 dx\)。将所有圆盘的体积从 \(a\) 到 \(b\) 积分，即得总体积。这就是<b>圆盘法</b>。</p>
+                <p><strong>重要：</strong>旋转体半径不是函数值本身，而是曲线到旋转轴的距离。例如 \(y=-x\) 绕x轴旋转时，半径是 \(|-x|\)，不是0。</p>
+                <p>若曲线绕y轴旋转，同理需要将函数改写为 \(x=g(y)\)，然后积分 \(\pi [g(y)]^2 dy\)。</p>
+            `,
+            formula: `\\[ V = \\pi \\int_{a}^{b} \\bigl(\\text{distance from } f(x) \\text{ to axis}\\bigr)^2 \\, dx \\]`,
+            quiz: [
+                { q: 'y=x 绕x轴旋转，x∈[0,2]，体积为？', a: '8π/3', explanation: 'V = π∫₀² x² dx = π[x³/3]₀² = π·8/3 = 8π/3。' },
+                { q: '若绕y轴旋转，如何改写？', a: 'x=y，y∈[0,2]', explanation: '由y=x得x=y，且当x∈[0,2]时y∈[0,2]。体积 = π∫₀² y² dy = 8π/3，结果一致。' }
+            ]
+        },
+        washer: {
+            badge: 'ab', title: '三、旋转体体积：Washer（圆环法）',
+            explanation: `
+                <h3>📖 原理说明</h3>
+                <p>当区域由两条曲线 \(y=R(x)\)（外边界）和 \(y=r(x)\)（内边界）围成，绕轴旋转后会形成一个<b>空心</b>旋转体。此时垂直于轴的截面不再是实心圆，而是<b>圆环</b>（形似垫圈washer）。</p>
+                <p>在位置 \(x\) 处，先计算两条边界到旋转轴的距离，再把较大的距离作为外半径 \(R\)，较小的距离作为内半径 \(r\)。圆环面积 = \(\pi (R^2 - r^2)\)。乘以厚度 \(dx\) 得到体积微元，积分即得总体积。</p>
+                <p>注意：外半径和内半径由“到旋转轴的距离”决定，不一定等于函数上下位置；系统会自动按距离识别外半径和内半径。</p>
+            `,
+            formula: `\\[ V = \\pi \\int_{a}^{b} \\bigl( [R(x)]^2 - [r(x)]^2 \\bigr) \\, dx \\]`,
+            quiz: [
+                { q: 'y=2 与 y=x 围成区域绕x轴旋转，外半径R=？内半径r=？', a: 'R=2, r=x', explanation: '外边界是直线y=2（常数），内边界是y=x。因为2 ≥ x（在[0,2]上），所以R=2，r=x。' },
+                { q: '体积积分表达式为？', a: 'π∫₀² (4 - x²) dx', explanation: 'V = π∫₀² (2² - x²) dx = π∫₀² (4 - x²) dx = π[4x - x³/3]₀² = π(8 - 8/3) = 16π/3。' }
+            ]
+        },
+        cross: {
+            badge: 'ab', title: '四、已知横截面的体积',
+            explanation: `
+                <h3>📖 原理说明</h3>
+                <p>更一般的情形：若已知立体在垂直于x轴的平面上的横截面积函数 \(A(x)\)（\(a \le x \le b\)），则体积就是横截面积在x轴上的积分。这可以看作将立体切成无数个厚度为 \(dx\) 的薄片，每个薄片的体积 ≈ \(A(x)dx\)。</p>
+                <p>圆盘法和圆环法都是横截面法的特例：圆盘法的横截面是半径为 \(f(x)\) 的圆（\(A(x)=\pi f(x)^2\)）；圆环法的横截面是内外半径分别为 \(r(x), R(x)\) 的圆环（\(A(x)=\pi(R^2-r^2)\)）。</p>
+                <p>如果截面是正方形、等边三角形等其他形状，同样只需找出面积表达式 \(A(x)\)，然后积分即可。</p>
+            `,
+            formula: `\\[ V = \\int_{a}^{b} A(x) \\, dx \\]`,
+            quiz: [
+                { q: '底面为半径2的圆，垂直于x轴的截面均为正方形，求体积。', a: '128/3', explanation: '底面圆方程为 x²+y²=4。对于x处的截面，其边长 = 2√(4-x²)，正方形面积 A(x)=4(4-x²)。积分 V = ∫₋₂² 4(4-x²) dx = 4[4x - x³/3]₋₂² = 128/3。' }
+            ]
+        },
+        shell: {
+            badge: 'ext', title: '五、壳法 Shell Method（拓展方法 / Extension）',
+            explanation: `
+                <h3>📖 原理说明</h3>
+                <p><strong>定位说明：</strong>Shell Method 是很有用的拓展方法，但不是 AP Calculus BC 必须掌握的核心考点。AP 中体积主线通常是 cross sections、disk 和 washer。</p>
+                <p>壳法适用于<b>平行于旋转轴</b>的切片。例如区域由曲线 \(y=f(x)\)、x轴以及 \(x=a, x=b\) 围成，绕y轴旋转。我们将区域切成无数个竖条，每个竖条绕y轴旋转会形成一个薄圆柱壳（空心管）。</p>
+                <p>在位置 \(x\) 处，壳的半径 = \(x\)，高度 = \(f(x)\)，厚度 = \(dx\)。展开这个壳，近似为一个长方体：长=圆周长 \(2\pi x\)，宽=高 \(f(x)\)，厚=\(dx\)，因此体积微元 \(dV = 2\pi x \cdot f(x) \cdot dx\)。积分即得总体积。</p>
+                <p>壳法特别适合函数容易对x积分，但难以解出x=g(y)的情形。同时注意积分变量与旋转轴的关系。</p>
+            `,
+            formula: `\\[ V = 2\\pi \\int_{a}^{b} x \\cdot f(x) \\, dx \\quad (\\text{绕y轴}) \\]`,
+            quiz: [
+                { q: 'y=x² (0≤x≤√2) 绕y轴旋转，用壳法表达式？', a: '2π∫₀^{√2} x·x² dx', explanation: '壳半径 = x，高度 = f(x)=x²，厚度dx，体积 = 2π∫₀^{√2} x·x² dx = 2π∫₀^{√2} x³ dx = 2π·[x⁴/4]₀^{√2} = 2π·(4/4) = 2π。' }
+            ]
+        },
+        polar: {
+            badge: 'bc', title: '六、极坐标下的面积',
+            explanation: `
+                <h3>📖 原理说明</h3>
+                <p>在极坐标系中，曲线由 \(r=f(\theta)\) 描述。从角度 \(\theta\) 到 \(\theta+d\theta\) 的小扇形区域，其面积近似为 \(\frac{1}{2} r^2 d\theta\)（因为扇形面积公式是 \(\frac{1}{2}r^2\theta\)）。</p>
+                <p>因此，从 \(\theta=\alpha\) 到 \(\theta=\beta\) 扫过的区域面积 = \(\frac{1}{2} \int_{\alpha}^{\beta} [f(\theta)]^2 d\theta\)。</p>
+                <p><strong>重要：</strong>极坐标中 \(r\) 可以为负，负 \(r\) 表示沿相反方向取点；面积公式仍然使用 \(r^2\)，不能把负 \(r\) 当成 0。</p>
+                <p>若区域由两条极坐标曲线 \(r_{\text{外}}\) 和 \(r_{\text{内}}\) 围成，则面积 = \(\frac{1}{2} \int (r_{\text{外}}^2 - r_{\text{内}}^2) d\theta\)。</p>
+            `,
+            formula: `\\[ A = \\frac{1}{2} \\int_{\\alpha}^{\\beta} [f(\\theta)]^2 \\, d\\theta \\]`,
+            quiz: [
+                { q: '心形线 r=1+cosθ 从0到2π的面积？', a: '3π/2', explanation: 'A = (1/2)∫₀^{2π} (1+cosθ)² dθ = (1/2)∫₀^{2π} (1+2cosθ+cos²θ) dθ = (1/2)[θ + 2sinθ + θ/2 + sin2θ/4]₀^{2π} = (1/2)(3π) = 3π/2。' }
+            ]
+        },
+        arc: {
+            badge: 'bc', title: '七、曲线弧长',
+            explanation: `
+                <h3>📖 原理说明</h3>
+                <p>对函数 \(y=f(x)\) 在 \([a,b]\) 上的曲线，取一小段 \([x, x+dx]\)，该段曲线的长度近似为直角三角形的斜边：\(ds = \sqrt{(dx)^2 + (dy)^2} = \sqrt{1 + (dy/dx)^2} dx\)。</p>
+                <p>积分所有小段即得总弧长。该公式只依赖一阶导数，计算时需注意导数的平方以及是否收敛。</p>
+                <p>对于参数方程 \(x(t), y(t)\)，弧长微元为 \(ds = \sqrt{(dx/dt)^2 + (dy/dt)^2} dt\)。</p>
+            `,
+            formula: `\\[ L = \\int_{a}^{b} \\sqrt{1 + [f'(x)]^2} \\, dx \\]`,
+            quiz: [
+                { q: 'y=x^(3/2) 从x=0到x=4的弧长约为？', a: '9.073', explanation: "f'(x) = (3/2)x^(1/2)，1+[f'(x)]² = 1 + (9/4)x。弧长 = ∫₀⁴ √(1+9x/4) dx。令u=1+9x/4，得 (8/27)[10^(3/2)-1] ≈ 9.073。" }
+            ]
+        },
+        surface: {
+            badge: 'bc', title: '八、旋转曲面面积',
+            explanation: `
+                <h3>📖 原理说明</h3>
+                <p>曲线 \(y=f(x)\) 绕x轴旋转时，曲线上每个微小弧段 \(ds\) 扫出一个窄圆环带。该圆环的周长 = \(2\pi r\)，其中 \(r\) 是曲线到旋转轴的距离，宽度 = \(ds\)，因此环带面积 = \(2\pi r\,ds\)。</p>
+                <p>其中 \(ds = \sqrt{1+[f'(x)]^2} dx\)。积分所有环带即得整个旋转曲面的表面积。</p>
+                <p>注意：若曲线位于x轴下方，半径应取到轴距离，例如绕x轴时为 \(|f(x)|\)，不是把负函数值归零。</p>
+            `,
+            formula: `\\[ S = 2\\pi \\int_{a}^{b} \\bigl|f(x)-\\text{axis}\\bigr| \\sqrt{1 + [f'(x)]^2} \\, dx \\]`,
+            quiz: [
+                { q: 'y=√x 绕x轴旋转，x∈[0,4]的表面积约为？', a: '36.177', explanation: "f(x)=√x，f'(x)=1/(2√x)，1+[f']² = 1+1/(4x)。积分 S = 2π∫₀⁴ √x √(1+1/(4x)) dx = 2π∫₀⁴ √(x+1/4) dx ≈ 36.177。" }
+            ]
+        },
+        parametric: {
+            badge: 'bc', title: '九、参数方程下的面积与体积',
+            explanation: `
+                <h3>📖 原理说明</h3>
+                <p>若曲线由参数方程 \(x=x(t), y=y(t)\) 给出（\(t \in [\alpha, \beta]\)），则面积微元 \(dA = y dx = y(t) x'(t) dt\)（假设 \(x'(t)>0\) 或处理正负）。</p>
+                <p>旋转体积：绕x轴旋转时，体积微元 \(dV = \pi y^2 dx = \pi [y(t)]^2 x'(t) dt\)，积分即可。</p>
+                <p><strong>重要：</strong>参数方程用于面积/体积时，需要检查 \(x(t)\) 或 \(y(t)\) 是否在区间内单调；如果导数变号，通常要分段，否则可能重复计算。</p>
+                <p>面积常用 \(\left|\int y(t)x'(t)dt\right|\)，但若曲线重复描绘或方向复杂，需要分段并检查方向。</p>
+            `,
+            formula: `面积：\\[ A = \\left|\\int_{\\alpha}^{\\beta} y(t) \\, x'(t) \\, dt\\right| \\] 旋转体积：\\[ V = \\pi \\int_{\\alpha}^{\\beta} [\\text{dist}(y(t),\\text{axis})]^2 \\, |x'(t)| \\, dt \\]`,
+            quiz: [
+                { q: '椭圆 x=2cos t, y=sin t (0≤t≤2π) 的面积？', a: '2π', explanation: "x'(t) = -2sin t，面积 = ∫₀^{2π} y(t)x'(t) dt = ∫₀^{2π} sin t·(-2sin t) dt = -2∫₀^{2π} sin²t dt = -2·π = -2π，取绝对值得2π。或用对称性，实际椭圆面积 πab = π·2·1 = 2π。" }
+            ]
+        }
+    };
+
+    function buildAdvancedLabHTML(key) {
+        const prefix = `lab-${key}-`;
+        return `
+                <div class="advanced-lab" id="${prefix}Root">
+                    <div id="${prefix}Viewport" class="advanced-lab-viewport"></div>
+                    <div class="lab-control-panel">
+                        <h2 id="${prefix}PanelTitle">3D互动模型</h2>
+                        <div class="lab-btn-group">
+                            <button class="lab-mode-btn lab-mode-area" data-lab-mode="area">📏 面积</button>
+                            <button class="lab-mode-btn lab-mode-disk" data-lab-mode="disk">🟢 Disk</button>
+                            <button class="lab-mode-btn lab-mode-washer" data-lab-mode="washer">🟠 Washer</button>
+                            <button class="lab-mode-btn lab-mode-cs" data-lab-mode="cs">📋 截面</button>
+                            <button class="lab-mode-btn lab-mode-shell" data-lab-mode="shell">🐚 Shell 拓展</button>
+                            <button class="lab-mode-btn lab-mode-polar" data-lab-mode="polar">📈 极坐标</button>
+                            <button class="lab-mode-btn lab-mode-arc" data-lab-mode="arc">📐 弧长</button>
+                            <button class="lab-mode-btn lab-mode-surface" data-lab-mode="surface">🌐 旋转面</button>
+                            <button class="lab-mode-btn lab-mode-parametric" data-lab-mode="parametric">📊 参数</button>
+                            <button class="lab-btn-reset" id="${prefix}BtnReset">🎥 重置视角</button>
+                        </div>
+                        <div class="lab-axis-selector" id="${prefix}AxisSelector">
+                            <button id="${prefix}AxisXBtn" class="active">🔄 绕 X 轴旋转</button>
+                            <button id="${prefix}AxisYBtn">🔄 绕 Y 轴旋转</button>
+                        </div>
+                        <div class="lab-custom-section">
+                            <div class="lab-input-row">
+                                <label id="${prefix}FuncFLabel">🔴 函数 f(t)</label>
+                                <input type="text" id="${prefix}FuncF" value="0.65*t + sin(t*0.75)" placeholder="例如: 0.65*t + sin(t*0.75)">
+                            </div>
+                            <div class="lab-input-row">
+                                <label id="${prefix}FuncGLabel">🔵 函数 g(t)</label>
+                                <input type="text" id="${prefix}FuncG" value="0.28*t + 0.3" placeholder="例如: 0.28*t + 0.3">
+                            </div>
+                            <button id="${prefix}UpdateEqBtn" class="lab-update-btn">✏️ 更新方程 & 刷新模型</button>
+                            <div id="${prefix}EqErrorMsg" class="lab-error-msg">⚠️ 表达式无效，已保留原函数</div>
+                            <div class="lab-tip">
+                                <span>🖱️ 拖拽旋转 / 右键平移 / 滚轮缩放</span>
+                                <span>🧪 支持 sin、cos、sqrt、pow、exp、pi，也兼容 Math.sin 写法</span>
+                                <span id="${prefix}ModeNote">不同页面会自动切换到对应的 3D 模型</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lab-info-card">
+                        📐 模式: <span id="${prefix}ModeName">圆盘法</span> &nbsp;|&nbsp; 旋转轴: <span id="${prefix}AxisName">X轴</span><br>
+                        📈 积分公式: <span id="${prefix}FormulaTxt">V = π∫[0,8] [f(x)]² dx</span><br>
+                        💡 <span id="${prefix}MetricLabel">近似体积</span>: <span id="${prefix}VolumeValue" class="lab-volume-value">0.00</span> <span id="${prefix}UnitLabel">立方单位</span>
+                        <div id="${prefix}WarningMsg" class="lab-warning-msg"></div>
+                    </div>
+                    <div class="lab-note">🧩 每页独立模型 | 实时积分 | 自定义方程</div>
+                </div>`;
+    }
+
+    function buildVideoHTML(key) {
+        const video = videoLinks[key];
+        if (!video) return '';
+        const title = video.title || '教学视频';
+        const keyword = encodeURIComponent(video.keyword || title);
+        const searchUrl = `https://search.bilibili.com/all?keyword=${keyword}`;
+
+        if (video.local) {
+            return `
+                <div class="video-wrap">
+                    <video src="${video.local}" controls preload="metadata"></video>
+                </div>
+                <div class="video-tools">
+                    <span class="video-note">正在使用本地视频文件：${video.local}</span>
+                </div>`;
+        }
+
+        if (video.bilibili) {
+            const { bvid, cid, page = 1 } = video.bilibili;
+            const playerUrl = `https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}&cid=${cid}&p=${page}&autoplay=0&danmaku=0&high_quality=1`;
+            const watchUrl = `https://www.bilibili.com/video/${bvid}/?p=${page}`;
+            return `
+                <div class="video-wrap">
+                    <iframe title="${title}" src="${playerUrl}" allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <div class="video-tools">
+                    <a href="${watchUrl}" target="_blank" rel="noopener">打开B站页面</a>
+                    <a href="${searchUrl}" target="_blank" rel="noopener">搜索同类视频</a>
+                    <span class="video-note">已切换为 B站内嵌播放：${video.source || title}。如果大窗口仍空白，通常是当前内置浏览器限制第三方播放器；用 Chrome/Safari 打开本文件会更稳定。</span>
+                </div>`;
+        }
+
+        if (video.embed) {
+            return `
+                <div class="video-wrap">
+                    <iframe title="${title}" src="${video.embed}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <div class="video-tools">
+                    <a href="${video.embed}" target="_blank" rel="noopener">在新窗口打开</a>
+                    <span class="video-note">如果内嵌播放器空白，通常是平台限制了当前浏览器或本地 file 页面。</span>
+                </div>`;
+        }
+
+        if (video.youtube) {
+            const watchUrl = `https://www.youtube.com/watch?v=${video.youtube}`;
+            const embedUrl = `https://www.youtube-nocookie.com/embed/${video.youtube}?rel=0&modestbranding=1`;
+            return `
+                <div class="video-wrap">
+                    <iframe title="${title}" src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+                <div class="video-tools">
+                    <a href="${watchUrl}" target="_blank" rel="noopener">打开原视频</a>
+                    <a href="${searchUrl}" target="_blank" rel="noopener">国内备用搜索</a>
+                    <span class="video-note">当前视频来自 YouTube。若这里不能播放，通常是网络、内置浏览器或 file 页面限制；可以用上面的备用入口，或把本地 mp4 / B站 iframe 地址填到 videoLinks。</span>
+                </div>`;
+        }
+
+        return '';
+    }
+
+    function buildHTML() {
+        const main = document.getElementById('mainArea');
+        let html = '';
+        for (let [key, val] of Object.entries(content)) {
+            const badgeClass = val.badge === 'ab' ? 'badge ab' : (val.badge === 'ext' ? 'badge ext' : 'badge bc');
+            const videoEmbed = buildVideoHTML(key);
+            const modelEmbed = buildAdvancedLabHTML(key);
+            html += `
+            <div class="card" data-page="${key}">
+                <div class="card-inner">
+                    <h2><span class="${badgeClass}">${val.badge.toUpperCase()}</span> ${val.title}</h2>
+                    <div class="model-block">
+                        <div class="model-title"><span>3D互动模型</span></div>
+                        ${modelEmbed}
+                    </div>
+                    <div class="formula">${val.formula}</div>
+                    ${videoEmbed}
+                    <div class="explanation-section">${val.explanation}</div>
+                    <div class="quiz"><h3>📝 练习题（点击"显示答案"查看详细解析）</h3>${val.quiz ? val.quiz.map((q, i) => `
+                        <div style="margin:8px 0;">
+                            <strong>${i+1}. ${q.q}</strong><br>
+                            <button class="ans-btn" onclick="toggleAnswer(this)">显示答案</button>
+                            <div class="explanation"><strong>答案：</strong>${q.a}<br><strong>解析：</strong>${q.explanation}</div>
+                        </div>
+                    `).join('') : ''}</div>
+                </div>
+            </div>`;
+        }
+        html += `
+        <div class="card" data-page="calc">
+            <div class="card-inner">
+                <h2>🔢 综合计算器</h2>
+                <div class="tip" style="margin-bottom:14px;">📘 <strong>使用说明：</strong> 选择计算类型，输入函数表达式（如x、x^2、sin(x)），填写区间，点击计算。使用辛普森数值积分法，精度高。</div>
+                <div class="calc-grid">
+                    <div class="calc-field">
+                        <label for="calcType">类型</label>
+                        <select id="calcType">
+                            <option value="disk">Disk体积</option>
+                            <option value="washer">Washer体积</option>
+                            <option value="shell">Shell体积</option>
+                            <option value="arclength">弧长</option>
+                            <option value="surface">旋转面面积</option>
+                            <option value="polarArea">极坐标面积</option>
+                        </select>
+                    </div>
+                    <div class="calc-field">
+                        <label for="calcFunc">外半径 / 函数 f(x)</label>
+                        <input type="text" id="calcFunc" value="x" placeholder="例如 x^2、sin(x)、sqrt(x)">
+                    </div>
+                    <div class="calc-field hidden" id="calcFunc2Wrap">
+                        <label for="calcFunc2">边界函数 g(x)</label>
+                        <input type="text" id="calcFunc2" value="0" placeholder="例如 x、sqrt(x)">
+                    </div>
+                    <div class="calc-field">
+                        <label for="calcA">下限</label>
+                        <input type="number" id="calcA" value="0" step="any">
+                    </div>
+                    <div class="calc-field">
+                        <label for="calcB">上限</label>
+                        <input type="number" id="calcB" value="2" step="any">
+                    </div>
+                    <button onclick="performCalc()" style="background:linear-gradient(135deg,#2563eb,#7c3aed);color:white;border:none;">计算</button>
+                </div>
+                <div class="result" id="calcResult"></div>
+            </div>
+        </div>`;
+        main.innerHTML = html;
+    }
+
+    buildHTML();
+
+    setTimeout(() => {
+        addControlButtons();
+        setupCalculator();
+        switchPage('area');
+        if (window.MathJax?.typesetPromise) MathJax.typesetPromise();
+    }, 150);
+
+    function addControlButtons() {
+        const ctrls = {
+            area: `<button class="accent" onclick="toggleAreaSlice()">🔁 切换切片方向（<span id="sliceLabel">垂直</span>）</button>`,
+            disk: `<button class="accent" onclick="toggleDisks()">🔘 显示/隐藏圆盘</button> <span style="color:#475569;">圆盘数 <strong id="diskLabel">12</strong></span> <input type="range" min="4" max="30" value="12" step="2" oninput="updateDiskCount(this.value)">`,
+            washer: `<button class="accent" onclick="toggleWasherCutaway()">🔍 显示/隐藏截面环</button>`,
+            cross: `<button class="accent" onclick="toggleCrossSections()">📋 显示/隐藏截面</button> <span style="color:#475569;">截面X=<strong id="crossPosLabel">0.0</strong></span> <input type="range" min="-2" max="2" value="0" step="0.1" oninput="updateCrossPos(this.value)">`,
+            shell: `<button class="bc-btn" onclick="toggleShells()">🐚 显示/隐藏壳层</button> <span style="color:#475569;">壳数 <strong id="shellLabel">10</strong></span> <input type="range" min="4" max="24" value="10" step="2" oninput="updateShellCount(this.value)">`,
+            polar: `<button class="bc-btn" onclick="togglePolarSectors()">🔁 显示/隐藏扇形</button>`,
+            arc: `<span style="color:#475569;">折线段数 <strong id="arcSegLabel">12</strong></span> <input type="range" min="4" max="40" value="12" step="2" oninput="updateArcSegments(this.value)">`
+        };
+        for (let [key, html] of Object.entries(ctrls)) {
+            const el = document.getElementById(key + 'Controls');
+            if (el) el.innerHTML = html;
+        }
+    }
+
+    window.switchPage = function(page) {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        const target = document.querySelector(`.card[data-page="${page}"]`);
+        if (target) target.classList.add('active');
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        const navLink = document.querySelector(`.nav a[data-page="${page}"]`);
+        if (navLink) navLink.classList.add('active');
+        if (content[page]) initAdvancedLab(page);
+        else destroyAdvancedLab();
+        setTimeout(() => {
+            resizeAdvancedLab();
+            Object.values(sceneData).forEach(resizeScene);
+            Object.values(compatScenes).forEach(d => d.resize());
+        }, 100);
+    };
+
+    window.addEventListener('resize', () => {
+        resizeAdvancedLab();
+        Object.values(sceneData).forEach(resizeScene);
+        Object.values(compatScenes).forEach(d => d.resize());
+    });
+
+    document.getElementById('topNav').addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+            e.preventDefault();
+            const page = e.target.dataset.page;
+            if (page) switchPage(page);
+        }
+    });
+
+    window.toggleAnswer = (button) => {
+        const ex = button.nextElementSibling;
+        if (!ex) return;
+        const isHidden = getComputedStyle(ex).display === 'none';
+        ex.style.display = isHidden ? 'block' : 'none';
+        button.textContent = isHidden ? '隐藏答案' : '显示答案';
+    };
+
+    window.toggleAreaSlice = () => {
+        const d = sceneData.area; if (!d) return;
+        d.extra.current = d.extra.current === 'vertical' ? 'horizontal' : 'vertical';
+        d.extra.vertG.visible = d.extra.current === 'vertical';
+        d.extra.horizG.visible = d.extra.current === 'horizontal';
+        const lbl = document.getElementById('sliceLabel'); if (lbl) lbl.textContent = d.extra.current === 'vertical' ? '垂直' : '水平';
+    };
+    window.toggleDisks = () => { const d = sceneData.disk; if (!d) return; d.extra.visible = !d.extra.visible; d.extra.diskG.visible = d.extra.visible; };
+    window.updateDiskCount = (v) => { const d = sceneData.disk; if (!d) return; d.extra.createDisks(parseInt(v)); d.extra.diskG.visible = d.extra.visible; document.getElementById('diskLabel').textContent = v; };
+    window.toggleWasherCutaway = () => { const d = sceneData.washer; if (!d) return; d.extra.ringsVisible = !d.extra.ringsVisible; d.extra.ringG.visible = d.extra.ringsVisible; };
+    window.toggleCrossSections = () => { const d = sceneData.cross; if (!d) return; d.extra.visible = !d.extra.visible; d.extra.cg.visible = d.extra.visible; };
+    window.updateCrossPos = (v) => { const d = sceneData.cross; if (!d) return; d.extra.createSections(parseFloat(v)); d.extra.cg.visible = d.extra.visible; document.getElementById('crossPosLabel').textContent = parseFloat(v).toFixed(1); };
+    window.toggleShells = () => { const d = sceneData.shell; if (!d) return; d.extra.visible = !d.extra.visible; d.extra.shellG.visible = d.extra.visible; };
+    window.updateShellCount = (v) => { const d = sceneData.shell; if (!d) return; d.extra.createShells(parseInt(v)); d.extra.shellG.visible = d.extra.visible; document.getElementById('shellLabel').textContent = v; };
+    window.togglePolarSectors = () => { const d = sceneData.polar; if (!d) return; d.extra.sectorsVisible = !d.extra.sectorsVisible; d.extra.sectorG.visible = d.extra.sectorsVisible; };
+    window.updateArcSegments = (v) => { const d = sceneData.arc; if (!d) return; d.extra.createSegments(parseInt(v)); document.getElementById('arcSegLabel').textContent = v; };
+
+    function setupCalculator() {
+        const type = document.getElementById('calcType');
+        if (!type) return;
+        type.addEventListener('change', updateCalculatorFields);
+        updateCalculatorFields();
+    }
+
+    function updateCalculatorFields() {
+        const type = document.getElementById('calcType')?.value;
+        const secondFunc = document.getElementById('calcFunc2Wrap');
+        const mainLabel = document.querySelector('label[for="calcFunc"]');
+        if (secondFunc) secondFunc.classList.toggle('hidden', type !== 'washer');
+        if (!mainLabel) return;
+        const labels = {
+            disk: '边界函数 f(x)（半径取到旋转轴距离）',
+            washer: '边界函数 f(x)',
+            shell: '高度函数 f(x)',
+            arclength: '曲线函数 y=f(x)',
+            surface: '曲线函数 y=f(x)',
+            polarArea: '极径函数 r(theta)'
+        };
+        mainLabel.textContent = labels[type] || '函数 f(x)';
+    }
+
+    function setCalcMessage(message, isError = false) {
+        const res = document.getElementById('calcResult');
+        res.textContent = message;
+        res.classList.toggle('error', isError);
+    }
+
+    function compileExpression(expr) {
+        const source = expr.trim()
+            .replace(/π/g, 'pi')
+            .replace(/θ/g, 'theta')
+            .replace(/\bln\s*\(/g, 'log(')
+            .replace(/\^/g, '**');
+        if (!source) throw new Error('表达式不能为空');
+        return new Function('x', `
+            const {
+                sin, cos, tan, asin, acos, atan, atan2,
+                sinh, cosh, tanh, sqrt, cbrt, abs, log, log10,
+                exp, pow, min, max, floor, ceil, round, PI, E
+            } = Math;
+            const pi = PI;
+            const e = E;
+            const theta = x;
+            const t = x;
+            return (${source});
+        `);
+    }
+
+    function finiteValue(f, x) {
+        const value = Number(f(x));
+        if (!Number.isFinite(value)) throw new Error(`函数在 ${Number(x).toPrecision(6)} 处没有有效数值`);
+        return value;
+    }
+
+    // 计算器同样使用“到旋转轴的距离”；当前轴偏移默认 0，便于未来扩展 y=c 或 x=c。
+    function calcRadiusToAxis(value, axisOffset = 0) {
+        return Math.abs(value - axisOffset);
+    }
+
+    function calcWasherRadii(firstValue, secondValue, axisOffset = 0) {
+        const firstRadius = calcRadiusToAxis(firstValue, axisOffset);
+        const secondRadius = calcRadiusToAxis(secondValue, axisOffset);
+        return {
+            outer: Math.max(firstRadius, secondRadius),
+            inner: Math.min(firstRadius, secondRadius),
+            swapped: secondRadius > firstRadius
+        };
+    }
+
+    function derivative(f, x) {
+        const step = Math.max(1e-5, Math.abs(x) * 1e-5);
+        const yp = Number(f(x + step));
+        const ym = Number(f(x - step));
+        if (Number.isFinite(yp) && Number.isFinite(ym)) return (yp - ym) / (2 * step);
+        const y0 = Number(f(x));
+        if (Number.isFinite(yp) && Number.isFinite(y0)) return (yp - y0) / step;
+        if (Number.isFinite(ym) && Number.isFinite(y0)) return (y0 - ym) / step;
+        throw new Error(`无法在 ${Number(x).toPrecision(6)} 附近估计导数`);
+    }
+
+    function integrateSimpson(g, a, b, steps = 1000) {
+        const n = steps % 2 === 0 ? steps : steps + 1;
+        const h = (b - a) / n;
+        let sum = finiteValue(g, a) + finiteValue(g, b);
+        for (let i = 1; i < n; i++) {
+            const x = a + i * h;
+            sum += (i % 2 ? 4 : 2) * finiteValue(g, x);
+        }
+        return sum * h / 3;
+    }
+
+    window.performCalc = () => {
+        const type = document.getElementById('calcType').value;
+        const funcStr = document.getElementById('calcFunc').value;
+        const func2Str = document.getElementById('calcFunc2').value;
+        const a = parseFloat(document.getElementById('calcA').value);
+        const b = parseFloat(document.getElementById('calcB').value);
+        if (isNaN(a) || isNaN(b) || a === b) { setCalcMessage('请输入有效且不相等的积分区间', true); return; }
+        try {
+            const f = compileExpression(funcStr);
+            const g2 = compileExpression(func2Str || '0');
+            let result, note = '';
+            if (type === 'disk') {
+                result = integrateSimpson(x => Math.PI * calcRadiusToAxis(finiteValue(f, x)) ** 2, a, b);
+            } else if (type === 'washer') {
+                let swappedRadii = false;
+                result = integrateSimpson(x => {
+                    const radii = calcWasherRadii(finiteValue(f, x), finiteValue(g2, x));
+                    if (radii.swapped) swappedRadii = true;
+                    return Math.PI * (radii.outer ** 2 - radii.inner ** 2);
+                }, a, b);
+                if (swappedRadii) note = '（提示：已按到旋转轴的距离自动识别外半径和内半径）';
+            } else if (type === 'shell') {
+                result = integrateSimpson(x => 2 * Math.PI * Math.abs(x) * Math.abs(finiteValue(f, x)), a, b);
+            } else if (type === 'arclength') {
+                result = integrateSimpson(x => Math.sqrt(1 + derivative(f, x) ** 2), a, b);
+            } else if (type === 'surface') {
+                result = integrateSimpson(x => 2 * Math.PI * calcRadiusToAxis(finiteValue(f, x)) * Math.sqrt(1 + derivative(f, x) ** 2), a, b);
+            } else if (type === 'polarArea') {
+                result = integrateSimpson(theta => 0.5 * finiteValue(f, theta) ** 2, a, b);
+            }
+            setCalcMessage(`结果 ≈ ${result.toFixed(6)} ${note}`.trim());
+        } catch (e) { setCalcMessage(`计算失败：${e.message || '请检查表达式语法'}`, true); }
+    };
+</script>
+</body>
+</html>
