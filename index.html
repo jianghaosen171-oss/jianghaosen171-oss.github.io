@@ -15,80 +15,269 @@
     </script>
     <style>
         :root {
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --accent: #2563eb;
-            --bc: #7c3aed;
-            --border: #e2e8f0;
-            --shadow: 0 4px 20px rgba(0,0,0,0.06);
+            --bg: #0B1320;
+            --card-bg: #F5F0E1;
+            --text: #1E293B;
+            --accent: #145DA0;
+            --bc: #C9A227;
+            --border: #D7CCB6;
+            --shadow: 0 8px 26px rgba(11,19,32,0.16);
             --radius: 16px;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            background: linear-gradient(135deg, #f0f4f8 0%, #e8eef5 30%, #f5f7fa 60%, #eef1f5 100%);
+            background: linear-gradient(180deg, #0B1320 0%, #111C2E 100%);
             font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
             color: var(--text);
+            height: 100vh;
+            display: block;
+            overflow: hidden;
+        }
+        .app-shell {
+            display: grid;
+            grid-template-columns: 232px minmax(0, 1fr);
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(180deg, #0B1320 0%, #111C2E 100%);
+        }
+        .sidebar {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            background: #0B1320;
+            border-right: 1px solid rgba(201,162,39,0.36);
+            color: #F8FAFC;
+            box-shadow: 10px 0 28px rgba(11,19,32,0.32);
+            z-index: 20;
+        }
+        .sidebar-brand {
+            display: grid;
+            grid-template-columns: 64px minmax(0, 1fr);
+            align-items: center;
+            gap: 12px;
+            min-height: 94px;
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(215,204,182,0.2);
+        }
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 58px;
+            height: 58px;
+            border-radius: 8px;
+            background: rgba(201,162,39,0.18);
+            border: 1px solid rgba(201,162,39,0.42);
+            color: #F5F0E1;
+            font-size: 1.45rem;
+            font-weight: 900;
+        }
+        .brand-copy strong {
+            display: block;
+            color: #C9A227;
+            font-size: 0.86rem;
+            line-height: 1.25;
+            text-transform: uppercase;
+        }
+        .brand-copy span {
+            display: block;
+            margin-top: 4px;
+            color: #D7CCB6;
+            font-size: 0.7rem;
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+        .workspace {
+            min-width: 0;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
         .header {
-            text-align: center;
-            padding: 14px 20px;
-            background: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            text-align: left;
+            padding: 14px 28px;
+            background: #0B1320;
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(215,204,182,0.24);
             flex-shrink: 0;
-            box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+            box-shadow: 0 2px 16px rgba(11,19,32,0.28);
         }
         .header h1 {
             font-size: 1.8rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            background: linear-gradient(135deg, #F8FAFC, #C9A227);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+        .header-title p {
+            margin-top: 4px;
+            color: #D7CCB6;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+        .fake-icon-button {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            border: 1px solid rgba(201,162,39,0.34);
+            background: rgba(245,240,225,0.08);
+            color: #C9A227;
+            font-size: 1rem;
+            font-weight: 900;
+        }
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 42px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(201,162,39,0.34);
+            background: rgba(245,240,225,0.08);
+            color: #F8FAFC;
+        }
+        .user-avatar {
+            display: grid;
+            place-items: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #C9A227;
+            color: #0B1320;
+            font-size: 0.76rem;
+            font-weight: 900;
+        }
+        .user-chip strong,
+        .user-chip small {
+            display: block;
+            line-height: 1.2;
+        }
+        .user-chip strong { font-size: 0.86rem; }
+        .user-chip small { color: #D7CCB6; font-size: 0.68rem; }
         .nav {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
             gap: 6px;
-            flex-wrap: wrap;
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
+            flex-wrap: nowrap;
+            padding: 18px 16px;
+            background: transparent;
+            backdrop-filter: none;
+            border-bottom: 0;
             flex-shrink: 0;
             z-index: 10;
-            box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+            box-shadow: none;
         }
         .nav a {
-            padding: 8px 14px;
-            background: #e8ecf1;
-            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 12px;
+            background: rgba(245,240,225,0.08);
+            color: #D7CCB6;
             text-decoration: none;
-            border-radius: 24px;
+            border-radius: 8px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 700;
             transition: 0.3s;
             white-space: nowrap;
-            border: 1px solid transparent;
+            border: 1px solid rgba(215,204,182,0.18);
             cursor: pointer;
         }
+        .nav a::before {
+            width: 22px;
+            color: #C9A227;
+            font-weight: 900;
+            text-align: center;
+        }
+        .nav a[data-page="home"]::before { content: "⌂"; }
+        .nav a[data-page="learn"]::before { content: "□"; }
+        .nav a[data-page="visualLab"]::before { content: "⌁"; }
+        .nav a[data-page="practice"]::before { content: "✎"; }
+        .nav a[data-page="formulaMap"]::before { content: "∑"; }
+        .nav a[data-page="mistakes"]::before { content: "!"; }
         .nav a:hover, .nav a.active {
             background: var(--accent);
-            color: white;
+            color: #F8FAFC;
             border-color: var(--accent);
-            box-shadow: 0 2px 10px rgba(37,99,235,0.25);
+            box-shadow: 0 2px 10px rgba(20,93,160,0.25);
         }
-        .nav a.bc-link { background: #ede9fe; color: #5b21b6; }
+        .nav a.bc-link { background: rgba(201,162,39,0.16); color: #F5F0E1; }
         .nav a.bc-link:hover, .nav a.bc-link.active {
             background: var(--bc);
-            color: white;
+            color: #0B1320;
             border-color: var(--bc);
-            box-shadow: 0 2px 10px rgba(124,58,237,0.25);
+            box-shadow: 0 2px 10px rgba(201,162,39,0.24);
+        }
+        .sidebar-tools {
+            margin-top: auto;
+            padding: 16px;
+            border-top: 1px solid rgba(215,204,182,0.18);
+        }
+        .sidebar-tools button {
+            width: 100%;
+            min-height: 40px;
+            margin: 0 0 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(215,204,182,0.24);
+            background: rgba(245,240,225,0.08);
+            color: #D7CCB6;
+            text-align: left;
+            font-weight: 800;
+        }
+        .sidebar-tools button.primary {
+            background: #C9A227;
+            border-color: #C9A227;
+            color: #0B1320;
+        }
+        .observatory-status {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(201,162,39,0.34);
+            background: rgba(17,28,46,0.9);
+            color: #D7CCB6;
+        }
+        .observatory-status span {
+            display: block;
+            margin-bottom: 6px;
+            color: #C9A227;
+            font-size: 0.68rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        .observatory-status strong {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #F8FAFC;
+            font-size: 0.78rem;
+            line-height: 1.35;
+        }
+        .observatory-status strong::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #2CB1BC;
         }
         .main-area {
             flex: 1;
@@ -98,6 +287,7 @@
         .card {
             position: absolute;
             inset: 0;
+            display: none;
             overflow-y: auto;
             padding: 24px;
             background: transparent;
@@ -106,6 +296,7 @@
             transition: opacity 0.3s;
         }
         .card.active {
+            display: block;
             visibility: visible;
             opacity: 1;
         }
@@ -117,6 +308,7 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             padding: 24px;
+            color: #1E293B;
         }
         .badge {
             display: inline-block;
@@ -124,20 +316,20 @@
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 700;
-            color: #fff;
+            color: #F8FAFC;
         }
-        .badge.ab { background: linear-gradient(135deg, #2563eb, #3b82f6); }
-        .badge.bc { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
-        .badge.ext { background: linear-gradient(135deg, #64748b, #8b5cf6); }
+        .badge.ab { background: linear-gradient(135deg, #145DA0, #2CB1BC); }
+        .badge.bc { background: linear-gradient(135deg, #C9A227, #D7CCB6); color: #0B1320; }
+        .badge.ext { background: linear-gradient(135deg, #0B3D6E, #C9A227); }
         .formula {
-            background: #f1f5f9;
+            background: #FFF9EA;
             padding: 14px 18px;
             border-radius: 10px;
             margin: 14px 0;
             border: 1px solid var(--border);
             font-size: 1.05rem;
             overflow-x: auto;
-            color: #334155;
+            color: #1E293B;
         }
         .video-wrap {
             margin: 15px 0;
@@ -145,8 +337,8 @@
             overflow: hidden;
             border: 1px solid var(--border);
             aspect-ratio: 16 / 9;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            background: #0f172a;
+            box-shadow: 0 2px 8px rgba(11,19,32,0.1);
+            background: #0B1320;
         }
         .video-wrap iframe,
         .video-wrap video { width: 100%; height: 100%; border: 0; display: block; }
@@ -156,7 +348,7 @@
             flex-wrap: wrap;
             gap: 8px;
             margin: -4px 0 14px;
-            color: #64748b;
+            color: #475569;
             font-size: 0.85rem;
         }
         .video-tools a {
@@ -164,16 +356,16 @@
             align-items: center;
             padding: 7px 12px;
             border-radius: 20px;
-            background: #eef2ff;
-            color: #3730a3;
+            background: rgba(20,93,160,0.12);
+            color: #0B3D6E;
             text-decoration: none;
             font-weight: 700;
-            border: 1px solid #c7d2fe;
+            border: 1px solid rgba(20,93,160,0.24);
         }
-        .video-tools a:hover { background: #e0e7ff; }
+        .video-tools a:hover { background: rgba(20,93,160,0.18); }
         .video-note {
             flex-basis: 100%;
-            color: #64748b;
+            color: #475569;
             line-height: 1.5;
         }
         .model-block {
@@ -185,7 +377,7 @@
             justify-content: space-between;
             gap: 8px;
             margin-bottom: 8px;
-            color: #334155;
+            color: #1E293B;
             font-weight: 800;
         }
         .compat-toggle {
@@ -193,20 +385,20 @@
             padding: 6px 12px;
             border-radius: 18px;
             font-size: 0.78rem;
-            background: #f8fafc;
+            background: #FFF9EA;
             color: #475569;
         }
         .canvas-container {
             width: 100%;
             height: 380px;
-            border: 2px solid #cbd5e1;
+            border: 2px solid #D7CCB6;
             border-radius: 12px;
             margin: 0;
-            background: #f5f7fa;
+            background: #FFF9EA;
             cursor: grab;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+            box-shadow: inset 0 0 20px rgba(11,19,32,0.04);
         }
         .compat-canvas {
             display: block;
@@ -221,21 +413,21 @@
             max-width: calc(100% - 24px);
             padding: 6px 10px;
             border-radius: 10px;
-            background: rgba(255,255,255,0.88);
+            background: rgba(255,249,234,0.94);
             color: #475569;
             font-size: 0.8rem;
             line-height: 1.45;
             pointer-events: none;
-            box-shadow: 0 1px 8px rgba(15,23,42,0.08);
+            box-shadow: 0 1px 8px rgba(11,19,32,0.12);
         }
         .canvas-container:active { cursor: grabbing; }
         .hint {
             position: absolute;
             bottom: 10px;
             left: 14px;
-            color: #64748b;
+            color: #475569;
             font-size: 0.8rem;
-            background: rgba(255,255,255,0.85);
+            background: rgba(255,249,234,0.92);
             padding: 4px 10px;
             border-radius: 12px;
             z-index: 10;
@@ -246,84 +438,162 @@
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
-            border: 1px solid #cbd5e1;
-            background: #fff;
+            border: 1px solid #D7CCB6;
+            background: #FFF9EA;
             color: #475569;
             margin: 4px;
         }
         button.accent {
             background: var(--accent);
-            color: white;
+            color: #F8FAFC;
             border-color: var(--accent);
         }
         button.accent:hover {
-            background: #1d4ed8;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2);
+            background: #0B3D6E;
+            box-shadow: 0 2px 8px rgba(20,93,160,0.18);
         }
         button.bc-btn {
             background: var(--bc);
-            color: white;
+            color: #0B1320;
             border-color: var(--bc);
         }
         button.bc-btn:hover {
-            background: #6d28d9;
-            box-shadow: 0 2px 8px rgba(124,58,237,0.2);
+            background: #D7CCB6;
+            box-shadow: 0 2px 8px rgba(201,162,39,0.2);
         }
         input[type="range"] { width: 150px; accent-color: var(--accent); }
         input[type="text"], input[type="number"], select {
             padding: 10px 14px;
-            background: #fff;
-            border: 2px solid #cbd5e1;
+            background: #FFF9EA;
+            border: 2px solid #D7CCB6;
             border-radius: 8px;
-            color: #1e293b;
+            color: #1E293B;
             margin: 0 4px;
         }
         .result {
             margin-top: 10px;
             padding: 10px 16px;
-            background: #f0fdf4;
+            background: #FFF9EA;
             border-radius: 8px;
-            color: #059669;
+            color: #0B3D6E;
             font-weight: 700;
         }
         .quiz { margin-top: 20px; }
-        .quiz h3 { color: #d97706; margin-bottom: 8px; }
+        .quiz h3 { color: #C9A227; margin-bottom: 8px; }
         .quiz button.ans-btn {
             padding: 4px 12px;
             font-size: 0.85rem;
-            background: #fef3c7;
-            border: 1px solid #fcd34d;
-            color: #92400e;
+            background: rgba(201,162,39,0.16);
+            border: 1px solid rgba(201,162,39,0.36);
+            color: #0B1320;
             margin-top: 4px;
         }
-        .quiz button.ans-btn:hover { background: #fde68a; }
+        .quiz button.ans-btn:hover { background: rgba(201,162,39,0.26); }
         .quiz .explanation {
             display: none;
             margin-top: 6px;
             padding: 8px 12px;
-            background: #f0fdf4;
-            border-left: 4px solid #10b981;
-            color: #065f46;
+            background: #FFF9EA;
+            border-left: 4px solid #2CB1BC;
+            color: #1E293B;
             border-radius: 4px;
         }
         .tip {
-            background: #fffbeb;
-            border-left: 4px solid #f59e0b;
+            background: #FFF9EA;
+            border-left: 4px solid #C9A227;
             padding: 10px;
             border-radius: 8px;
             margin: 10px 0;
-            color: #92400e;
+            color: #1E293B;
         }
         .explanation-section {
-            background: #f8fafc;
+            background: #FFF9EA;
             padding: 16px;
             border-radius: 10px;
             border: 1px solid var(--border);
             margin: 12px 0;
         }
-        .explanation-section h3 { color: #1e40af; margin-bottom: 8px; }
-        .explanation-section p { color: #334155; margin-bottom: 6px; }
+        .explanation-section h3 { color: #0B3D6E; margin-bottom: 8px; }
+        .explanation-section p { color: #1E293B; margin-bottom: 6px; }
         .explanation-section ul { margin-left: 20px; color: #475569; }
+        .lesson-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .lesson-card,
+        .mistake-card,
+        .practice-card {
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #FFF9EA;
+        }
+        .lesson-card h4,
+        .mistake-card h4,
+        .practice-card h4 {
+            margin-bottom: 8px;
+            color: #0B3D6E;
+        }
+        .lesson-card p,
+        .practice-card p { margin-bottom: 6px; }
+        .lesson-card ul,
+        .mistake-card ul,
+        .practice-card ul { margin-left: 18px; }
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 10px 0;
+        }
+        .topic-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(20,93,160,0.24);
+            background: rgba(20,93,160,0.12);
+            color: #0B3D6E;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+        .topic-tag.ext { border-color: rgba(201,162,39,0.42); background: rgba(201,162,39,0.14); color: #0B1320; }
+        .topic-tag.warn { border-color: rgba(162,62,72,0.3); background: rgba(162,62,72,0.1); color: #A23E48; }
+        .method-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .method-table th,
+        .method-table td {
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .method-table th {
+            background: rgba(20, 93, 160, 0.12);
+            color: #0B3D6E;
+        }
+        details.lesson-accordion {
+            margin: 10px 0;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #FFF9EA;
+            overflow: hidden;
+        }
+        details.lesson-accordion summary {
+            cursor: pointer;
+            padding: 12px 14px;
+            font-weight: 800;
+            color: #0B3D6E;
+        }
+        details.lesson-accordion > div {
+            padding: 0 14px 14px;
+        }
         .btn-row {
             display: flex;
             align-items: center;
@@ -331,98 +601,296 @@
             gap: 8px;
             margin: 10px 0 16px;
         }
-        .calc-grid {
+        .site-hero {
             display: grid;
-            grid-template-columns: repeat(5, minmax(140px, 1fr)) auto;
-            gap: 10px;
-            align-items: end;
+            grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+            gap: 22px;
+            align-items: stretch;
+            margin-bottom: 24px;
         }
-        .calc-field {
+        .hero-copy,
+        .preview-card,
+        .path-card,
+        .tool-card,
+        .lesson-shell,
+        .page-intro {
+            border: 1px solid #D7CCB6;
+            background: #FFF9EA;
+            border-radius: 14px;
+            box-shadow: 0 10px 26px rgba(11,19,32,0.14);
+        }
+        .hero-copy {
+            padding: 28px;
+            min-height: 280px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            min-width: 0;
+            justify-content: center;
         }
-        .calc-field label {
-            font-size: 0.8rem;
-            color: #64748b;
+        .hero-copy h2 {
+            font-size: clamp(2rem, 4vw, 4rem);
+            line-height: 1.02;
+            margin-bottom: 16px;
+            color: #1E293B;
+        }
+        .hero-copy p,
+        .page-intro p,
+        .path-card p,
+        .tool-card p,
+        .lesson-description {
+            color: #475569;
+            line-height: 1.65;
+        }
+        .hero-actions,
+        .card-actions,
+        .lesson-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            padding: 9px 16px;
+            border-radius: 24px;
+            border: 1px solid rgba(20, 93, 160, 0.32);
+            background: rgba(20, 93, 160, 0.12);
+            color: #0B3D6E;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nav-button.primary {
+            background: linear-gradient(135deg, #145DA0, #0B3D6E);
+            color: #F8FAFC;
+            border-color: transparent;
+        }
+        .nav-button.subtle {
+            background: rgba(201,162,39,0.14);
+            color: #0B1320;
+        }
+        .preview-card {
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px;
+        }
+        .preview-card h3,
+        .section-title,
+        .path-group h3,
+        .tool-card h3,
+        .path-card h4 {
+            color: #0B3D6E;
+        }
+        .preview-formula {
+            margin: 18px 0;
+            padding: 16px;
+            border-radius: 12px;
+            background: #F5F0E1;
+            border: 1px solid #D7CCB6;
+            color: #1E293B;
+            overflow-x: auto;
+        }
+        .section-title {
+            margin: 22px 0 10px;
+            font-size: 1.35rem;
+        }
+        .path-grid,
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+            gap: 14px;
+            margin: 12px 0 20px;
+        }
+        .path-card,
+        .tool-card {
+            padding: 18px;
+            min-height: 190px;
+            display: flex;
+            flex-direction: column;
+        }
+        .path-card.extension {
+            opacity: 0.84;
+            border-style: dashed;
+        }
+        .path-card ul,
+        .tool-card ul {
+            margin: 10px 0 0 18px;
+            color: #475569;
+            line-height: 1.6;
+        }
+        .path-card .card-actions,
+        .tool-card .card-actions {
+            margin-top: auto;
+            padding-top: 14px;
+        }
+        .page-intro {
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+        .page-intro h2 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #1E293B;
+        }
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 14px;
+            color: #475569;
+            font-size: 0.88rem;
             font-weight: 700;
         }
-        .calc-field input,
-        .calc-field select {
-            width: 100%;
+        .breadcrumb button {
+            border: 0;
+            background: transparent;
+            color: #145DA0;
+            padding: 0;
             margin: 0;
+            font-size: inherit;
         }
-        .calc-field.hidden { display: none; }
+        .lesson-header {
+            margin-bottom: 18px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #D7CCB6;
+        }
+        .lesson-header h2 {
+            margin: 8px 0 10px;
+            font-size: 2rem;
+            color: #1E293B;
+        }
+        .lesson-section {
+            margin: 18px 0;
+        }
+        .lesson-section > h3 {
+            color: #0B3D6E;
+            margin-bottom: 10px;
+        }
+        .lesson-outline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 8px;
+            margin: 16px 0 4px;
+        }
+        .lesson-outline span {
+            padding: 9px 10px;
+            border-radius: 12px;
+            background: rgba(20, 93, 160, 0.1);
+            border: 1px solid rgba(20, 93, 160, 0.22);
+            color: #0B3D6E;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
         .error {
-            background: #fef2f2;
-            color: #b91c1c;
+            background: rgba(162,62,72,0.12);
+            color: #A23E48;
         }
         /* Dark glass visual pass, aligned with the imported 3D lab. */
         body {
             background:
-                radial-gradient(circle at 20% 12%, rgba(56, 189, 248, 0.16), transparent 28%),
-                radial-gradient(circle at 82% 18%, rgba(139, 92, 246, 0.18), transparent 30%),
-                #0a0f1e;
-            color: #e2e8f0;
+                radial-gradient(circle at 20% 12%, rgba(44, 177, 188, 0.12), transparent 28%),
+                radial-gradient(circle at 82% 18%, rgba(201, 162, 39, 0.1), transparent 30%),
+                linear-gradient(180deg, #0B1320 0%, #111C2E 100%);
+            color: #F8FAFC;
         }
-        .header,
+        .header {
+            background: #0B1320;
+            border-color: rgba(215, 204, 182, 0.24);
+            box-shadow: 0 8px 24px rgba(11,19,32,0.32);
+        }
         .nav {
-            background: rgba(15, 23, 42, 0.84);
-            border-color: rgba(56, 189, 248, 0.25);
-            box-shadow: 0 10px 28px rgba(0,0,0,0.28);
+            background: transparent;
+            border-color: transparent;
+            box-shadow: none;
         }
         .nav a {
-            background: #1e293b;
-            color: #cbd5e1;
-            border-color: rgba(148, 163, 184, 0.18);
+            background: rgba(245, 240, 225, 0.08);
+            color: #D7CCB6;
+            border-color: rgba(215, 204, 182, 0.22);
         }
         .nav a:hover,
         .nav a.active {
-            background: #3b82f6;
-            color: #fff;
-            box-shadow: 0 0 12px rgba(59,130,246,0.45);
+            background: #145DA0;
+            color: #F8FAFC;
+            box-shadow: 0 2px 10px rgba(20,93,160,0.24);
         }
-        .nav a.bc-link { background: #2e225d; color: #ddd6fe; }
+        .nav a.bc-link { background: rgba(201,162,39,0.16); color: #F5F0E1; }
         .nav a.bc-link:hover,
         .nav a.bc-link.active {
-            background: #8b5cf6;
-            color: #fff;
-            box-shadow: 0 0 12px rgba(139,92,246,0.5);
+            background: #C9A227;
+            color: #0B1320;
+            box-shadow: 0 2px 10px rgba(201,162,39,0.24);
         }
         .card-inner {
-            background: rgba(15, 23, 42, 0.86);
-            border-color: rgba(56, 189, 248, 0.28);
-            box-shadow: 0 18px 44px rgba(0,0,0,0.35);
+            background: #F5F0E1;
+            border-color: #D7CCB6;
+            box-shadow: 0 14px 34px rgba(11,19,32,0.22);
             backdrop-filter: blur(14px);
+            color: #1E293B;
         }
         .formula,
         .explanation-section,
         .result {
-            background: rgba(15, 23, 42, 0.78);
-            border-color: rgba(148, 163, 184, 0.24);
-            color: #dbeafe;
+            background: #FFF9EA;
+            border-color: #D7CCB6;
+            color: #1E293B;
         }
-        .explanation-section h3 { color: #38bdf8; }
+        .explanation-section h3 { color: #0B3D6E; }
         .explanation-section p,
         .explanation-section ul,
         .model-title,
-        .video-note { color: #cbd5e1; }
+        .video-note { color: #475569; }
+        .lesson-card,
+        .mistake-card,
+        .practice-card,
+        details.lesson-accordion {
+            background: #FFF9EA;
+            border-color: #D7CCB6;
+            color: #1E293B;
+        }
+        .lesson-card h4,
+        .mistake-card h4,
+        .practice-card h4,
+        details.lesson-accordion summary,
+        .method-table th { color: #0B3D6E; }
+        .method-table th,
+        .method-table td { border-color: #D7CCB6; }
+        .method-table th { background: rgba(20, 93, 160, 0.1); }
+        .topic-tag {
+            background: rgba(20, 93, 160, 0.12);
+            border-color: rgba(20, 93, 160, 0.26);
+            color: #0B3D6E;
+        }
+        .topic-tag.ext {
+            background: rgba(201,162,39,0.16);
+            border-color: rgba(201,162,39,0.38);
+            color: #0B1320;
+        }
+        .topic-tag.warn {
+            background: rgba(162,62,72,0.1);
+            border-color: rgba(162,62,72,0.3);
+            color: #A23E48;
+        }
         .tip {
-            background: rgba(67, 56, 202, 0.2);
-            border-left-color: #38bdf8;
-            color: #dbeafe;
+            background: #FFF9EA;
+            border-left-color: #C9A227;
+            color: #1E293B;
         }
         .canvas-container {
-            background: #0a0f1e;
-            border-color: rgba(56, 189, 248, 0.4);
+            background: #FFF9EA;
+            border-color: #D7CCB6;
         }
         input[type="text"],
         input[type="number"],
         select {
-            background: #0f172a;
-            border-color: #334155;
-            color: #f1f5f9;
+            background: #FFF9EA;
+            border-color: #D7CCB6;
+            color: #1E293B;
         }
         .advanced-lab-card {
             padding: 0;
@@ -436,14 +904,15 @@
             height: min(76vh, 780px);
             overflow: hidden;
             border-radius: 18px;
-            background: #0a0f1e;
-            border: 1px solid rgba(56, 189, 248, 0.38);
-            box-shadow: 0 22px 60px rgba(0,0,0,0.45);
+            background: #0B1320;
+            border: 1px solid rgba(44, 177, 188, 0.34);
+            box-shadow: 0 18px 40px rgba(11,19,32,0.38);
+            color: #F8FAFC;
         }
         .advanced-lab-viewport {
             position: absolute;
             inset: 0;
-            background: #0a0f1e;
+            background: #0B1320;
         }
         .advanced-lab-viewport canvas {
             display: block;
@@ -458,13 +927,14 @@
             width: 390px;
             padding: 18px 24px;
             border-radius: 28px;
-            background: rgba(15, 23, 42, 0.86);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+            background: #111C2E;
+            border: 1px solid rgba(215, 204, 182, 0.28);
+            box-shadow: 0 12px 28px rgba(11,19,32,0.42);
             backdrop-filter: blur(16px);
+            color: #F8FAFC;
         }
         .lab-control-panel h2 {
-            color: #38bdf8;
+            color: #F8FAFC;
             font-size: 1.15rem;
             margin-bottom: 12px;
         }
@@ -480,8 +950,8 @@
             border-radius: 40px;
             padding: 7px 14px;
             margin: 0;
-            background: #1e293b;
-            color: #e2e8f0;
+            background: rgba(245, 240, 225, 0.1);
+            color: #F8FAFC;
             font-size: 13px;
             transition: 0.2s;
         }
@@ -490,25 +960,22 @@
             filter: brightness(1.08);
         }
         .lab-mode-btn {
-            border: 1px solid rgba(148, 163, 184, 0.24) !important;
+            border: 1px solid rgba(215, 204, 182, 0.24) !important;
             padding: 7px 11px !important;
         }
         .lab-mode-btn.active {
-            color: #fff !important;
+            color: #F8FAFC !important;
             transform: translateY(-1px);
         }
-        .lab-mode-area.active { background: #eab308 !important; box-shadow: 0 0 10px #eab308aa; }
-        .lab-mode-disk.active { background: #22c55e !important; box-shadow: 0 0 10px #22c55eaa; }
-        .lab-mode-washer.active { background: #f97316 !important; box-shadow: 0 0 10px #f97316aa; }
-        .lab-mode-cs.active { background: #3b82f6 !important; box-shadow: 0 0 10px #3b82f6aa; }
-        .lab-mode-shell.active { background: #a855f7 !important; box-shadow: 0 0 10px #a855f7aa; }
-        .lab-mode-polar.active { background: #06b6d4 !important; box-shadow: 0 0 10px #06b6d4aa; }
-        .lab-mode-arc.active { background: #ef4444 !important; box-shadow: 0 0 10px #ef4444aa; }
-        .lab-mode-surface.active { background: #14b8a6 !important; box-shadow: 0 0 10px #14b8a6aa; }
-        .lab-mode-parametric.active { background: #6366f1 !important; box-shadow: 0 0 10px #6366f1aa; }
+        .lab-mode-area.active { background: #C9A227 !important; box-shadow: 0 2px 8px rgba(201,162,39,0.28); color: #0B1320 !important; }
+        .lab-mode-disk.active { background: #2CB1BC !important; box-shadow: 0 2px 8px rgba(44,177,188,0.26); color: #0B1320 !important; }
+        .lab-mode-washer.active { background: #145DA0 !important; box-shadow: 0 2px 8px rgba(20,93,160,0.28); }
+        .lab-mode-cs.active { background: #0B3D6E !important; box-shadow: 0 2px 8px rgba(11,61,110,0.3); }
+        .lab-mode-polar.active { background: #2CB1BC !important; box-shadow: 0 2px 8px rgba(44,177,188,0.26); color: #0B1320 !important; }
+        .lab-mode-arc.active { background: #A23E48 !important; box-shadow: 0 2px 8px rgba(162,62,72,0.28); }
         .lab-btn-reset { background: #475569 !important; }
         .lab-axis-selector {
-            background: #0f172a80;
+            background: rgba(11, 19, 32, 0.72);
             border-radius: 48px;
             padding: 4px;
         }
@@ -517,14 +984,14 @@
             padding: 7px 0;
         }
         .lab-axis-selector button.active {
-            background: #8b5cf6 !important;
-            color: #fff;
-            box-shadow: 0 0 10px #8b5cf6aa;
+            background: #145DA0 !important;
+            color: #F8FAFC;
+            box-shadow: 0 2px 8px rgba(20,93,160,0.28);
         }
         .lab-custom-section {
             margin-top: 12px;
             padding-top: 12px;
-            border-top: 1px solid rgba(148, 163, 184, 0.3);
+            border-top: 1px solid rgba(215, 204, 182, 0.24);
         }
         .lab-input-row {
             display: flex;
@@ -533,7 +1000,7 @@
             margin-bottom: 12px;
         }
         .lab-input-row label {
-            color: #94a3b8;
+            color: #D7CCB6;
             font-size: 12px;
             font-weight: 600;
         }
@@ -541,21 +1008,21 @@
             margin: 0;
             padding: 8px 14px;
             border-radius: 20px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: #f1f5f9;
+            background: #0B1320;
+            border: 1px solid rgba(215, 204, 182, 0.28);
+            color: #F8FAFC;
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             font-size: 12px;
         }
         .lab-input-row input:focus {
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 2px #38bdf855;
+            border-color: #2CB1BC;
+            box-shadow: 0 0 0 2px rgba(44,177,188,0.24);
             outline: none;
         }
         .lab-update-btn {
             width: 100%;
-            background: #8b5cf6 !important;
-            color: #fff !important;
+            background: #145DA0 !important;
+            color: #F8FAFC !important;
             font-weight: 800;
         }
         .lab-error-msg {
@@ -563,8 +1030,8 @@
             margin-top: 7px;
             padding: 5px 8px;
             border-radius: 18px;
-            background: #7f1a1a66;
-            color: #ffb4a8;
+            background: rgba(162,62,72,0.18);
+            color: #F5F0E1;
             font-size: 11px;
             text-align: center;
         }
@@ -574,8 +1041,8 @@
             gap: 4px;
             margin-top: 12px;
             padding-top: 8px;
-            border-top: 1px solid #334155;
-            color: #94a3b8;
+            border-top: 1px solid rgba(215, 204, 182, 0.24);
+            color: #D7CCB6;
             font-size: 10px;
         }
         .lab-info-card {
@@ -585,22 +1052,22 @@
             z-index: 20;
             padding: 11px 18px;
             border-radius: 24px;
-            border-left: 4px solid #facc15;
-            background: rgba(0,0,0,0.74);
-            color: #cbd5e1;
+            border-left: 4px solid #C9A227;
+            background: #FFF9EA;
+            color: #1E293B;
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             font-size: 13px;
             pointer-events: none;
             backdrop-filter: blur(12px);
         }
-        .lab-info-card span { color: #ffd966; font-weight: 800; }
+        .lab-info-card span { color: #0B3D6E; font-weight: 800; }
         .lab-volume-value { font-size: 18px; }
         .lab-warning-msg {
             display: none;
             margin-top: 7px;
             padding-top: 7px;
-            border-top: 1px solid rgba(250, 204, 21, 0.28);
-            color: #fde68a;
+            border-top: 1px solid rgba(201, 162, 39, 0.32);
+            color: #C9A227;
             font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
             font-size: 12px;
             font-weight: 700;
@@ -613,8 +1080,8 @@
             z-index: 20;
             padding: 7px 12px;
             border-radius: 20px;
-            background: #00000066;
-            color: #9ca3af;
+            background: #0B1320;
+            color: #D7CCB6;
             font-size: 11px;
             backdrop-filter: blur(4px);
         }
@@ -624,16 +1091,76 @@
             display: grid;
             place-items: center;
             padding: 28px;
-            color: #e2e8f0;
+            color: #F8FAFC;
             text-align: center;
-            background: radial-gradient(circle at center, rgba(56,189,248,0.12), transparent 42%), #0a0f1e;
+            background: radial-gradient(circle at center, rgba(44,177,188,0.12), transparent 42%), #0B1320;
         }
         @media (max-width: 768px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto minmax(0, 1fr);
+            }
+            .sidebar {
+                border-right: 0;
+                border-bottom: 1px solid rgba(201,162,39,0.28);
+                box-shadow: 0 8px 24px rgba(11,19,32,0.28);
+            }
+            .sidebar-brand {
+                grid-template-columns: 52px minmax(0, 1fr);
+                min-height: 72px;
+                padding: 10px 14px;
+            }
+            .brand-mark {
+                width: 46px;
+                height: 46px;
+                font-size: 1rem;
+            }
+            .nav {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 8px 12px 12px;
+            }
+            .nav a {
+                width: auto;
+                min-height: 38px;
+                padding: 8px 12px;
+            }
+            .sidebar-tools {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 8px;
+                padding: 0 12px 12px;
+                border-top: 0;
+            }
+            .sidebar-tools button {
+                margin: 0;
+                text-align: center;
+                padding: 8px;
+            }
+            .observatory-status {
+                grid-column: 1 / -1;
+                margin-top: 0;
+            }
+            .workspace { height: auto; min-height: 0; }
+            .header {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 12px 14px;
+            }
+            .topbar-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .user-chip { flex: 1; }
+            .site-hero { grid-template-columns: 1fr; }
+            .hero-copy { min-height: auto; padding: 22px; }
+            .hero-copy h2 { font-size: 2.25rem; }
+            .path-card,
+            .tool-card { min-height: auto; }
             .canvas-container { height: 260px; }
             .header h1 { font-size: 1.3rem; }
             .card { padding: 14px; }
             .card-inner { padding: 16px; }
-            .calc-grid { grid-template-columns: 1fr; }
             .advanced-lab { min-height: 780px; height: 82vh; }
             .lab-control-panel {
                 width: calc(100% - 24px);
@@ -657,23 +1184,54 @@
     </style>
 </head>
 <body>
-<div class="header">
-    <h1>🧮 AP微积分积分应用 · 3D教学</h1>
+<div class="app-shell">
+    <aside class="sidebar" aria-label="Observatory navigation">
+        <div class="sidebar-brand">
+            <div class="brand-mark">U28</div>
+            <div class="brand-copy">
+                <strong>Mathematical Observatory</strong>
+                <span>Learning & Research System</span>
+            </div>
+        </div>
+        <nav class="nav" id="topNav">
+            <a data-page="home" class="active">Home</a>
+            <a data-page="learn">Learn</a>
+            <a data-page="visualLab">Visual Lab</a>
+            <a data-page="practice">Practice</a>
+            <a data-page="formulaMap">Formula Map</a>
+            <a data-page="mistakes">Mistake Bank</a>
+        </nav>
+        <div class="sidebar-tools" aria-label="Demo account tools">
+            <button type="button" class="primary" id="demoSignIn">Sign In</button>
+            <button type="button" id="demoLogOut">Log Out</button>
+            <button type="button" id="demoSettings">Settings</button>
+            <div class="observatory-status">
+                <span>Observatory Status</span>
+                <strong id="demoStatusText">All Systems Nominal</strong>
+            </div>
+        </div>
+    </aside>
+    <section class="workspace">
+        <div class="header">
+            <div class="header-title">
+                <h1>🧮 AP微积分积分应用 · 3D教学</h1>
+                <p>Mathematical Observatory · Learning & Research System</p>
+            </div>
+            <div class="topbar-actions" aria-label="Demo account controls">
+                <button type="button" class="fake-icon-button" title="Search demo">⌕</button>
+                <button type="button" class="fake-icon-button" title="Notifications demo">!</button>
+                <div class="user-chip">
+                    <span class="user-avatar" id="demoAvatar">AS</span>
+                    <span>
+                        <strong id="demoUserName">Alex Student</strong>
+                        <small id="demoAuthState">Signed in · Demo mode</small>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="main-area" id="mainArea"></div>
+    </section>
 </div>
-<nav class="nav" id="topNav">
-    <a data-page="area" class="active">📏 面积</a>
-    <a data-page="disk">🔄 Disk</a>
-    <a data-page="washer">⭕ Washer</a>
-    <a data-page="cross">📋 截面</a>
-    <a data-page="shell" class="bc-link">🐚 Shell 拓展</a>
-    <a data-page="polar" class="bc-link">📈 极坐标</a>
-    <a data-page="arc" class="bc-link">📐 弧长</a>
-    <a data-page="surface" class="bc-link">🌐 旋转面</a>
-    <a data-page="parametric" class="bc-link">📊 参数方程</a>
-    <a data-page="calc">🔢 计算器</a>
-</nav>
-
-<div class="main-area" id="mainArea"></div>
 
 <script type="module">
     import * as THREE from 'three';
@@ -1104,16 +1662,6 @@
             sliceStep: 0.34,
             csDepth: 1
         },
-        shell: {
-            title: 'Shell 壳层法（拓展）',
-            mode: 'shell',
-            axis: 'y',
-            f: '0.46*t + 0.9 + 0.32*sin(t*0.65)',
-            g: '0.18*t + 0.25',
-            tMin: 0.25,
-            tMax: 7.5,
-            sliceStep: 0.34
-        },
         polar: {
             title: '极坐标面积',
             mode: 'polar',
@@ -1134,25 +1682,15 @@
             tMax: 8,
             sliceStep: 0.5
         },
-        surface: {
-            title: '旋转面面积',
-            mode: 'surface',
+        visualLab: {
+            title: 'Visual Lab',
+            mode: 'area',
             axis: 'x',
-            f: 'sqrt(t + 0.25) + 0.15*sin(t*1.2)',
-            g: '0',
+            f: '0.32*t + 0.75 + 0.32*sin(t*0.75)',
+            g: '0.14*t + 0.2',
             tMin: 0,
             tMax: 8,
-            sliceStep: 0.42
-        },
-        parametric: {
-            title: '参数方程',
-            mode: 'parametric',
-            axis: 'x',
-            f: '2*cos(t)',
-            g: '1.15*sin(t)',
-            tMin: 0,
-            tMax: TAU,
-            sliceStep: Math.PI / 16
+            sliceStep: 0.38
         }
     };
 
@@ -1161,11 +1699,8 @@
         disk: 'disk',
         washer: 'washer',
         cs: 'cross',
-        shell: 'shell',
         polar: 'polar',
-        arc: 'arc',
-        surface: 'surface',
-        parametric: 'parametric'
+        arc: 'arc'
     };
 
     const labModeMeta = {
@@ -1217,18 +1752,6 @@
             gLabel: '🔵 截面下边界 g(t)',
             note: '模型用两曲线距离作为正方形截面的边长。'
         },
-        shell: {
-            name: 'Shell 拓展',
-            formula: variable => `V = 2π∫[a,b] radius·height d${variable}`,
-            metric: '近似体积',
-            unit: '立方单位',
-            axis: true,
-            axisX: '绕 X 轴壳层',
-            axisY: '绕 Y 轴壳层',
-            fLabel: '🔴 外边界 f(t)',
-            gLabel: '🔵 内边界 g(t)',
-            note: 'Shell Method 是有用的拓展方法，不是 AP BC 体积主线核心；AP 主线通常是 cross sections、disk 和 washer。'
-        },
         polar: {
             name: '极坐标',
             formula: () => `A = 1/2 ∫[α,β] r(θ)² dθ`,
@@ -1248,28 +1771,6 @@
             fLabel: '🔴 曲线 y = f(t)',
             gLabel: '🔵 辅助函数，可填 0',
             note: '黄色折线是数值近似，红色曲线是真实函数。'
-        },
-        surface: {
-            name: '旋转面',
-            formula: variable => `S = 2π∫[a,b] dist(f(${variable}), axis)√(1 + [f'(${variable})]²) d${variable}`,
-            metric: '近似面积',
-            unit: '平方单位',
-            axis: true,
-            axisX: '绕 X 轴旋转',
-            axisY: '绕 Y 轴旋转',
-            fLabel: '🔴 半径函数 f(t)',
-            gLabel: '🔵 辅助函数，可填 0',
-            note: '旋转曲面半径是曲线到旋转轴的距离；当前默认旋转轴偏移为 0。'
-        },
-        parametric: {
-            name: '参数方程',
-            formula: () => `A = |∫ y(t)x'(t)dt|，V = π∫ dist(y(t),axis)²|x'(t)|dt`,
-            metric: '面积 / 体积',
-            unit: '单位',
-            axis: false,
-            fLabel: '🔴 x(t)',
-            gLabel: '🔵 y(t)',
-            note: '用于面积/体积时要检查 x(t) 或 y(t) 是否单调；导数变号通常需要分段，否则可能重复计算。'
         }
     };
 
@@ -2163,6 +2664,12 @@
 
     function setLabMode(mode) {
         const presetPage = labModePresetPage[mode] || advancedLab.page || 'area';
+        if (advancedLab.page === 'visualLab') {
+            applyLabPreset(presetPage);
+            refreshAdvancedLab();
+            resetLabView();
+            return;
+        }
         if (presetPage !== advancedLab.page && content[presetPage]) {
             switchPage(presetPage);
             document.querySelector('.main-area')?.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2584,11 +3091,6 @@
             bilibili: { bvid: 'BV11i4y1t7Uk', page: 21, cid: '182929184' },
             source: 'WANG-吉玥 / Khan Academy AP Calculus：Volume with cross sections intro'
         },
-        shell: {
-            title: 'Shell壳法',
-            bilibili: { bvid: 'BV1RT41127eF', page: 1, cid: '966994755' },
-            source: '丛哥AP微积分66：旋转体求体积的 shell 方法（未找到 WANG-吉玥/Khan 对应分 P）'
-        },
         polar: {
             title: '极坐标面积',
             bilibili: { bvid: 'BV1Bs4uz3E7b', page: 15, cid: '33014351998' },
@@ -2598,16 +3100,6 @@
             title: '曲线弧长',
             bilibili: { bvid: 'BV11i4y1t7Uk', page: 38, cid: '182929503' },
             source: 'WANG-吉玥 / Khan Academy AP Calculus BC：Arc length intro'
-        },
-        surface: {
-            title: '旋转曲面面积',
-            bilibili: { bvid: 'BV1wA411t7Rv', page: 1, cid: '186029298' },
-            source: 'AP微积分BC真题精讲：弧长与旋转面积（未找到 WANG-吉玥/Khan 对应分 P）'
-        },
-        parametric: {
-            title: '参数方程',
-            bilibili: { bvid: 'BV1Bs4uz3E7b', page: 1, cid: '33014349923' },
-            source: 'Khan Academy AP Calculus BC：Parametric equations'
         }
     };
 
@@ -2670,20 +3162,6 @@
                 { q: '底面为半径2的圆，垂直于x轴的截面均为正方形，求体积。', a: '128/3', explanation: '底面圆方程为 x²+y²=4。对于x处的截面，其边长 = 2√(4-x²)，正方形面积 A(x)=4(4-x²)。积分 V = ∫₋₂² 4(4-x²) dx = 4[4x - x³/3]₋₂² = 128/3。' }
             ]
         },
-        shell: {
-            badge: 'ext', title: '五、壳法 Shell Method（拓展方法 / Extension）',
-            explanation: `
-                <h3>📖 原理说明</h3>
-                <p><strong>定位说明：</strong>Shell Method 是很有用的拓展方法，但不是 AP Calculus BC 必须掌握的核心考点。AP 中体积主线通常是 cross sections、disk 和 washer。</p>
-                <p>壳法适用于<b>平行于旋转轴</b>的切片。例如区域由曲线 \(y=f(x)\)、x轴以及 \(x=a, x=b\) 围成，绕y轴旋转。我们将区域切成无数个竖条，每个竖条绕y轴旋转会形成一个薄圆柱壳（空心管）。</p>
-                <p>在位置 \(x\) 处，壳的半径 = \(x\)，高度 = \(f(x)\)，厚度 = \(dx\)。展开这个壳，近似为一个长方体：长=圆周长 \(2\pi x\)，宽=高 \(f(x)\)，厚=\(dx\)，因此体积微元 \(dV = 2\pi x \cdot f(x) \cdot dx\)。积分即得总体积。</p>
-                <p>壳法特别适合函数容易对x积分，但难以解出x=g(y)的情形。同时注意积分变量与旋转轴的关系。</p>
-            `,
-            formula: `\\[ V = 2\\pi \\int_{a}^{b} x \\cdot f(x) \\, dx \\quad (\\text{绕y轴}) \\]`,
-            quiz: [
-                { q: 'y=x² (0≤x≤√2) 绕y轴旋转，用壳法表达式？', a: '2π∫₀^{√2} x·x² dx', explanation: '壳半径 = x，高度 = f(x)=x²，厚度dx，体积 = 2π∫₀^{√2} x·x² dx = 2π∫₀^{√2} x³ dx = 2π·[x⁴/4]₀^{√2} = 2π·(4/4) = 2π。' }
-            ]
-        },
         polar: {
             badge: 'bc', title: '六、极坐标下的面积',
             explanation: `
@@ -2711,34 +3189,622 @@
                 { q: 'y=x^(3/2) 从x=0到x=4的弧长约为？', a: '9.073', explanation: "f'(x) = (3/2)x^(1/2)，1+[f'(x)]² = 1 + (9/4)x。弧长 = ∫₀⁴ √(1+9x/4) dx。令u=1+9x/4，得 (8/27)[10^(3/2)-1] ≈ 9.073。" }
             ]
         },
-        surface: {
-            badge: 'bc', title: '八、旋转曲面面积',
-            explanation: `
-                <h3>📖 原理说明</h3>
-                <p>曲线 \(y=f(x)\) 绕x轴旋转时，曲线上每个微小弧段 \(ds\) 扫出一个窄圆环带。该圆环的周长 = \(2\pi r\)，其中 \(r\) 是曲线到旋转轴的距离，宽度 = \(ds\)，因此环带面积 = \(2\pi r\,ds\)。</p>
-                <p>其中 \(ds = \sqrt{1+[f'(x)]^2} dx\)。积分所有环带即得整个旋转曲面的表面积。</p>
-                <p>注意：若曲线位于x轴下方，半径应取到轴距离，例如绕x轴时为 \(|f(x)|\)，不是把负函数值归零。</p>
+        
+    };
+
+    const enhancedContent = {
+        area: {
+            badge: 'core', badgeLabel: 'Core AP', title: '一、Area 面积：从看图到设积分',
+            formula: String.raw`
+                \[A=\int_a^b(\text{top}-\text{bottom})\,dx\]
+                \[A=\int_c^d(\text{right}-\text{left})\,dy\]
+                \[A=\int_a^b |f(x)-g(x)|\,dx\]
             `,
-            formula: `\\[ S = 2\\pi \\int_{a}^{b} \\bigl|f(x)-\\text{axis}\\bigr| \\sqrt{1 + [f'(x)]^2} \\, dx \\]`,
+            explanation: String.raw`
+                <h3>Concept / 这个方法是什么</h3>
+                <p>Area between curves 的核心不是背一个绝对值公式，而是训练一条流程：看题、画区域、找交点、选切片方向、判断上/下或右/左、写积分、检查是否需要分段。</p>
+                <div class="tag-row">
+                    <span class="topic-tag">Core AP</span><span class="topic-tag">Bounds</span><span class="topic-tag">Setup Only</span><span class="topic-tag">Graph Interpretation</span>
+                </div>
+                <div class="lesson-grid">
+                    <div class="lesson-card">
+                        <h4>Signed Area vs Actual Area</h4>
+                        <p>定积分 \(\int_a^b f(x)\,dx\) 表示 signed area：在 x-axis 上方贡献为正，下方贡献为负。</p>
+                        <p>真正的 total area / actual area 是 \(\displaystyle A=\int_a^b |f(x)|\,dx\)。如果函数穿过 x-axis，通常要在零点处分段。</p>
+                        <p><strong>常见错误：</strong>题目问 total area，却直接算 \(\int_a^b f(x)\,dx\)。</p>
+                    </div>
+                    <div class="lesson-card">
+                        <h4>Top minus Bottom</h4>
+                        <p>使用 vertical slices，也就是 \(dx\) 时，小矩形高度是 top function - bottom function。</p>
+                        <p>\(\displaystyle A=\int_a^b(\text{top}-\text{bottom})\,dx\)</p>
+                        <p>绝对值公式可以用，但学生首先应该学会判断谁在上、谁在下。</p>
+                    </div>
+                    <div class="lesson-card">
+                        <h4>Right minus Left</h4>
+                        <p>使用 horizontal slices，也就是 \(dy\) 时，小矩形长度是 right function - left function。</p>
+                        <p>\(\displaystyle A=\int_c^d(\text{right}-\text{left})\,dy\)</p>
+                        <p>适合横向区域，或用 \(dx\) 会分很多段但用 \(dy\) 更简单的题。</p>
+                    </div>
+                    <div class="lesson-card">
+                        <h4>Multiple Intersections</h4>
+                        <p>两条曲线多次相交时，top/bottom 可能交换，必须在交点处分段。</p>
+                        <p>\(\displaystyle A=\int_a^c(f-g)\,dx+\int_c^b(g-f)\,dx\)</p>
+                        <p>也可写 \(\int_a^b |f-g|dx\)，但考试中最好说明分段点和每段谁在上。</p>
+                    </div>
+                </div>
+                <h3>Step-by-step setup / 设积分步骤</h3>
+                <ul>
+                    <li>画出或想象 bounded region。</li>
+                    <li>解交点，作为积分边界候选。</li>
+                    <li>判断用 \(dx\) 还是 \(dy\)：竖切看 top-bottom，横切看 right-left。</li>
+                    <li>检查 top/bottom 或 right/left 是否中途交换。</li>
+                    <li>如果交换，在交点处分段；不要只对最后答案取绝对值。</li>
+                </ul>
+                <h3>Worked example / 用 dy 的典型例题</h3>
+                <p>Find the area bounded by \(x=y^2\) and \(x=2y\)。交点由 \(y^2=2y\) 得 \(y=0,2\)。在 \(0\le y\le2\) 上，right function 是 \(x=2y\)，left function 是 \(x=y^2\)。</p>
+                <p>\(\displaystyle A=\int_0^2(2y-y^2)\,dy\)</p>
+                <h3>Common mistakes / 常见错误</h3>
+                <ul>
+                    <li>忘记找所有交点，或没有排序交点。</li>
+                    <li>top/bottom 中途交换但没有分段。</li>
+                    <li>混淆 signed area 和 total area。</li>
+                    <li>只对最终积分结果取绝对值。</li>
+                    <li>该用 \(dy\) 时硬用 \(dx\)，导致不必要分段。</li>
+                </ul>
+            `,
             quiz: [
-                { q: 'y=√x 绕x轴旋转，x∈[0,4]的表面积约为？', a: '36.177', explanation: "f(x)=√x，f'(x)=1/(2√x)，1+[f']² = 1+1/(4x)。积分 S = 2π∫₀⁴ √x √(1+1/(4x)) dx = 2π∫₀⁴ √(x+1/4) dx ≈ 36.177。" }
+                { q: 'Find the area bounded by y=x² and y=2x.', a: String.raw`\(\displaystyle A=\int_0^2(2x-x^2)\,dx\)`, explanation: '先解交点 x²=2x，得 x=0,2。在该区间上 2x 在上，x² 在下。' },
+                { q: 'For x=y² and x=2y, should you use dx or dy first?', a: String.raw`Use \(dy\): \(\displaystyle A=\int_0^2(2y-y^2)\,dy\).`, explanation: '这两条边界已经写成 x 关于 y 的函数，横向切片 right-left 最直接。' }
             ]
         },
-        parametric: {
-            badge: 'bc', title: '九、参数方程下的面积与体积',
-            explanation: `
-                <h3>📖 原理说明</h3>
-                <p>若曲线由参数方程 \(x=x(t), y=y(t)\) 给出（\(t \in [\alpha, \beta]\)），则面积微元 \(dA = y dx = y(t) x'(t) dt\)（假设 \(x'(t)>0\) 或处理正负）。</p>
-                <p>旋转体积：绕x轴旋转时，体积微元 \(dV = \pi y^2 dx = \pi [y(t)]^2 x'(t) dt\)，积分即可。</p>
-                <p><strong>重要：</strong>参数方程用于面积/体积时，需要检查 \(x(t)\) 或 \(y(t)\) 是否在区间内单调；如果导数变号，通常要分段，否则可能重复计算。</p>
-                <p>面积常用 \(\left|\int y(t)x'(t)dt\right|\)，但若曲线重复描绘或方向复杂，需要分段并检查方向。</p>
+        cross: {
+            badge: 'core', badgeLabel: 'Core AP', title: '二、Cross Sections 截面法：先找 base length，再套形状面积',
+            formula: String.raw`
+                \[V=\int_a^b A(x)\,dx\]
+                \[\text{Square: } A=s^2\qquad \text{Rectangle: }A=bh\]
+                \[\text{Right isosceles: }A=\frac12s^2\qquad \text{Equilateral: }A=\frac{\sqrt3}{4}s^2\]
+                \[\text{Semicircle with diameter }d:\quad A=\frac{\pi}{8}d^2\]
             `,
-            formula: `面积：\\[ A = \\left|\\int_{\\alpha}^{\\beta} y(t) \\, x'(t) \\, dt\\right| \\] 旋转体积：\\[ V = \\pi \\int_{\\alpha}^{\\beta} [\\text{dist}(y(t),\\text{axis})]^2 \\, |x'(t)| \\, dt \\]`,
+            explanation: String.raw`
+                <h3>Concept / 这个方法是什么</h3>
+                <p>Cross section 题给你一个平面 base region，然后告诉你垂直某条轴的截面形状。体积不是直接对边长积分，而是先把每个切片的截面积 \(A(x)\) 或 \(A(y)\) 写出来。</p>
+                <div class="tag-row">
+                    <span class="topic-tag">Core AP</span><span class="topic-tag">Radius / Base Identification</span><span class="topic-tag">Setup Only</span><span class="topic-tag warn">High Error Rate</span>
+                </div>
+                <div class="lesson-grid">
+                    <div class="lesson-card">
+                        <h4>Square Cross Sections</h4>
+                        <p>如果 base length 是 \(s(x)=f(x)-g(x)\)，正方形截面积是 \(A(x)=s(x)^2\)。</p>
+                        <p>\(\displaystyle V=\int_a^b [f(x)-g(x)]^2\,dx\)</p>
+                    </div>
+                    <div class="lesson-card">
+                        <h4>Rectangle Cross Sections</h4>
+                        <p>题目常说 height is twice / half / three times the base，或 height is a constant。</p>
+                        <p>若 base 是 \(b(x)\)，height 是 \(2b(x)\)，则 \(A(x)=2[b(x)]^2\)。</p>
+                    </div>
+                    <div class="lesson-card">
+                        <h4>Triangle Cross Sections</h4>
+                        <p>Right isosceles triangle: \(\displaystyle A=\frac12s^2\)</p>
+                        <p>Equilateral triangle: \(\displaystyle A=\frac{\sqrt3}{4}s^2\)</p>
+                        <p>General triangle: \(\displaystyle A=\frac12bh\)</p>
+                    </div>
+                    <div class="lesson-card">
+                        <h4>Semicircle Cross Sections</h4>
+                        <p>如果两曲线之间的距离是直径 \(d(x)\)，半径是 \(r=d(x)/2\)。</p>
+                        <p>\(\displaystyle A(x)=\frac12\pi\left(\frac{d(x)}2\right)^2=\frac{\pi}{8}[d(x)]^2\)</p>
+                        <p><strong>错误写法：</strong>\(\frac12\pi[d(x)]^2\)，这是把直径当半径。</p>
+                    </div>
+                </div>
+                <h3>Perpendicular to x-axis / y-axis</h3>
+                <ul>
+                    <li>Cross sections perpendicular to the x-axis → use \(dx\)。</li>
+                    <li>Cross sections perpendicular to the y-axis → use \(dy\)。</li>
+                    <li>如果题目说 perpendicular to y-axis，通常要把边界写成 \(x=\text{function of }y\)。</li>
+                </ul>
+                <h3>Worked example</h3>
+                <p>The base of a solid is the region between \(y=x\) and \(y=x^2\). Cross sections perpendicular to the x-axis are rectangles whose height is twice the base. Set up the volume integral.</p>
+                <p>交点是 \(x=0,1\)。在 \([0,1]\) 上 base length \(b(x)=x-x^2\)，height \(=2b(x)\)。</p>
+                <p>\(\displaystyle V=\int_0^1 2(x-x^2)^2\,dx\)</p>
+                <h3>Common mistakes / 常见错误</h3>
+                <ul>
+                    <li>把 base length 直接当成 cross-sectional area。</li>
+                    <li>正方形忘记平方边长。</li>
+                    <li>半圆截面把直径当半径。</li>
+                    <li>忘记截面形状自己的面积公式。</li>
+                    <li>误读 perpendicular to x-axis / y-axis。</li>
+                </ul>
+            `,
             quiz: [
-                { q: '椭圆 x=2cos t, y=sin t (0≤t≤2π) 的面积？', a: '2π', explanation: "x'(t) = -2sin t，面积 = ∫₀^{2π} y(t)x'(t) dt = ∫₀^{2π} sin t·(-2sin t) dt = -2∫₀^{2π} sin²t dt = -2·π = -2π，取绝对值得2π。或用对称性，实际椭圆面积 πab = π·2·1 = 2π。" }
+                { q: 'Base region between y=x and y=x²; squares perpendicular to x-axis. Set up V.', a: String.raw`\(\displaystyle V=\int_0^1(x-x^2)^2\,dx\)`, explanation: '正方形边长是两曲线竖直距离 x-x²，不是 x 或 x² 单独一个函数。' },
+                { q: 'If a semicircle cross-section has diameter d(x)=2x-x², what is A(x)?', a: String.raw`\(\displaystyle A(x)=\frac{\pi}{8}(2x-x^2)^2\)`, explanation: '半径是直径的一半，所以半圆面积是 (1/2)π(d/2)²。' }
+            ]
+        },
+        disk: {
+            badge: 'core', badgeLabel: 'Core AP', title: '三、Disk 圆盘法：没有洞时的旋转体',
+            formula: String.raw`
+                \[V=\pi\int_a^b R(x)^2\,dx\]
+                \[V=\pi\int_c^d R(y)^2\,dy\]
+                \[\text{Radius}=\text{distance from curve to axis of rotation}\]
+            `,
+            explanation: String.raw`
+                <h3>What is Disk Method?</h3>
+                <p>当区域绕轴旋转形成实心截面，没有中间空洞时，用 Disk Method。每个切片是一个圆盘，圆盘面积是 \(\pi R^2\)。</p>
+                <table class="method-table">
+                    <tr><th>Situation</th><th>Formula / Radius</th></tr>
+                    <tr><td>around x-axis</td><td>\(\displaystyle V=\pi\int_a^b[f(x)]^2dx\)，半径是曲线到 x-axis 的距离。</td></tr>
+                    <tr><td>around y-axis</td><td>\(\displaystyle V=\pi\int_c^d[g(y)]^2dy\)，常要写成 \(x=g(y)\)。</td></tr>
+                    <tr><td>around \(y=3\)</td><td>\(\displaystyle R(x)=|3-f(x)|\)</td></tr>
+                    <tr><td>around \(x=4\)</td><td>\(\displaystyle R(y)=|4-g(y)|\)</td></tr>
+                </table>
+                <div class="tip"><strong>Axis distance reminder:</strong> Radius 永远是到旋转轴的距离，不是盯着函数值本身。</div>
+                <h3>When to use it / 什么时候用</h3>
+                <ul>
+                    <li>旋转后截面是实心圆。</li>
+                    <li>区域碰到旋转轴，且没有 hole。</li>
+                    <li>只有一条边界曲线决定半径，另一边界就是旋转轴。</li>
+                </ul>
+                <h3>Step-by-step setup</h3>
+                <ul>
+                    <li>确认旋转轴：x-axis、y-axis、\(y=c\)、或 \(x=c\)。</li>
+                    <li>选择垂直于旋转轴的切片。</li>
+                    <li>把 radius 写成 curve 到 axis 的距离。</li>
+                    <li>代入 \(\pi\int R^2\)。</li>
+                </ul>
+                <h3>Common mistakes</h3>
+                <ul>
+                    <li>绕 \(y=c\) 或 \(x=c\) 时仍然把 radius 写成 \(f(x)\)。</li>
+                    <li>半径忘记平方。</li>
+                    <li>绕 y-axis 的题忘记改成 \(x=g(y)\)。</li>
+                </ul>
+            `,
+            quiz: [
+                { q: 'If y=f(x) is revolved around y=3, what is the radius?', a: String.raw`\(\displaystyle R(x)=|3-f(x)|\)`, explanation: '半径是曲线到旋转轴 y=3 的垂直距离。' },
+                { q: 'A region touches the x-axis and creates no hole when revolved. Disk or washer?', a: 'Disk Method.', explanation: '截面是实心圆盘，没有 inner radius。' }
+            ]
+        },
+        washer: {
+            badge: 'core', badgeLabel: 'Core AP', title: '四、Washer 垫圈法：外半径减内半径',
+            formula: String.raw`
+                \[V=\pi\int_a^b(R(x)^2-r(x)^2)\,dx\]
+                \[V=\pi\int_c^d(R(y)^2-r(y)^2)\,dy\]
+            `,
+            explanation: String.raw`
+                <h3>What is Washer Method?</h3>
+                <p>Washer method 本质是 large disk - small disk。旋转后如果有 hole，截面就是圆环。</p>
+                <table class="method-table">
+                    <tr><th>Situation</th><th>Method</th></tr>
+                    <tr><td>Region touches the axis and no hole is created</td><td>Disk</td></tr>
+                    <tr><td>Region does not touch the axis and a hole is created</td><td>Washer</td></tr>
+                    <tr><td>Two boundary curves create outer and inner radii</td><td>Washer</td></tr>
+                </table>
+                <div class="lesson-grid">
+                    <div class="lesson-card">
+                        <h4>Around x-axis</h4>
+                        <p>通常用 \(dx\)，半径来自上/下曲线到 x-axis 或水平旋转轴的距离。</p>
+                        <p>\(\displaystyle V=\pi\int_a^b(R(x)^2-r(x)^2)\,dx\)</p>
+                    </div>
+                    <div class="lesson-card">
+                        <h4>Around y-axis</h4>
+                        <p>通常用 \(dy\)，半径来自 right/left functions 到 y-axis 的距离。</p>
+                        <p>\(\displaystyle V=\pi\int_c^d(R(y)^2-r(y)^2)\,dy\)</p>
+                    </div>
+                    <div class="lesson-card">
+                        <h4>Around \(y=-1\)</h4>
+                        <p>若上曲线 \(f(x)\)、下曲线 \(g(x)\)，则 \(R=f(x)+1\)，\(r=g(x)+1\)。</p>
+                    </div>
+                    <div class="lesson-card">
+                        <h4>Around \(y=5\)</h4>
+                        <p>旋转轴在区域上方时可能 \(R(x)=5-g(x)\)，\(r(x)=5-f(x)\)。</p>
+                        <p>Outer radius 不一定是上函数；outer 是离旋转轴更远的距离。</p>
+                    </div>
+                </div>
+                <h3>Inner / Outer 中途交换</h3>
+                <p>如果 outer radius 和 inner radius 在区间中途交换，必须分段：</p>
+                <p>\(\displaystyle V=\pi\int_a^c(R_1^2-r_1^2)\,dx+\pi\int_c^b(R_2^2-r_2^2)\,dx\)</p>
+                <h3>Common mistakes</h3>
+                <ul>
+                    <li>outer/inner 写反。</li>
+                    <li>忘记平方，或写成 \((R-r)^2\)。</li>
+                    <li>忘记 \(\pi\)。</li>
+                    <li>没有根据旋转轴重新计算半径。</li>
+                    <li>旋转轴在区域上方或下方时，仍机械地把上函数当 outer。</li>
+                </ul>
+            `,
+            quiz: [
+                { q: 'The region between y=2x and y=x² on [0,2] is revolved around the x-axis. Set up V.', a: String.raw`\(\displaystyle V=\pi\int_0^2[(2x)^2-(x^2)^2]\,dx\)`, explanation: '在 [0,2] 上 2x 离 x-axis 更远，x² 离 x-axis 更近。' },
+                { q: 'The same region is revolved around y=-1. Set up V.', a: String.raw`\(\displaystyle V=\pi\int_0^2[(2x+1)^2-(x^2+1)^2]\,dx\)`, explanation: '两个半径都要从旋转轴 y=-1 量起。' }
+            ]
+        },
+        polar: {
+            badge: 'bc', badgeLabel: 'BC Only', title: '五、Polar Area 极坐标面积：角度范围和 outer radius',
+            formula: String.raw`
+                \[A=\frac12\int_\alpha^\beta r(\theta)^2\,d\theta\]
+                \[A=\frac12\int_\alpha^\beta\left(R(\theta)^2-r(\theta)^2\right)\,d\theta\]
+            `,
+            explanation: String.raw`
+                <h3>Single Polar Curve Area</h3>
+                <p>极坐标面积用角度 \(\theta\) 扫过的扇形累积，不是 x 的范围。公式必须有 \(\frac12\)，并且 \(r(\theta)\) 必须平方。</p>
+                <h3>Area Between Two Polar Curves</h3>
+                <p>\(\displaystyle A=\frac12\int_\alpha^\beta(R(\theta)^2-r(\theta)^2)\,d\theta\)</p>
+                <ul>
+                    <li>\(R(\theta)\) 是 outer polar radius。</li>
+                    <li>\(r(\theta)\) 是 inner polar radius。</li>
+                    <li>交角通常通过 \(r_1(\theta)=r_2(\theta)\) 找到。</li>
+                </ul>
+                <h3>Polar 常见题型</h3>
+                <div class="lesson-grid">
+                    <div class="lesson-card"><h4>One loop</h4><p>area inside one loop of a rose curve，需要找单个 loop 的 \(\theta\) 范围。</p></div>
+                    <div class="lesson-card"><h4>Cardioid</h4><p>area inside a cardioid，例如 \(r=1+\cos\theta\)。</p></div>
+                    <div class="lesson-card"><h4>Between curves</h4><p>area between a cardioid and a circle，先找交角，再判 outer/inner。</p></div>
+                    <div class="lesson-card"><h4>Symmetry</h4><p>使用对称性缩短积分区间，但要确认乘的倍数。</p></div>
+                </div>
+                <h3>Common mistakes</h3>
+                <ul>
+                    <li>忘记 \(\frac12\)。</li>
+                    <li>忘记平方 \(r(\theta)\)。</li>
+                    <li>theta bounds 错。</li>
+                    <li>outer/inner 弄反。</li>
+                    <li>多算或少算一个 loop。</li>
+                    <li>忽略 negative \(r\) 的几何意义。</li>
+                </ul>
+            `,
+            quiz: [
+                { q: 'Set up the area enclosed by r=1+cosθ from θ=0 to 2π.', a: String.raw`\(\displaystyle A=\frac12\int_0^{2\pi}(1+\cos\theta)^2\,d\theta\)`, explanation: '单条极坐标曲线面积：一半乘以 r² 的角度积分。' }
+            ]
+        },
+        arc: {
+            badge: 'bc', badgeLabel: 'BC Only', title: '六、Arc Length 弧长：函数形式与参数形式',
+            formula: String.raw`
+                \[L=\int_a^b\sqrt{1+[f'(x)]^2}\,dx\]
+                \[L=\int_\alpha^\beta\sqrt{[x'(t)]^2+[y'(t)]^2}\,dt\]
+            `,
+            explanation: String.raw`
+                <h3>Function Form</h3>
+                <p>对 \(y=f(x)\)，小段长度由勾股定理得到：\(\displaystyle ds=\sqrt{1+[f'(x)]^2}\,dx\)。</p>
+                <h3>Parametric Form</h3>
+                <p>对参数方程 \(x=x(t), y=y(t)\)，不能直接用普通 \(y=f(x)\) 弧长公式，必须同时考虑 \(x'(t)\) 和 \(y'(t)\)。</p>
+                <p>\(\displaystyle L=\int_\alpha^\beta\sqrt{[x'(t)]^2+[y'(t)]^2}\,dt\)</p>
+                <h3>Step-by-step setup</h3>
+                <ul>
+                    <li>判断题目是函数形式还是参数形式。</li>
+                    <li>求一阶导数：\(f'(x)\)，或 \(x'(t),y'(t)\)。</li>
+                    <li>确认积分区间是 x 区间还是 t 区间。</li>
+                    <li>套入根号公式，通常 AP 更重 setup 与数值表达。</li>
+                </ul>
+                <h3>Common mistakes</h3>
+                <ul>
+                    <li>忘记 square root。</li>
+                    <li>忘记 \(1+[f'(x)]^2\)。</li>
+                    <li>对参数曲线误用 function-form 公式。</li>
+                    <li>没有检查 parameter interval。</li>
+                </ul>
+            `,
+            quiz: [
+                { q: 'For x=cos t, y=sin t, 0≤t≤π, set up arc length.', a: String.raw`\(\displaystyle L=\int_0^\pi\sqrt{(-\sin t)^2+(\cos t)^2}\,dt\)`, explanation: '参数方程弧长同时使用 x′(t) 与 y′(t)。' }
+            ]
+        },
+        formulaMap: {
+            badge: 'core', badgeLabel: 'Study Map', title: 'Formula Map / 公式总览',
+            formula: '',
+            explanation: String.raw`
+                <h3>Formula Map</h3>
+                <div class="lesson-grid">
+                    <div class="lesson-card"><h4>Area</h4><p>\(\displaystyle A=\int_a^b(\text{top}-\text{bottom})dx\)</p><p>\(\displaystyle A=\int_c^d(\text{right}-\text{left})dy\)</p><p>\(\displaystyle A=\int_a^b|f(x)-g(x)|dx\)</p></div>
+                    <div class="lesson-card"><h4>Cross Sections</h4><p>\(\displaystyle V=\int_a^b A(x)dx\)</p><p>Square: \(A=s^2\)</p><p>Rectangle: \(A=bh\)</p><p>Right isosceles: \(A=\frac12s^2\)</p><p>Equilateral: \(A=\frac{\sqrt3}{4}s^2\)</p><p>Semicircle with diameter \(d\): \(A=\frac{\pi}{8}d^2\)</p></div>
+                    <div class="lesson-card"><h4>Disk</h4><p>\(\displaystyle V=\pi\int_a^bR(x)^2dx\)</p><p>\(\displaystyle V=\pi\int_c^dR(y)^2dy\)</p></div>
+                    <div class="lesson-card"><h4>Washer</h4><p>\(\displaystyle V=\pi\int_a^b(R(x)^2-r(x)^2)dx\)</p><p>\(\displaystyle V=\pi\int_c^d(R(y)^2-r(y)^2)dy\)</p></div>
+                    <div class="lesson-card"><h4>Polar Area</h4><p>\(\displaystyle A=\frac12\int_\alpha^\beta r(\theta)^2d\theta\)</p><p>\(\displaystyle A=\frac12\int_\alpha^\beta(R(\theta)^2-r(\theta)^2)d\theta\)</p></div>
+                    <div class="lesson-card"><h4>Arc Length</h4><p>Function form: \(\displaystyle L=\int_a^b\sqrt{1+[f'(x)]^2}dx\)</p><p>Parametric form: \(\displaystyle L=\int_\alpha^\beta\sqrt{[x'(t)]^2+[y'(t)]^2}dt\)</p></div>
+                </div>
+            `,
+            quiz: []
+        },
+        mistakes: {
+            badge: 'core', badgeLabel: 'Study Map', title: 'Mistake Bank / 易错点库',
+            formula: '',
+            explanation: String.raw`
+                <h3>Mistake Bank</h3>
+                <details class="lesson-accordion" open><summary>Area Mistakes</summary><div><ul><li>Confusing signed area with total area.</li><li>Forgetting absolute value for total area.</li><li>Not splitting at intersections.</li><li>Mixing up top-bottom and right-left.</li><li>Using \(dx\) when \(dy\) would be simpler.</li></ul></div></details>
+                <details class="lesson-accordion"><summary>Cross Section Mistakes</summary><div><ul><li>Confusing base length with cross-sectional area.</li><li>Forgetting to square the side length for squares.</li><li>Using diameter as radius in semicircle problems.</li><li>Forgetting the shape-specific area formula.</li><li>Misreading “perpendicular to x-axis” and “perpendicular to y-axis”.</li></ul></div></details>
+                <details class="lesson-accordion"><summary>Disk / Washer Mistakes</summary><div><ul><li>Using disk when the solid has a hole.</li><li>Using washer when there is no hole.</li><li>Reversing outer and inner radius.</li><li>Forgetting to square the radius.</li><li>Writing \((R-r)^2\) instead of \(R^2-r^2\).</li><li>Measuring radius from the wrong axis.</li><li>Forgetting that radius is distance to the axis of rotation.</li></ul></div></details>
+                <details class="lesson-accordion"><summary>Polar Mistakes</summary><div><ul><li>Forgetting \(\frac12\).</li><li>Forgetting to square \(r(\theta)\).</li><li>Using wrong theta bounds.</li><li>Confusing inner and outer polar curves.</li><li>Double-counting a loop.</li><li>Ignoring negative \(r\).</li></ul></div></details>
+                <details class="lesson-accordion"><summary>Arc Length Mistakes</summary><div><ul><li>Forgetting the square root.</li><li>Forgetting \(1+[f'(x)]^2\).</li><li>Using function-form formula for parametric curves.</li><li>Not checking the parameter interval.</li></ul></div></details>
+            `,
+            quiz: []
+        },
+        practice: {
+            badge: 'core', badgeLabel: 'Practice', title: 'Practice Guide / 题型训练指南',
+            formula: '',
+            explanation: String.raw`
+                <h3>Question Type Tags</h3>
+                <div class="tag-row">
+                    <span class="topic-tag">Method Choice</span><span class="topic-tag">Bounds</span><span class="topic-tag">Setup Only</span><span class="topic-tag">Full Calculation</span><span class="topic-tag">Radius / Base Identification</span><span class="topic-tag">Graph Interpretation</span><span class="topic-tag">Table-Based</span><span class="topic-tag">Common Mistake Check</span>
+                </div>
+                <h3>What Should You Practice?</h3>
+                <div class="lesson-grid">
+                    <div class="practice-card"><h4>Area Practice Types</h4><ul><li>判断 signed area 和 total area。</li><li>找交点作为上下限。</li><li>判断 top-bottom / right-left。</li><li>多交点分段。</li><li>从图像选择正确面积积分。</li></ul></div>
+                    <div class="practice-card"><h4>Cross Section Practice Types</h4><ul><li>找 base length。</li><li>判断 perpendicular to x-axis 还是 y-axis。</li><li>根据截面形状写 \(A(x)\)。</li><li>练正方形、矩形、三角形、半圆截面。</li><li>避免把直径当半径。</li></ul></div>
+                    <div class="practice-card"><h4>Disk Practice Types</h4><ul><li>判断是否是 disk。</li><li>找旋转轴和 radius。</li><li>绕 x-axis / y-axis。</li><li>绕 \(y=c\) 或 \(x=c\)。</li></ul></div>
+                    <div class="practice-card"><h4>Washer Practice Types</h4><ul><li>区分 disk 和 washer。</li><li>找 outer radius / inner radius。</li><li>绕 x-axis / y-axis / other axes。</li><li>判断 outer/inner 是否中途交换。</li></ul></div>
+                    <div class="practice-card"><h4>Polar Practice Types</h4><ul><li>单条 polar curve 面积。</li><li>两条 polar curves 之间面积。</li><li>找 theta bounds。</li><li>判断 outer / inner polar curve。</li><li>使用对称性，处理 negative \(r\)。</li></ul></div>
+                    <div class="practice-card"><h4>Arc Length Practice Types</h4><ul><li>函数形式弧长。</li><li>参数方程弧长。</li><li>正确使用导数。</li><li>判断积分区间。</li></ul></div>
+                </div>
+                <div class="tip"><strong>FRQ Mode Coming Later:</strong> Full AP FRQ practice and scoring will be added in a later version. 当前版本只做普通题型指导、setup 类型题、方法判断题、公式应用题和常见错误题。</div>
+            `,
+            quiz: [
+                { q: 'Problem Type 1: A region is revolved around the x-axis and the resulting solid has a hole. Which method should be used?', a: 'Washer Method.', explanation: 'Because the solid is formed by subtracting an inner disk from an outer disk.' },
+                { q: 'Problem Type 2: Find the intersection points of y=x² and y=2x.', a: String.raw`\(x^2=2x\Rightarrow x(x-2)=0\Rightarrow x=0,2\)`, explanation: '交点通常就是 bounds 的来源。' },
+                { q: 'Problem Type 3: Find the area of the region bounded by y=x² and y=2x.', a: String.raw`\(\displaystyle A=\int_0^2(2x-x^2)\,dx\)`, explanation: '在 [0,2] 上，top 是 2x，bottom 是 x²。' },
+                { q: 'Problem Type 4: Base between y=x and y=x²; squares perpendicular to x-axis. Set up V.', a: String.raw`\(\displaystyle V=\int_0^1(x-x^2)^2\,dx\)`, explanation: '正方形边长是 base length。' },
+                { q: 'Problem Type 5: d(x)=2x-x² is the diameter of semicircle cross sections. Write A(x).', a: String.raw`\(\displaystyle A(x)=\frac{\pi}{8}(2x-x^2)^2\)`, explanation: 'The given base length is the diameter, so the radius is half of it.' },
+                { q: 'Problem Type 6: Region between y=2x and y=x² on [0,2] revolves around x-axis. Set up V.', a: String.raw`\(\displaystyle V=\pi\int_0^2[(2x)^2-(x^2)^2]\,dx\)`, explanation: 'Washer around x-axis with outer radius 2x and inner radius x².' },
+                { q: 'Problem Type 7: The same region revolves around y=-1. Set up V.', a: String.raw`\(\displaystyle V=\pi\int_0^2[(2x+1)^2-(x^2+1)^2]\,dx\)`, explanation: 'Both radii must be measured from the axis y=-1.' },
+                { q: 'Problem Type 8: Set up the area enclosed by r=1+cosθ from θ=0 to 2π.', a: String.raw`\(\displaystyle A=\frac12\int_0^{2\pi}(1+\cos\theta)^2\,d\theta\)`, explanation: 'Single polar curve area uses one half times radius squared.' }
             ]
         }
     };
+
+    Object.assign(content, enhancedContent);
+
+    const lessonKeys = ['area', 'cross', 'disk', 'washer', 'polar', 'arc'];
+    const coreLessonKeys = ['area', 'cross', 'disk', 'washer'];
+    const bcLessonKeys = ['polar', 'arc'];
+
+    const lessonMeta = {
+        area: {
+            title: 'Area Between Curves',
+            tags: ['Core AP', 'Area'],
+            description: 'Learn signed area, total area, top-bottom, right-left, and multiple intersections.'
+        },
+        cross: {
+            title: 'Cross Sections',
+            tags: ['Core AP', 'Volume'],
+            description: 'Set up volumes using square, rectangle, triangle, and semicircle cross sections.'
+        },
+        disk: {
+            title: 'Disk Method',
+            tags: ['Core AP', 'Volume'],
+            description: 'Use disk method when rotating a region without a hole.'
+        },
+        washer: {
+            title: 'Washer Method',
+            tags: ['Core AP', 'Volume'],
+            description: 'Use washer method when rotating a region creates a hole.'
+        },
+        polar: {
+            title: 'Polar Area',
+            tags: ['BC Only'],
+            description: 'Find area of one polar curve and area between two polar curves.'
+        },
+        arc: {
+            title: 'Arc Length',
+            tags: ['BC Only'],
+            description: 'Use function form and parametric form arc length formulas.'
+        }
+    };
+
+    const toolMeta = {
+        formulaMap: {
+            title: 'Formula Map',
+            description: 'A compact reference for the formulas used across area, volume, polar, and arc length topics.'
+        },
+        mistakes: {
+            title: 'Mistake Bank',
+            description: 'Common setup mistakes and checks to run before committing to an integral.'
+        },
+        practice: {
+            title: 'Practice Guide',
+            description: 'Practice by problem type: method choice, bounds, setup, radius/base identification, and error checks.'
+        }
+    };
+
+    function navButton(label, page, variant = '') {
+        return `<button type="button" class="nav-button ${variant}" data-jump="${page}">${label}</button>`;
+    }
+
+    function tagHTML(tags) {
+        return `<div class="tag-row">${tags.map(tag => {
+            const cls = tag === 'BC Only' ? 'topic-tag ext' : 'topic-tag';
+            return `<span class="${cls}">${tag}</span>`;
+        }).join('')}</div>`;
+    }
+
+    function buildHomePageHTML() {
+        return `
+            <div class="card" data-page="home">
+                <div class="card-inner">
+                    <section class="site-hero">
+                        <div class="hero-copy">
+                            <h2>AP Calculus BC Integral Applications Lab</h2>
+                            <p>Learn area, volume, cross sections, disk/washer method, polar area, and arc length with clear explanations and 3D visual tools.</p>
+                            <div class="hero-actions">
+                                ${navButton('Start Learning', 'learn', 'primary')}
+                                ${navButton('Open Visual Lab', 'visualLab')}
+                                ${navButton('Practice Guide', 'practice', 'subtle')}
+                            </div>
+                        </div>
+                        <aside class="preview-card">
+                            <div>
+                                <h3>Core Formula Preview</h3>
+                                <div class="preview-formula">\[V=\pi\int_a^b(R(x)^2-r(x)^2)\,dx\]</div>
+                            </div>
+                            <div>
+                                ${tagHTML(['Area', 'Cross Sections', 'Disk', 'Washer', 'Polar', 'Arc Length'])}
+                            </div>
+                        </aside>
+                    </section>
+
+                    <h3 class="section-title">What You Can Learn</h3>
+                    <div class="path-grid">
+                        <div class="path-card">
+                            <h4>Area Between Curves</h4>
+                            <ul><li>top-bottom</li><li>right-left</li><li>multiple intersections</li></ul>
+                            <div class="card-actions">${navButton('Learn', 'area', 'primary')}</div>
+                        </div>
+                        <div class="path-card">
+                            <h4>Volumes with Cross Sections</h4>
+                            <ul><li>square</li><li>rectangle</li><li>triangle</li><li>semicircle</li></ul>
+                            <div class="card-actions">${navButton('Learn', 'cross', 'primary')}</div>
+                        </div>
+                        <div class="path-card">
+                            <h4>Solids of Revolution</h4>
+                            <ul><li>disk method</li><li>washer method</li><li>radius to axis</li></ul>
+                            <div class="card-actions">${navButton('Learn', 'disk', 'primary')}${navButton('Washer', 'washer')}</div>
+                        </div>
+                        <div class="path-card">
+                            <h4>BC Only Topics</h4>
+                            <ul><li>polar area</li><li>arc length</li><li>BC setup skills</li></ul>
+                            <div class="card-actions">${navButton('Learn', 'polar', 'primary')}${navButton('Arc Length', 'arc')}</div>
+                        </div>
+                    </div>
+
+                    <h3 class="section-title">Quick Tools</h3>
+                    <div class="tool-grid">
+                        <div class="tool-card"><h3>Formula Map</h3><p>Review the key setup formulas in one place.</p><div class="card-actions">${navButton('Open', 'formulaMap', 'primary')}</div></div>
+                        <div class="tool-card"><h3>Mistake Bank</h3><p>Check the setup traps that cost points most often.</p><div class="card-actions">${navButton('Open', 'mistakes', 'primary')}</div></div>
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    function buildLearnCard(key, extraButton = '') {
+        const meta = lessonMeta[key];
+        return `
+            <div class="path-card">
+                <h4>${meta.title}</h4>
+                ${tagHTML(meta.tags)}
+                <p>${meta.description}</p>
+                <div class="card-actions">
+                    ${navButton('Learn This', key, 'primary')}
+                    ${extraButton}
+                </div>
+            </div>`;
+    }
+
+    function buildLearnPageHTML() {
+        return `
+            <div class="card" data-page="learn">
+                <div class="card-inner">
+                    <section class="page-intro">
+                        <h2>Learning Path</h2>
+                        <p>Follow the path from area to volume, then move into BC-only topics.</p>
+                    </section>
+
+                    <section class="path-group">
+                        <h3 class="section-title">Core AP Modules</h3>
+                        <div class="path-grid">
+                            ${buildLearnCard('area', navButton('Practice Types', 'practice'))}
+                            ${buildLearnCard('cross', navButton('Open Visual', 'visualLab'))}
+                            ${buildLearnCard('disk', navButton('Open Visual', 'visualLab'))}
+                            ${buildLearnCard('washer', navButton('Open Visual', 'visualLab'))}
+                        </div>
+                    </section>
+
+                    <section class="path-group">
+                        <h3 class="section-title">BC Only Modules</h3>
+                        <div class="path-grid">
+                            ${buildLearnCard('polar')}
+                            ${buildLearnCard('arc')}
+                        </div>
+                    </section>
+
+                </div>
+            </div>`;
+    }
+
+    function buildVisualLabPageHTML() {
+        return `
+            <div class="card" data-page="visualLab">
+                <div class="card-inner">
+                    <section class="page-intro">
+                        <h2>Visual Lab</h2>
+                        <p>Explore the geometry behind area and volume with an interactive 3D model. Switch modes to compare area slices, cross sections, disk, washer, polar area, and arc length.</p>
+                    </section>
+                    <div class="tool-grid">
+                        ${lessonKeys.map(key => `<div class="tool-card"><h3>${lessonMeta[key].title}</h3>${tagHTML(lessonMeta[key].tags)}<p>${lessonMeta[key].description}</p><div class="card-actions">${navButton('Open Lesson', key)}</div></div>`).join('')}
+                    </div>
+                    <div class="model-block">
+                        <div class="model-title"><span>3D Visual Model</span></div>
+                        ${buildAdvancedLabHTML('visualLab')}
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    function buildLessonPageHTML(key, val) {
+        const meta = lessonMeta[key];
+        const badgeClass = meta.tags.includes('BC Only') ? 'badge bc' : 'badge ab';
+        const hasLab = Boolean(advancedLabPresets[key]);
+        const videoEmbed = buildVideoHTML(key);
+        const modelEmbed = hasLab ? buildAdvancedLabHTML(key) : '';
+        const formulaBlock = val.formula ? `<section class="lesson-section"><h3>Key Formula</h3><div class="formula">${val.formula}</div></section>` : '';
+        const quizBlock = val.quiz && val.quiz.length ? `
+            <section class="lesson-section quiz">
+                <h3>Practice Types</h3>
+                ${val.quiz.map((q, i) => `
+                    <div style="margin:8px 0;">
+                        <strong>${i+1}. ${q.q}</strong><br>
+                        <button class="ans-btn" onclick="toggleAnswer(this)">显示答案</button>
+                        <div class="explanation"><strong>答案：</strong>${q.a}<br><strong>解析：</strong>${q.explanation}</div>
+                    </div>
+                `).join('')}
+            </section>` : '';
+        return `
+            <div class="card" data-page="${key}">
+                <div class="card-inner">
+                    <header class="lesson-header">
+                        <div class="breadcrumb">
+                            <button type="button" data-jump="home">Home</button><span>&gt;</span>
+                            <button type="button" data-jump="learn">Learn</button><span>&gt;</span>
+                            <span>${meta.title}</span>
+                        </div>
+                        <span class="${badgeClass}">${meta.tags[0]}</span>
+                        <h2>${meta.title}</h2>
+                        ${tagHTML(meta.tags)}
+                        <p class="lesson-description">${meta.description}</p>
+                        <div class="lesson-actions">${navButton('Back to Learn', 'learn', 'subtle')}</div>
+                        <div class="lesson-outline">
+                            <span>Concept</span><span>When to Use</span><span>Key Formula</span><span>Step-by-step Setup</span>
+                            <span>Worked Example</span><span>Common Mistakes</span><span>Practice Types</span><span>3D Visual Model</span>
+                        </div>
+                    </header>
+                    <section class="lesson-section">
+                        <h3>Concept / When to Use / Step-by-step Setup</h3>
+                        <div class="explanation-section">${val.explanation}</div>
+                    </section>
+                    ${formulaBlock}
+                    ${videoEmbed ? `<section class="lesson-section"><h3>Worked Example Video</h3>${videoEmbed}</section>` : ''}
+                    ${quizBlock}
+                    ${hasLab ? `<section class="lesson-section model-block">
+                        <div class="model-title"><span>3D Visual Model</span></div>
+                        ${modelEmbed}
+                    </section>` : ''}
+                </div>
+            </div>`;
+    }
+
+    function buildToolPageHTML(key, val) {
+        const meta = toolMeta[key];
+        const quizBlock = val.quiz && val.quiz.length ? `
+            <div class="quiz"><h3>Practice Checks</h3>${val.quiz.map((q, i) => `
+                <div style="margin:8px 0;">
+                    <strong>${i+1}. ${q.q}</strong><br>
+                    <button class="ans-btn" onclick="toggleAnswer(this)">显示答案</button>
+                    <div class="explanation"><strong>答案：</strong>${q.a}<br><strong>解析：</strong>${q.explanation}</div>
+                </div>
+            `).join('')}</div>` : '';
+        return `
+            <div class="card" data-page="${key}">
+                <div class="card-inner">
+                    <section class="page-intro">
+                        <h2>${meta.title}</h2>
+                        <p>${meta.description}</p>
+                    </section>
+                    <div class="explanation-section">${val.explanation}</div>
+                    ${quizBlock}
+                </div>
+            </div>`;
+    }
 
     function buildAdvancedLabHTML(key) {
         const prefix = `lab-${key}-`;
@@ -2752,11 +3818,8 @@
                             <button class="lab-mode-btn lab-mode-disk" data-lab-mode="disk">🟢 Disk</button>
                             <button class="lab-mode-btn lab-mode-washer" data-lab-mode="washer">🟠 Washer</button>
                             <button class="lab-mode-btn lab-mode-cs" data-lab-mode="cs">📋 截面</button>
-                            <button class="lab-mode-btn lab-mode-shell" data-lab-mode="shell">🐚 Shell 拓展</button>
                             <button class="lab-mode-btn lab-mode-polar" data-lab-mode="polar">📈 极坐标</button>
                             <button class="lab-mode-btn lab-mode-arc" data-lab-mode="arc">📐 弧长</button>
-                            <button class="lab-mode-btn lab-mode-surface" data-lab-mode="surface">🌐 旋转面</button>
-                            <button class="lab-mode-btn lab-mode-parametric" data-lab-mode="parametric">📊 参数</button>
                             <button class="lab-btn-reset" id="${prefix}BtnReset">🎥 重置视角</button>
                         </div>
                         <div class="lab-axis-selector" id="${prefix}AxisSelector">
@@ -2853,70 +3916,13 @@
 
     function buildHTML() {
         const main = document.getElementById('mainArea');
-        let html = '';
-        for (let [key, val] of Object.entries(content)) {
-            const badgeClass = val.badge === 'ab' ? 'badge ab' : (val.badge === 'ext' ? 'badge ext' : 'badge bc');
-            const videoEmbed = buildVideoHTML(key);
-            const modelEmbed = buildAdvancedLabHTML(key);
-            html += `
-            <div class="card" data-page="${key}">
-                <div class="card-inner">
-                    <h2><span class="${badgeClass}">${val.badge.toUpperCase()}</span> ${val.title}</h2>
-                    <div class="model-block">
-                        <div class="model-title"><span>3D互动模型</span></div>
-                        ${modelEmbed}
-                    </div>
-                    <div class="formula">${val.formula}</div>
-                    ${videoEmbed}
-                    <div class="explanation-section">${val.explanation}</div>
-                    <div class="quiz"><h3>📝 练习题（点击"显示答案"查看详细解析）</h3>${val.quiz ? val.quiz.map((q, i) => `
-                        <div style="margin:8px 0;">
-                            <strong>${i+1}. ${q.q}</strong><br>
-                            <button class="ans-btn" onclick="toggleAnswer(this)">显示答案</button>
-                            <div class="explanation"><strong>答案：</strong>${q.a}<br><strong>解析：</strong>${q.explanation}</div>
-                        </div>
-                    `).join('') : ''}</div>
-                </div>
-            </div>`;
-        }
-        html += `
-        <div class="card" data-page="calc">
-            <div class="card-inner">
-                <h2>🔢 综合计算器</h2>
-                <div class="tip" style="margin-bottom:14px;">📘 <strong>使用说明：</strong> 选择计算类型，输入函数表达式（如x、x^2、sin(x)），填写区间，点击计算。使用辛普森数值积分法，精度高。</div>
-                <div class="calc-grid">
-                    <div class="calc-field">
-                        <label for="calcType">类型</label>
-                        <select id="calcType">
-                            <option value="disk">Disk体积</option>
-                            <option value="washer">Washer体积</option>
-                            <option value="shell">Shell体积</option>
-                            <option value="arclength">弧长</option>
-                            <option value="surface">旋转面面积</option>
-                            <option value="polarArea">极坐标面积</option>
-                        </select>
-                    </div>
-                    <div class="calc-field">
-                        <label for="calcFunc">外半径 / 函数 f(x)</label>
-                        <input type="text" id="calcFunc" value="x" placeholder="例如 x^2、sin(x)、sqrt(x)">
-                    </div>
-                    <div class="calc-field hidden" id="calcFunc2Wrap">
-                        <label for="calcFunc2">边界函数 g(x)</label>
-                        <input type="text" id="calcFunc2" value="0" placeholder="例如 x、sqrt(x)">
-                    </div>
-                    <div class="calc-field">
-                        <label for="calcA">下限</label>
-                        <input type="number" id="calcA" value="0" step="any">
-                    </div>
-                    <div class="calc-field">
-                        <label for="calcB">上限</label>
-                        <input type="number" id="calcB" value="2" step="any">
-                    </div>
-                    <button onclick="performCalc()" style="background:linear-gradient(135deg,#2563eb,#7c3aed);color:white;border:none;">计算</button>
-                </div>
-                <div class="result" id="calcResult"></div>
-            </div>
-        </div>`;
+        let html = buildHomePageHTML() + buildLearnPageHTML() + buildVisualLabPageHTML();
+        lessonKeys.forEach(key => {
+            html += buildLessonPageHTML(key, content[key]);
+        });
+        ['practice', 'formulaMap', 'mistakes'].forEach(key => {
+            html += buildToolPageHTML(key, content[key]);
+        });
         main.innerHTML = html;
     }
 
@@ -2924,8 +3930,7 @@
 
     setTimeout(() => {
         addControlButtons();
-        setupCalculator();
-        switchPage('area');
+        switchPage('home');
         if (window.MathJax?.typesetPromise) MathJax.typesetPromise();
     }, 150);
 
@@ -2935,7 +3940,6 @@
             disk: `<button class="accent" onclick="toggleDisks()">🔘 显示/隐藏圆盘</button> <span style="color:#475569;">圆盘数 <strong id="diskLabel">12</strong></span> <input type="range" min="4" max="30" value="12" step="2" oninput="updateDiskCount(this.value)">`,
             washer: `<button class="accent" onclick="toggleWasherCutaway()">🔍 显示/隐藏截面环</button>`,
             cross: `<button class="accent" onclick="toggleCrossSections()">📋 显示/隐藏截面</button> <span style="color:#475569;">截面X=<strong id="crossPosLabel">0.0</strong></span> <input type="range" min="-2" max="2" value="0" step="0.1" oninput="updateCrossPos(this.value)">`,
-            shell: `<button class="bc-btn" onclick="toggleShells()">🐚 显示/隐藏壳层</button> <span style="color:#475569;">壳数 <strong id="shellLabel">10</strong></span> <input type="range" min="4" max="24" value="10" step="2" oninput="updateShellCount(this.value)">`,
             polar: `<button class="bc-btn" onclick="togglePolarSectors()">🔁 显示/隐藏扇形</button>`,
             arc: `<span style="color:#475569;">折线段数 <strong id="arcSegLabel">12</strong></span> <input type="range" min="4" max="40" value="12" step="2" oninput="updateArcSegments(this.value)">`
         };
@@ -2946,14 +3950,26 @@
     }
 
     window.switchPage = function(page) {
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.card').forEach(c => {
+            c.classList.remove('active');
+            c.style.display = 'none';
+            c.style.visibility = 'hidden';
+            c.style.opacity = '0';
+        });
         const target = document.querySelector(`.card[data-page="${page}"]`);
-        if (target) target.classList.add('active');
+        if (target) {
+            target.classList.add('active');
+            target.style.display = 'block';
+            target.style.visibility = 'visible';
+            target.style.opacity = '1';
+        }
         document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
-        const navLink = document.querySelector(`.nav a[data-page="${page}"]`);
+        const primaryPage = lessonKeys.includes(page) ? 'learn' : page;
+        const navLink = document.querySelector(`.nav a[data-page="${primaryPage}"]`);
         if (navLink) navLink.classList.add('active');
-        if (content[page]) initAdvancedLab(page);
+        if (advancedLabPresets[page]) initAdvancedLab(page);
         else destroyAdvancedLab();
+        target?.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => {
             resizeAdvancedLab();
             Object.values(sceneData).forEach(resizeScene);
@@ -2968,11 +3984,40 @@
     });
 
     document.getElementById('topNav').addEventListener('click', (e) => {
-        if (e.target.tagName === 'A') {
-            e.preventDefault();
-            const page = e.target.dataset.page;
-            if (page) switchPage(page);
-        }
+        const link = e.target.closest('a[data-page]');
+        if (!link) return;
+        e.preventDefault();
+        const page = link.dataset.page;
+        if (page) switchPage(page);
+    });
+
+    const demoUserName = document.getElementById('demoUserName');
+    const demoAuthState = document.getElementById('demoAuthState');
+    const demoAvatar = document.getElementById('demoAvatar');
+    const demoStatusText = document.getElementById('demoStatusText');
+    const setDemoSignedIn = (signedIn) => {
+        if (demoUserName) demoUserName.textContent = signedIn ? 'Alex Student' : 'Guest Viewer';
+        if (demoAuthState) demoAuthState.textContent = signedIn ? 'Signed in · Demo mode' : 'Signed out · Frontend only';
+        if (demoAvatar) demoAvatar.textContent = signedIn ? 'AS' : 'GV';
+        if (demoStatusText) demoStatusText.textContent = signedIn ? 'All Systems Nominal' : 'Guest Preview Active';
+    };
+    document.getElementById('demoSignIn')?.addEventListener('click', () => setDemoSignedIn(true));
+    document.getElementById('demoLogOut')?.addEventListener('click', () => setDemoSignedIn(false));
+    document.getElementById('demoSettings')?.addEventListener('click', () => {
+        if (demoStatusText) demoStatusText.textContent = 'Settings Panel Is Demo Only';
+    });
+    document.querySelectorAll('.fake-icon-button').forEach(button => {
+        button.addEventListener('click', () => {
+            if (demoStatusText) demoStatusText.textContent = 'Demo Toolbar Action';
+        });
+    });
+
+    document.getElementById('mainArea').addEventListener('click', (e) => {
+        const jump = e.target.closest('[data-jump]');
+        if (!jump) return;
+        e.preventDefault();
+        const page = jump.dataset.jump;
+        if (page) switchPage(page);
     });
 
     window.toggleAnswer = (button) => {
@@ -2995,138 +4040,9 @@
     window.toggleWasherCutaway = () => { const d = sceneData.washer; if (!d) return; d.extra.ringsVisible = !d.extra.ringsVisible; d.extra.ringG.visible = d.extra.ringsVisible; };
     window.toggleCrossSections = () => { const d = sceneData.cross; if (!d) return; d.extra.visible = !d.extra.visible; d.extra.cg.visible = d.extra.visible; };
     window.updateCrossPos = (v) => { const d = sceneData.cross; if (!d) return; d.extra.createSections(parseFloat(v)); d.extra.cg.visible = d.extra.visible; document.getElementById('crossPosLabel').textContent = parseFloat(v).toFixed(1); };
-    window.toggleShells = () => { const d = sceneData.shell; if (!d) return; d.extra.visible = !d.extra.visible; d.extra.shellG.visible = d.extra.visible; };
-    window.updateShellCount = (v) => { const d = sceneData.shell; if (!d) return; d.extra.createShells(parseInt(v)); d.extra.shellG.visible = d.extra.visible; document.getElementById('shellLabel').textContent = v; };
     window.togglePolarSectors = () => { const d = sceneData.polar; if (!d) return; d.extra.sectorsVisible = !d.extra.sectorsVisible; d.extra.sectorG.visible = d.extra.sectorsVisible; };
     window.updateArcSegments = (v) => { const d = sceneData.arc; if (!d) return; d.extra.createSegments(parseInt(v)); document.getElementById('arcSegLabel').textContent = v; };
 
-    function setupCalculator() {
-        const type = document.getElementById('calcType');
-        if (!type) return;
-        type.addEventListener('change', updateCalculatorFields);
-        updateCalculatorFields();
-    }
-
-    function updateCalculatorFields() {
-        const type = document.getElementById('calcType')?.value;
-        const secondFunc = document.getElementById('calcFunc2Wrap');
-        const mainLabel = document.querySelector('label[for="calcFunc"]');
-        if (secondFunc) secondFunc.classList.toggle('hidden', type !== 'washer');
-        if (!mainLabel) return;
-        const labels = {
-            disk: '边界函数 f(x)（半径取到旋转轴距离）',
-            washer: '边界函数 f(x)',
-            shell: '高度函数 f(x)',
-            arclength: '曲线函数 y=f(x)',
-            surface: '曲线函数 y=f(x)',
-            polarArea: '极径函数 r(theta)'
-        };
-        mainLabel.textContent = labels[type] || '函数 f(x)';
-    }
-
-    function setCalcMessage(message, isError = false) {
-        const res = document.getElementById('calcResult');
-        res.textContent = message;
-        res.classList.toggle('error', isError);
-    }
-
-    function compileExpression(expr) {
-        const source = expr.trim()
-            .replace(/π/g, 'pi')
-            .replace(/θ/g, 'theta')
-            .replace(/\bln\s*\(/g, 'log(')
-            .replace(/\^/g, '**');
-        if (!source) throw new Error('表达式不能为空');
-        return new Function('x', `
-            const {
-                sin, cos, tan, asin, acos, atan, atan2,
-                sinh, cosh, tanh, sqrt, cbrt, abs, log, log10,
-                exp, pow, min, max, floor, ceil, round, PI, E
-            } = Math;
-            const pi = PI;
-            const e = E;
-            const theta = x;
-            const t = x;
-            return (${source});
-        `);
-    }
-
-    function finiteValue(f, x) {
-        const value = Number(f(x));
-        if (!Number.isFinite(value)) throw new Error(`函数在 ${Number(x).toPrecision(6)} 处没有有效数值`);
-        return value;
-    }
-
-    // 计算器同样使用“到旋转轴的距离”；当前轴偏移默认 0，便于未来扩展 y=c 或 x=c。
-    function calcRadiusToAxis(value, axisOffset = 0) {
-        return Math.abs(value - axisOffset);
-    }
-
-    function calcWasherRadii(firstValue, secondValue, axisOffset = 0) {
-        const firstRadius = calcRadiusToAxis(firstValue, axisOffset);
-        const secondRadius = calcRadiusToAxis(secondValue, axisOffset);
-        return {
-            outer: Math.max(firstRadius, secondRadius),
-            inner: Math.min(firstRadius, secondRadius),
-            swapped: secondRadius > firstRadius
-        };
-    }
-
-    function derivative(f, x) {
-        const step = Math.max(1e-5, Math.abs(x) * 1e-5);
-        const yp = Number(f(x + step));
-        const ym = Number(f(x - step));
-        if (Number.isFinite(yp) && Number.isFinite(ym)) return (yp - ym) / (2 * step);
-        const y0 = Number(f(x));
-        if (Number.isFinite(yp) && Number.isFinite(y0)) return (yp - y0) / step;
-        if (Number.isFinite(ym) && Number.isFinite(y0)) return (y0 - ym) / step;
-        throw new Error(`无法在 ${Number(x).toPrecision(6)} 附近估计导数`);
-    }
-
-    function integrateSimpson(g, a, b, steps = 1000) {
-        const n = steps % 2 === 0 ? steps : steps + 1;
-        const h = (b - a) / n;
-        let sum = finiteValue(g, a) + finiteValue(g, b);
-        for (let i = 1; i < n; i++) {
-            const x = a + i * h;
-            sum += (i % 2 ? 4 : 2) * finiteValue(g, x);
-        }
-        return sum * h / 3;
-    }
-
-    window.performCalc = () => {
-        const type = document.getElementById('calcType').value;
-        const funcStr = document.getElementById('calcFunc').value;
-        const func2Str = document.getElementById('calcFunc2').value;
-        const a = parseFloat(document.getElementById('calcA').value);
-        const b = parseFloat(document.getElementById('calcB').value);
-        if (isNaN(a) || isNaN(b) || a === b) { setCalcMessage('请输入有效且不相等的积分区间', true); return; }
-        try {
-            const f = compileExpression(funcStr);
-            const g2 = compileExpression(func2Str || '0');
-            let result, note = '';
-            if (type === 'disk') {
-                result = integrateSimpson(x => Math.PI * calcRadiusToAxis(finiteValue(f, x)) ** 2, a, b);
-            } else if (type === 'washer') {
-                let swappedRadii = false;
-                result = integrateSimpson(x => {
-                    const radii = calcWasherRadii(finiteValue(f, x), finiteValue(g2, x));
-                    if (radii.swapped) swappedRadii = true;
-                    return Math.PI * (radii.outer ** 2 - radii.inner ** 2);
-                }, a, b);
-                if (swappedRadii) note = '（提示：已按到旋转轴的距离自动识别外半径和内半径）';
-            } else if (type === 'shell') {
-                result = integrateSimpson(x => 2 * Math.PI * Math.abs(x) * Math.abs(finiteValue(f, x)), a, b);
-            } else if (type === 'arclength') {
-                result = integrateSimpson(x => Math.sqrt(1 + derivative(f, x) ** 2), a, b);
-            } else if (type === 'surface') {
-                result = integrateSimpson(x => 2 * Math.PI * calcRadiusToAxis(finiteValue(f, x)) * Math.sqrt(1 + derivative(f, x) ** 2), a, b);
-            } else if (type === 'polarArea') {
-                result = integrateSimpson(theta => 0.5 * finiteValue(f, theta) ** 2, a, b);
-            }
-            setCalcMessage(`结果 ≈ ${result.toFixed(6)} ${note}`.trim());
-        } catch (e) { setCalcMessage(`计算失败：${e.message || '请检查表达式语法'}`, true); }
-    };
 </script>
 </body>
 </html>
