@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" role="img" aria-labelledby="title desc">
+  <title id="title">Slim mark option 03 - Gold Aperture</title>
+  <desc id="desc">A golden aperture-like angular star with a clear center.</desc>
+  <defs>
+    <linearGradient id="bladeGold" x1="126" y1="52" x2="235" y2="305">
+      <stop offset="0" stop-color="#F5F0E1"/>
+      <stop offset=".55" stop-color="#C9A227"/>
+      <stop offset="1" stop-color="#6F5511"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111C2E"/>
+      <stop offset="1" stop-color="#0B1320"/>
+    </linearGradient>
+  </defs>
+  <rect x="42" y="42" width="276" height="276" rx="34" fill="url(#card)" stroke="#D7CCB6" stroke-width="2"/>
+  <g transform="translate(180 180)">
+    <path d="M-11-125 10-125 43-63 24-48Z" fill="url(#bladeGold)"/>
+    <path d="M-11-125 10-125 43-63 24-48Z" fill="#2CB1BC" opacity=".86" transform="rotate(60)"/>
+    <path d="M-11-125 10-125 43-63 24-48Z" fill="#C9A227" transform="rotate(120)"/>
+    <path d="M-11-125 10-125 43-63 24-48Z" fill="#D7CCB6" transform="rotate(180)"/>
+    <path d="M-11-125 10-125 43-63 24-48Z" fill="#145DA0" transform="rotate(240)"/>
+    <path d="M-11-125 10-125 43-63 24-48Z" fill="#C9A227" transform="rotate(300)"/>
+    <circle r="45" fill="#0B1320"/>
+    <path d="M0-34 13-7 40-5 18 12 25 39 0 24-25 39-18 12-40-5-13-7Z" fill="#111C2E" stroke="#C9A227" stroke-width="3"/>
+  </g>
+</svg>

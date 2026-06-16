@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 820" role="img" aria-labelledby="title desc">
+  <title id="title">Agency math logo 03 - Integral Wreath</title>
+  <desc id="desc">A calculus-themed institutional logo with integral and dx marks replacing laurel leaves.</desc>
+  <defs>
+    <linearGradient id="bg03" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1320"/>
+      <stop offset="1" stop-color="#111C2E"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="820" rx="42" fill="url(#bg03)"/>
+  <path d="M189 387C110 286 135 153 251 82" fill="none" stroke="#D7CCB6" stroke-width="7" stroke-linecap="round" opacity=".82"/>
+  <path d="M531 387C610 286 585 153 469 82" fill="none" stroke="#D7CCB6" stroke-width="7" stroke-linecap="round" opacity=".82"/>
+  <g font-family="Georgia, serif" font-weight="700" font-size="43" fill="#C9A227">
+    <text x="168" y="360" transform="rotate(-44 168 360)">∫</text>
+    <text x="148" y="315" transform="rotate(-34 148 315)">dx</text>
+    <text x="143" y="266" transform="rotate(-22 143 266)">∫</text>
+    <text x="154" y="218" transform="rotate(-8 154 218)">dy</text>
+    <text x="181" y="173" transform="rotate(9 181 173)">∫</text>
+    <text x="220" y="135" transform="rotate(24 220 135)">Σ</text>
+    <text x="525" y="360" transform="rotate(44 525 360)">∫</text>
+    <text x="527" y="315" transform="rotate(34 527 315)">dx</text>
+    <text x="545" y="266" transform="rotate(22 545 266)">∫</text>
+    <text x="520" y="218" transform="rotate(8 520 218)">dy</text>
+    <text x="495" y="173" transform="rotate(-9 495 173)">∫</text>
+    <text x="465" y="135" transform="rotate(-24 465 135)">Σ</text>
+  </g>
+  <path d="M250 421C287 392 323 389 360 417C397 389 433 392 470 421" fill="none" stroke="#C9A227" stroke-width="8" stroke-linecap="round"/>
+  <g transform="translate(360 245)" fill="none" stroke-linecap="round">
+    <path d="M-118 54C-66-56 62-71 123 29" stroke="#2CB1BC" stroke-width="9"/>
+    <path d="M-124 64C-51 43 23 41 106 66" stroke="#C9A227" stroke-width="7"/>
+    <path d="M-108 61V-46M-72 55V-17M-36 50V-35M0 47V-58M36 50V-41M72 57V-18" stroke="#F5F0E1" stroke-width="5"/>
+    <ellipse rx="128" ry="38" stroke="#145DA0" stroke-width="7" transform="rotate(-13)"/>
+    <ellipse rx="128" ry="38" stroke="#D7CCB6" stroke-width="5" transform="rotate(61)"/>
+    <circle r="10" fill="#F5F0E1"/>
+  </g>
+  <text x="360" y="590" text-anchor="middle" fill="#F8FAFC" font-family="Segoe UI, Arial, sans-serif" font-size="82" font-weight="900" letter-spacing="5">MATH OBS</text>
+  <text x="360" y="646" text-anchor="middle" fill="#C9A227" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="900">Mathematical Observatory</text>
+  <text x="360" y="690" text-anchor="middle" fill="#D7CCB6" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Calculus Methods · Visual Models · Study System</text>
+</svg>

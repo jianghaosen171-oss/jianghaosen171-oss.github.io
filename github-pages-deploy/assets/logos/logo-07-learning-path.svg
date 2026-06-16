@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Logo option 07 - Learning Path</title>
+  <desc id="desc">A learning path logo showing AB to BC progression around an integral axis.</desc>
+  <defs>
+    <linearGradient id="step" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F5F0E1"/>
+      <stop offset=".45" stop-color="#C9A227"/>
+      <stop offset="1" stop-color="#145DA0"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0B1320" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <rect x="56" y="76" width="164" height="164" rx="26" fill="#0B1320" stroke="#C9A227" stroke-width="3"/>
+    <path d="M91 199c28 0 37-73 74-73 22 0 31 25 45 25" fill="none" stroke="#2CB1BC" stroke-width="6" stroke-linecap="round"/>
+    <rect x="88" y="188" width="25" height="20" rx="4" fill="#145DA0"/>
+    <rect x="116" y="166" width="25" height="42" rx="4" fill="#0B3D6E"/>
+    <rect x="144" y="139" width="25" height="69" rx="4" fill="#C9A227"/>
+    <rect x="172" y="113" width="25" height="95" rx="4" fill="url(#step)"/>
+    <path d="M107 110c22-14 46-16 72-7" fill="none" stroke="#D7CCB6" stroke-width="5" stroke-linecap="round"/>
+    <path d="M107 110l12-15M107 110l17 8" stroke="#D7CCB6" stroke-width="5" stroke-linecap="round"/>
+    <text x="92" y="226" fill="#F5F0E1" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="900">AB</text>
+    <text x="171" y="226" fill="#C9A227" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="900">BC</text>
+  </g>
+  <g font-family="Segoe UI, Microsoft YaHei, Arial, sans-serif">
+    <text x="256" y="136" fill="#C9A227" font-size="27" font-weight="900" letter-spacing="1">LEARNING PATH</text>
+    <text x="256" y="185" fill="#F8FAFC" font-size="51" font-weight="900">AP Calculus</text>
+    <text x="258" y="224" fill="#D7CCB6" font-size="21" font-weight="700">From area setup to BC extensions</text>
+  </g>
+</svg>

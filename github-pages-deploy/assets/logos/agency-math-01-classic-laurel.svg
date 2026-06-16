@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 820" role="img" aria-labelledby="title desc">
+  <title id="title">Agency math logo 01 - Classic Laurel</title>
+  <desc id="desc">A Mathematical Observatory emblem with laurel arcs, calculus orbits, and institutional wordmark.</desc>
+  <defs>
+    <linearGradient id="bg01" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111C2E"/>
+      <stop offset="1" stop-color="#0B1320"/>
+    </linearGradient>
+    <linearGradient id="gold01" x1="205" y1="75" x2="510" y2="520">
+      <stop offset="0" stop-color="#F5F0E1"/>
+      <stop offset=".48" stop-color="#C9A227"/>
+      <stop offset="1" stop-color="#8A6B11"/>
+    </linearGradient>
+    <path id="leaf01" d="M0 0C-19-7-35-22-45-43C-21-40-5-24 0 0Z"/>
+    <filter id="shadow01" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#0B1320" flood-opacity=".36"/>
+    </filter>
+  </defs>
+  <rect width="720" height="820" rx="42" fill="url(#bg01)"/>
+  <g filter="url(#shadow01)">
+    <path d="M192 382C110 284 132 151 246 82" fill="none" stroke="#C9A227" stroke-width="13" stroke-linecap="round"/>
+    <path d="M528 382C610 284 588 151 474 82" fill="none" stroke="#C9A227" stroke-width="13" stroke-linecap="round"/>
+    <g fill="url(#gold01)">
+      <use href="#leaf01" transform="translate(184 357) rotate(-55) scale(.82)"/>
+      <use href="#leaf01" transform="translate(165 320) rotate(-46) scale(.8)"/>
+      <use href="#leaf01" transform="translate(154 279) rotate(-36) scale(.78)"/>
+      <use href="#leaf01" transform="translate(155 236) rotate(-24) scale(.76)"/>
+      <use href="#leaf01" transform="translate(170 194) rotate(-12) scale(.74)"/>
+      <use href="#leaf01" transform="translate(198 155) rotate(3) scale(.72)"/>
+      <use href="#leaf01" transform="translate(232 121) rotate(18) scale(.7)"/>
+      <use href="#leaf01" transform="translate(536 357) rotate(-125) scale(-.82 .82)"/>
+      <use href="#leaf01" transform="translate(555 320) rotate(-134) scale(-.8 .8)"/>
+      <use href="#leaf01" transform="translate(566 279) rotate(-144) scale(-.78 .78)"/>
+      <use href="#leaf01" transform="translate(565 236) rotate(-156) scale(-.76 .76)"/>
+      <use href="#leaf01" transform="translate(550 194) rotate(-168) scale(-.74 .74)"/>
+      <use href="#leaf01" transform="translate(522 155) rotate(177) scale(-.72 .72)"/>
+      <use href="#leaf01" transform="translate(488 121) rotate(162) scale(-.7 .7)"/>
+    </g>
+    <path d="M250 420C287 390 321 386 360 416C399 386 433 390 470 420" fill="none" stroke="#D7CCB6" stroke-width="8" stroke-linecap="round"/>
+    <g transform="translate(360 245)" fill="none" stroke-linecap="round">
+      <ellipse rx="138" ry="43" stroke="#2CB1BC" stroke-width="8" transform="rotate(-8)"/>
+      <ellipse rx="138" ry="43" stroke="#D7CCB6" stroke-width="7" transform="rotate(54)"/>
+      <ellipse rx="138" ry="43" stroke="#145DA0" stroke-width="8" transform="rotate(112)"/>
+      <path d="M16-128C-21-78 40-47 3 22C-14 54-47 78-92 91" stroke="#C9A227" stroke-width="16"/>
+      <circle cx="0" cy="0" r="11" fill="#F5F0E1"/>
+      <circle cx="104" cy="-35" r="8" fill="#C9A227"/>
+      <circle cx="-108" cy="35" r="8" fill="#2CB1BC"/>
+    </g>
+  </g>
+  <text x="360" y="590" text-anchor="middle" fill="#F8FAFC" font-family="Segoe UI, Arial, sans-serif" font-size="82" font-weight="900" letter-spacing="5">MATH OBS</text>
+  <text x="360" y="646" text-anchor="middle" fill="#C9A227" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="900">Mathematical Observatory</text>
+  <text x="360" y="690" text-anchor="middle" fill="#D7CCB6" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">AP Calculus AB+BC · 3D Integral Lab</text>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 820" role="img" aria-labelledby="title desc">
+  <title id="title">Agency math logo 04 - Curve Branches</title>
+  <desc id="desc">A calculus emblem where side branches are graph curves and tangent slices.</desc>
+  <defs>
+    <linearGradient id="paper04" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF9EA"/>
+      <stop offset="1" stop-color="#F5F0E1"/>
+    </linearGradient>
+    <linearGradient id="branch04" x1="90" y1="90" x2="610" y2="430">
+      <stop offset="0" stop-color="#145DA0"/>
+      <stop offset=".52" stop-color="#2CB1BC"/>
+      <stop offset="1" stop-color="#C9A227"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="820" rx="42" fill="url(#paper04)"/>
+  <path d="M190 382C120 304 126 185 247 83" fill="none" stroke="url(#branch04)" stroke-width="11" stroke-linecap="round"/>
+  <path d="M530 382C600 304 594 185 473 83" fill="none" stroke="url(#branch04)" stroke-width="11" stroke-linecap="round"/>
+  <g fill="#145DA0">
+    <path d="M165 345l50-19-20 46z"/>
+    <path d="M147 296l55-11-27 42z"/>
+    <path d="M154 244l55 0-34 36z"/>
+    <path d="M178 195l52 11-40 28z"/>
+    <path d="M214 151l46 22-45 18z"/>
+    <path d="M555 345l-50-19 20 46z"/>
+    <path d="M573 296l-55-11 27 42z"/>
+    <path d="M566 244l-55 0 34 36z"/>
+    <path d="M542 195l-52 11 40 28z"/>
+    <path d="M506 151l-46 22 45 18z"/>
+  </g>
+  <path d="M251 420C292 394 324 391 360 417C396 391 428 394 469 420" fill="none" stroke="#0B3D6E" stroke-width="8" stroke-linecap="round"/>
+  <g transform="translate(360 245)" fill="none" stroke-linecap="round">
+    <path d="M-129 67C-78-59 64-75 128 28" stroke="#145DA0" stroke-width="9"/>
+    <path d="M-126 70C-48 40 31 40 116 69" stroke="#C9A227" stroke-width="7"/>
+    <path d="M-105 61V-27M-70 51V-12M-35 45V-42M0 43V-64M35 46V-44M70 54V-17" stroke="#0B3D6E" stroke-width="5" opacity=".75"/>
+    <ellipse rx="130" ry="38" stroke="#2CB1BC" stroke-width="6" transform="rotate(-11)"/>
+    <path d="M-94 95 94-95" stroke="#C9A227" stroke-width="6" opacity=".82"/>
+    <circle r="10" fill="#0B3D6E"/>
+  </g>
+  <text x="360" y="590" text-anchor="middle" fill="#0B1320" font-family="Segoe UI, Arial, sans-serif" font-size="82" font-weight="900" letter-spacing="5">MATH OBS</text>
+  <text x="360" y="646" text-anchor="middle" fill="#145DA0" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="900">Mathematical Observatory</text>
+  <text x="360" y="690" text-anchor="middle" fill="#475569" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">AP Calculus AB+BC · 3D Integral Lab</text>
+</svg>

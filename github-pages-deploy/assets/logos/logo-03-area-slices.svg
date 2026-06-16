@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Logo option 03 - Area Slices</title>
+  <desc id="desc">A curve area logo with vertical integral slices, designed for AP Calculus area learning.</desc>
+  <defs>
+    <linearGradient id="sliceFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C9A227" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#2CB1BC" stop-opacity=".55"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0B1320" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <rect x="56" y="76" width="164" height="164" rx="26" fill="#0B1320" stroke="#C9A227" stroke-width="3"/>
+    <path d="M85 198h107M91 215V108" stroke="#D7CCB6" stroke-width="4" stroke-linecap="round"/>
+    <path d="M92 190c18-39 42-62 73-67 18-3 32 2 46 12v55z" fill="url(#sliceFill)" opacity=".72"/>
+    <path d="M94 190c20-42 45-64 74-67 17-2 32 3 43 12" fill="none" stroke="#2CB1BC" stroke-width="7" stroke-linecap="round"/>
+    <path d="M94 190c28-9 58-8 96 0" fill="none" stroke="#C9A227" stroke-width="6" stroke-linecap="round"/>
+    <path d="M109 187v-42M126 188v-54M143 188v-63M160 188v-65M177 188v-58" stroke="#FFF9EA" stroke-width="3" stroke-linecap="round" opacity=".82"/>
+    <text x="174" y="220" fill="#C9A227" font-family="Georgia, serif" font-size="42" font-weight="700">∫</text>
+  </g>
+  <g font-family="Segoe UI, Microsoft YaHei, Arial, sans-serif">
+    <text x="256" y="136" fill="#C9A227" font-size="27" font-weight="900" letter-spacing="1.1">AREA METHOD</text>
+    <text x="256" y="185" fill="#F8FAFC" font-size="51" font-weight="900">Calculus Lab</text>
+    <text x="258" y="224" fill="#D7CCB6" font-size="21" font-weight="700">Top minus bottom · slice by slice</text>
+  </g>
+</svg>

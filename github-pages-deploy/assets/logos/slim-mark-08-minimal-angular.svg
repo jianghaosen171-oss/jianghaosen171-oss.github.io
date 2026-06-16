@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" role="img" aria-labelledby="title desc">
+  <title id="title">Slim mark option 08 - Minimal Angular</title>
+  <desc id="desc">A very minimal slim angular mark for sidebar and favicon use.</desc>
+  <defs>
+    <linearGradient id="minimal" x1="98" y1="70" x2="263" y2="285">
+      <stop offset="0" stop-color="#2CB1BC"/>
+      <stop offset=".42" stop-color="#F5F0E1"/>
+      <stop offset="1" stop-color="#C9A227"/>
+    </linearGradient>
+  </defs>
+  <rect x="42" y="42" width="276" height="276" rx="34" fill="#0B1320" stroke="#D7CCB6" stroke-width="2"/>
+  <g transform="translate(180 180)" fill="none" stroke="url(#minimal)" stroke-width="18" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M0-116 36-56 13-38"/>
+    <path d="M0-116 36-56 13-38" transform="rotate(72)"/>
+    <path d="M0-116 36-56 13-38" transform="rotate(144)"/>
+    <path d="M0-116 36-56 13-38" transform="rotate(216)"/>
+    <path d="M0-116 36-56 13-38" transform="rotate(288)"/>
+  </g>
+  <circle cx="180" cy="180" r="18" fill="#0B1320" stroke="#C9A227" stroke-width="4"/>
+  <path d="M113 227c38-29 79-33 124-11" fill="none" stroke="#145DA0" stroke-width="5" stroke-linecap="round"/>
+</svg>
